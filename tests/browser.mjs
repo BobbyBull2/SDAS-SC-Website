@@ -1,0 +1,80 @@
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+import {mkdir,writeFile} from 'node:fs/promises';
+await mkdir('previews',{recursive:true});
+const browser=await chromium.launch({headless:true});
+const failures=[];const checks=[];
+for(const [name,width,height] of [['desktop',1440,1000],['mobile',390,844],['small-mobile',320,740],['tablet',768,1024]]){
+ const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:1,reducedMotion:'reduce'});
+ page.on('pageerror',e=>failures.push(e.message));
+ await page.goto('http://127.0.0.1:5174/',{waitUntil:'networkidle'});
+ await page.evaluate(()=>document.fonts.ready);
+ await page.locator('.event-card').first().waitFor();
+ assert.equal(await page.locator('h1').count(),1);
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${name}: horizontal overflow`);
+ const sections=await page.locator('main>section').evaluateAll(es=>es.map(e=>e.id||e.className));
+ assert.deepEqual(sections,['home','screenshots','sdas-banner','calendar','about','links']);
+ assert.equal(await page.locator('img').evaluateAll(es=>es.every(e=>e.complete&&e.naturalWidth>0)),true);
+ await page.getByRole('button',{name:'Next screenshot',exact:true}).click();
+ assert.equal(await page.getByRole('button',{name:'Show preview 2',exact:true}).getAttribute('aria-pressed'),'true');
+ await page.getByRole('button',{name:'Previous screenshot',exact:true}).click();
+ await page.getByRole('button',{name:'Play slideshow',exact:true}).click();
+ await page.getByRole('button',{name:'Pause slideshow',exact:true}).click();
+ if(width<=800){await page.getByRole('button',{name:'Open menu',exact:true}).click();assert.equal(await page.locator('#navigation').isVisible(),true);await page.locator('#navigation').getByRole('link',{name:'About',exact:true}).click();assert.equal(await page.locator('#navigation').isVisible(),false)}
+ const initial=await page.locator('.event-rail').evaluate(e=>e.scrollLeft);
+ await page.getByRole('button',{name:'Later events',exact:true}).click();
+ await page.waitForFunction(x=>document.querySelector('.event-rail').scrollLeft>x,initial);
+ await page.locator('.event-rail').evaluate(e=>e.scrollLeft=0);
+ await page.evaluate(()=>window.scrollTo(0,0));
+ await page.screenshot({path:`previews/${name}.png`,fullPage:true});
+ if(['desktop','mobile'].includes(name)){
+  await page.locator('.hero').screenshot({path:`previews/hero-A-${name}.png`});
+ }
+ const feature=await page.locator('.active-slide').boundingBox();
+ const thumbs=await page.locator('.thumbnails').boundingBox();
+ assert.ok(thumbs.y>=feature.y+feature.height, 'thumbnails below feature');
+ assert.ok(Math.abs(feature.width-thumbs.width)<3,'feature and thumbnail strip share full width');
+ assert.equal(await page.locator('#screenshots img[src*="Fox_"]').count(),0);
+ await page.locator('.active-slide').dispatchEvent('touchstart',{changedTouches:[{identifier:1,clientX:250,clientY:200}]});
+ await page.locator('.active-slide').dispatchEvent('touchend',{changedTouches:[{identifier:1,clientX:90,clientY:205}]});
+ assert.equal(await page.getByRole('button',{name:'Show preview 2',exact:true}).getAttribute('aria-pressed'),'true');
+
+ checks.push(`${name}: layout, images, section order, slideshow/swipe, gallery geometry, event scrolling and navigation passed`);
+ await page.close();
+}
+const page=await browser.newPage();
+await page.route('**/data/events.json',r=>r.fulfill({status:503,body:'unavailable'}));
+await page.goto('http://127.0.0.1:5174/');
+await page.getByText('Calendar temporarily unavailable.',{exact:false}).waitFor();
+assert.equal(await page.getByRole('link',{name:'Subscribe to calendar'}).count(),1);
+checks.push('Unavailable feed: honest fallback and source link remain');
+
+const auto=await browser.newPage({reducedMotion:'no-preference'});
+await auto.clock.install({time:new Date('2026-10-08T18:00:00Z')});
+await auto.clock.pauseAt(new Date('2026-10-08T18:00:01Z'));
+await auto.goto('http://127.0.0.1:5174/',{waitUntil:'networkidle'});
+await auto.clock.runFor(6100);
+assert.equal(await auto.getByRole('button',{name:'Show preview 2',exact:true}).getAttribute('aria-pressed'),'true');
+await auto.locator('.active-slide').hover();
+await auto.clock.runFor(6100);
+assert.equal(await auto.getByRole('button',{name:'Show preview 2',exact:true}).getAttribute('aria-pressed'),'true');
+await auto.mouse.move(0,0);
+await auto.getByRole('button',{name:'Pause slideshow'}).focus();
+await auto.clock.runFor(6100);
+assert.equal(await auto.getByRole('button',{name:'Show preview 2',exact:true}).getAttribute('aria-pressed'),'true');
+checks.push('Autoplay advances after six seconds; hover and keyboard focus pause it');
+await auto.close();
+const boundary=await browser.newPage();
+await boundary.clock.install({time:new Date('2026-11-01T04:59:00Z')});
+await boundary.clock.pauseAt(new Date('2026-11-01T04:59:01Z'));
+await boundary.route('**/data/events.json',r=>r.fulfill({contentType:'application/json',body:JSON.stringify({fetchedAt:'2026-11-01T04:59:00Z',events:[{id:'vara',title:'[TENTATIVE] Day of the Vara 2956',start:'2026-10-01',end:'2026-11-01',allDay:true,url:null}]})}));
+await boundary.goto('http://127.0.0.1:5174/',{waitUntil:'networkidle'});
+assert.equal(await boundary.locator('.event-card').count(),1);
+await boundary.clock.runFor(61000);
+assert.equal(await boundary.locator('.event-card').count(),0);
+checks.push('Open page removes Vara at Chicago exclusive-end boundary without reload');
+await boundary.close();
+assert.deepEqual(failures,[]);
+await writeFile('previews/verification.json',JSON.stringify({checks,pageErrors:failures},null,2));
+console.log(JSON.stringify({checks,pageErrors:failures},null,2));
+await browser.close();

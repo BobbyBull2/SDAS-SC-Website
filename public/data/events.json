@@ -1,0 +1,510 @@
+{
+  "source": "https://raw.githubusercontent.com/BobbyBull2/SDAS-SC-Calendar/main/star-citizen-events.ics",
+  "fetchedAt": "2026-10-08T18:06:15.537Z",
+  "events": [
+    {
+      "id": "day-of-the-vara-2956@sdas-star-citizen:2026-10-01",
+      "title": "[TENTATIVE] Day of the Vara 2956",
+      "start": "2026-10-01",
+      "end": "2026-11-01",
+      "allDay": true,
+      "url": null,
+      "description": "TENTATIVE — Expected annual October event. Update when CIG confirms exact dates."
+    },
+    {
+      "id": "discord-1544483191786578031-0@sdas-star-citizen:2026-10-09T00:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-10-09T00:00:00.000Z",
+      "end": "2026-10-09T04:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-0@sdas-star-citizen:2026-10-15T00:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-10-15T00:30:00.000Z",
+      "end": "2026-10-15T04:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-1@sdas-star-citizen:2026-10-16T00:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-10-16T00:00:00.000Z",
+      "end": "2026-10-16T04:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-1@sdas-star-citizen:2026-10-22T00:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-10-22T00:30:00.000Z",
+      "end": "2026-10-22T04:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-2@sdas-star-citizen:2026-10-23T00:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-10-23T00:00:00.000Z",
+      "end": "2026-10-23T04:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-2@sdas-star-citizen:2026-10-29T00:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-10-29T00:30:00.000Z",
+      "end": "2026-10-29T04:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-3@sdas-star-citizen:2026-10-30T00:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-10-30T00:00:00.000Z",
+      "end": "2026-10-30T04:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-3@sdas-star-citizen:2026-11-05T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-11-05T01:30:00.000Z",
+      "end": "2026-11-05T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-4@sdas-star-citizen:2026-11-06T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-11-06T01:00:00.000Z",
+      "end": "2026-11-06T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-4@sdas-star-citizen:2026-11-12T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-11-12T01:30:00.000Z",
+      "end": "2026-11-12T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-5@sdas-star-citizen:2026-11-13T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-11-13T01:00:00.000Z",
+      "end": "2026-11-13T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-5@sdas-star-citizen:2026-11-19T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-11-19T01:30:00.000Z",
+      "end": "2026-11-19T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "iae-2956@sdas-star-citizen:2026-11-20",
+      "title": "[TENTATIVE] IAE 2956",
+      "start": "2026-11-20",
+      "end": "2026-12-04",
+      "allDay": true,
+      "url": null,
+      "description": "TENTATIVE — Expected late-November IAE window. Update when CIG confirms exact dates."
+    },
+    {
+      "id": "discord-1544483191786578031-6@sdas-star-citizen:2026-11-20T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-11-20T01:00:00.000Z",
+      "end": "2026-11-20T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-6@sdas-star-citizen:2026-11-26T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-11-26T01:30:00.000Z",
+      "end": "2026-11-26T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-7@sdas-star-citizen:2026-11-27T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-11-27T01:00:00.000Z",
+      "end": "2026-11-27T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-7@sdas-star-citizen:2026-12-03T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-12-03T01:30:00.000Z",
+      "end": "2026-12-03T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-8@sdas-star-citizen:2026-12-04T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-12-04T01:00:00.000Z",
+      "end": "2026-12-04T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-8@sdas-star-citizen:2026-12-10T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-12-10T01:30:00.000Z",
+      "end": "2026-12-10T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-9@sdas-star-citizen:2026-12-11T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-12-11T01:00:00.000Z",
+      "end": "2026-12-11T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-9@sdas-star-citizen:2026-12-17T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-12-17T01:30:00.000Z",
+      "end": "2026-12-17T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-10@sdas-star-citizen:2026-12-18T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-12-18T01:00:00.000Z",
+      "end": "2026-12-18T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "luminalia-2956@sdas-star-citizen:2026-12-22",
+      "title": "[ANNUAL] Luminalia 2956",
+      "start": "2026-12-22",
+      "end": "2026-12-23",
+      "allDay": true,
+      "url": null,
+      "description": "ANNUAL — Luminalia is canonically celebrated December 22; CIG activities may span additional dates."
+    },
+    {
+      "id": "discord-1548466884045705350-10@sdas-star-citizen:2026-12-24T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-12-24T01:30:00.000Z",
+      "end": "2026-12-24T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-11@sdas-star-citizen:2026-12-25T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2026-12-25T01:00:00.000Z",
+      "end": "2026-12-25T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-11@sdas-star-citizen:2026-12-31T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2026-12-31T01:30:00.000Z",
+      "end": "2026-12-31T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-12@sdas-star-citizen:2027-01-01T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-01-01T01:00:00.000Z",
+      "end": "2027-01-01T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-12@sdas-star-citizen:2027-01-07T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-01-07T01:30:00.000Z",
+      "end": "2027-01-07T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-13@sdas-star-citizen:2027-01-08T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-01-08T01:00:00.000Z",
+      "end": "2027-01-08T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-13@sdas-star-citizen:2027-01-14T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-01-14T01:30:00.000Z",
+      "end": "2027-01-14T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-14@sdas-star-citizen:2027-01-15T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-01-15T01:00:00.000Z",
+      "end": "2027-01-15T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-14@sdas-star-citizen:2027-01-21T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-01-21T01:30:00.000Z",
+      "end": "2027-01-21T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-15@sdas-star-citizen:2027-01-22T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-01-22T01:00:00.000Z",
+      "end": "2027-01-22T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-15@sdas-star-citizen:2027-01-28T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-01-28T01:30:00.000Z",
+      "end": "2027-01-28T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-16@sdas-star-citizen:2027-01-29T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-01-29T01:00:00.000Z",
+      "end": "2027-01-29T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "red-festival-2957@sdas-star-citizen:2027-02-01",
+      "title": "[TENTATIVE] Red Festival 2957",
+      "start": "2027-02-01",
+      "end": "2027-03-01",
+      "allDay": true,
+      "url": null,
+      "description": "TENTATIVE — Expected February event; placeholder until CIG confirms."
+    },
+    {
+      "id": "discord-1548466884045705350-16@sdas-star-citizen:2027-02-04T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-02-04T01:30:00.000Z",
+      "end": "2027-02-04T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-17@sdas-star-citizen:2027-02-05T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-02-05T01:00:00.000Z",
+      "end": "2027-02-05T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-17@sdas-star-citizen:2027-02-11T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-02-11T01:30:00.000Z",
+      "end": "2027-02-11T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-18@sdas-star-citizen:2027-02-12T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-02-12T01:00:00.000Z",
+      "end": "2027-02-12T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-18@sdas-star-citizen:2027-02-18T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-02-18T01:30:00.000Z",
+      "end": "2027-02-18T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-19@sdas-star-citizen:2027-02-19T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-02-19T01:00:00.000Z",
+      "end": "2027-02-19T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-19@sdas-star-citizen:2027-02-25T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-02-25T01:30:00.000Z",
+      "end": "2027-02-25T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-20@sdas-star-citizen:2027-02-26T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-02-26T01:00:00.000Z",
+      "end": "2027-02-26T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "stella-fortuna-2957@sdas-star-citizen:2027-03-01",
+      "title": "[TENTATIVE] Stella Fortuna 2957",
+      "start": "2027-03-01",
+      "end": "2027-04-01",
+      "allDay": true,
+      "url": null,
+      "description": "TENTATIVE — Expected March event; placeholder until CIG confirms."
+    },
+    {
+      "id": "discord-1548466884045705350-20@sdas-star-citizen:2027-03-04T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-03-04T01:30:00.000Z",
+      "end": "2027-03-04T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-21@sdas-star-citizen:2027-03-05T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-03-05T01:00:00.000Z",
+      "end": "2027-03-05T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-21@sdas-star-citizen:2027-03-11T01:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-03-11T01:30:00.000Z",
+      "end": "2027-03-11T05:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-22@sdas-star-citizen:2027-03-12T01:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-03-12T01:00:00.000Z",
+      "end": "2027-03-12T05:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-22@sdas-star-citizen:2027-03-18T00:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-03-18T00:30:00.000Z",
+      "end": "2027-03-18T04:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-23@sdas-star-citizen:2027-03-19T00:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-03-19T00:00:00.000Z",
+      "end": "2027-03-19T04:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-23@sdas-star-citizen:2027-03-25T00:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-03-25T00:30:00.000Z",
+      "end": "2027-03-25T04:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-24@sdas-star-citizen:2027-03-26T00:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-03-26T00:00:00.000Z",
+      "end": "2027-03-26T04:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    },
+    {
+      "id": "discord-1548466884045705350-24@sdas-star-citizen:2027-04-01T00:30:00Z",
+      "title": "[SDAS] Worm Wednesday",
+      "start": "2027-04-01T00:30:00.000Z",
+      "end": "2027-04-01T04:30:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1548466884045705350",
+      "description": "SDAS Discord Scheduled Event\n\nMeet at Gaslight to battle the Valakkar. This is a weekly event to help people get parts for Wikelo.\n\nView event in Discord: https://discord.com/events/1518410019249459236/1548466884045705350"
+    },
+    {
+      "id": "discord-1544483191786578031-25@sdas-star-citizen:2027-04-02T00:00:00Z",
+      "title": "[SDAS] Org Mining Event",
+      "start": "2027-04-02T00:00:00.000Z",
+      "end": "2027-04-02T04:00:00.000Z",
+      "allDay": false,
+      "url": "https://discord.com/events/1518410019249459236/1544483191786578031",
+      "description": "SDAS Discord Scheduled Event\n\nCome join us in a massive resource mining extravaganza to supply the org with mats. These mats will then be refined and used to craft you beautiful dudes new equipment and components. This will be a new weekly event!\n\nView event in Discord: https://discord.com/events/1518410019249459236/1544483191786578031"
+    }
+  ]
+}
