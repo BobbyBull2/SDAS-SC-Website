@@ -13,6 +13,12 @@ test('provisional bundles are local-only; publication and identity are separate 
   assert.throws(()=>validateManifest(data));
   data.images[0].verifiedApproverIds=['789'];
   assert.equal(validateManifest(data).images.length,1);
+  const reaction = manifest();
+  reaction.publicationApproved=true;
+  reaction.images[0].approval='reaction-approved';
+  assert.equal(validateManifest(reaction).images.length,1);
+  reaction.images[0].verifiedApproverIds=['789'];
+  assert.throws(()=>validateManifest(reaction));
 });
 test('malformed, remote, traversing, duplicate, and wrong-source manifests rejected',()=>{
   for(const mutate of [
