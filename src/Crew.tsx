@@ -24,7 +24,16 @@ export function Crew(){
       if(data.schemaVersion!==1||data.source!==source||!Number.isFinite(Date.parse(data.fetchedAt))||!Array.isArray(data.members)||new Set(data.members.map((m:Member)=>m?.handle?.toLowerCase())).size!==data.members.length||
         !data.members.every((m:Member)=>m&&typeof m.handle==='string'&&m.handle.length>0&&safeURL(m.profile,true)&&
           (m.avatar===null||safeURL(m.avatar))&&(m.rank===null||typeof m.rank==='string')&&Array.isArray(m.roles)&&m.roles.every(r=>typeof r==='string')))throw Error();
-      setRoster(data);
+      
+      const shuffled = [...data.members];
+
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+
+      setRoster({...data, members: shuffled});
+
     }).catch(()=>{if(!controller.signal.aborted)setFailed(true)});
     return()=>controller.abort();
   },[]);

@@ -45,14 +45,14 @@ function Gallery(){
   },[]);
   const imageFailed=()=>{setActive(0);setSlides(fallbackSlides);setCommunity(false)};
   const [active,setActive]=useState(0);
-  const [playing,setPlaying]=useState(()=>!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [playing,setPlaying]=useState(true);
   const [hovered,setHovered]=useState(false);
   const [focused,setFocused]=useState(false);
   const [visible,setVisible]=useState(!document.hidden);
   const touch=useRef({x:0,y:0});
   const move=(n:number)=>setActive(a=>(a+n+slides.length)%slides.length);
   useEffect(()=>{const fn=()=>setVisible(!document.hidden);document.addEventListener('visibilitychange',fn);return()=>document.removeEventListener('visibilitychange',fn)},[]);
-  useEffect(()=>{if(!playing||hovered||focused||!visible)return;const id=setInterval(()=>setActive(a=>(a+1)%slides.length),6000);return()=>clearInterval(id)},[playing,hovered,focused,visible,slides.length]);
+  useEffect(()=>{if(!playing||!visible||slides.length<2)return;const id=setInterval(()=>setActive(a=>(a+1)%slides.length),7000);return()=>clearInterval(id)},[playing,visible,slides.length]);
   return <section className="section gallery" id="screenshots" aria-roledescription="carousel" aria-label={community?'SDAS community screenshot gallery':'Temporary community gallery preview'} onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)} onFocus={()=>setFocused(true)} onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget))setFocused(false)}}>
     <Heading eyebrow="COMMUNITY" title="SCREENSHOTS"><Button href={config.discord}><MessageCircle size={18}/> View more on Discord <ChevronRight size={16}/></Button></Heading>
     <div className="gallery-layout">
