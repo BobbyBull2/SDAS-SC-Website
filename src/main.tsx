@@ -9,6 +9,7 @@ import '@fontsource/barlow/latin-400.css';
 import '@fontsource/barlow/latin-600.css';
 import config from '../content/site.json';
 import './style.css';
+import { validateManifest } from './lib/screenshot-manifest.mjs';
 import { visibleEvent, eventState, dateRange } from './lib/event-window.mjs';
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 const nav = [['About','#about'],['Calendar','#calendar'],['Screenshots','#screenshots'],['Helpful links','#links'],['Join',config.org]];
@@ -17,11 +18,31 @@ function Button({href,children,className=''}: {href:string,children:React.ReactN
 function Heading({eyebrow,title,children}:{eyebrow:string,title:string,children?:React.ReactNode}) {return <div className="section-heading"><div><p className="eyebrow">{eyebrow}</p><h2>{title}</h2></div>{children}</div>}
 function Header(){const [open,setOpen]=useState(false);return <header><div className="nav-wrap"><Brand/><button className="menu-button" aria-expanded={open} aria-controls="navigation" aria-label={open?'Close menu':'Open menu'} onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button><nav id="navigation" className={open?'open':''}><a href="#home" className="active" onClick={()=>setOpen(false)}>Home</a>{nav.map(([title,url])=><a key={title} href={url} onClick={()=>setOpen(false)}>{title}</a>)}</nav><Button href={config.discord} className="header-discord"><MessageCircle size={18}/> Discord</Button></div></header>}
 function Hero(){return <section className="hero" id="home" style={{'--hero-position':config.heroPosition,'--mobile-position':config.mobileHeroPosition} as React.CSSProperties}><div className="hero-art"><img src={asset(config.heroImage)} alt={config.heroAlt} fetchPriority="high"/></div><div className="hero-shade"/><div className="hero-content"><div className="hero-kicker"><span/> A STAR CITIZEN COMMUNITY</div><Compass className="hero-compass"/><h1><span>SOME DUDES</span><small>AND A</small><em>SPACESHIP</em></h1><div className="hero-sdas">— &nbsp; S D A S &nbsp; —</div><h2>STAR CITIZEN IS BETTER WITH PEOPLE.</h2><p className="hero-note">Life comes first. Your seat will still be here.</p><div className="activities">{[[Shield,'PvE'],[Crosshair,'PvP'],[Gem,'Mining'],[Rocket,'Salvage'],[Compass,'Exploration']].map(([Icon,label])=>{const I=Icon as typeof Shield;return <span key={String(label)}><i><I/></i>{String(label)}</span>})}</div><div className="hero-buttons"><Button href={config.org} className="primary">Join SDAS <ChevronRight/></Button><Button href={config.discord}><MessageCircle/> Discord</Button></div></div><span className="art-credit">ORIGINAL ARTWORK BY FOX</span></section>}
-const slides = [
-  {title:'Beyond the familiar.',image:'images/preview-orbit.png',alt:'AI-generated concept preview: a spacecraft above an icy planet beside an orbital station.'},
-  {title:'Every adventure starts somewhere.',image:'images/preview-hangar.png',alt:'AI-generated concept preview: spacecraft inside a vast industrial hangar.'},
+type GallerySlide = {title:string;image:string;alt:string;label:string};
+const fallbackSlides:GallerySlide[] = [
+  {label:'CONCEPT PREVIEW',title:'Beyond the familiar.',image:'images/preview-orbit.png',alt:'AI-generated concept preview: a spacecraft above an icy planet beside an orbital station.'},
+  {label:'CONCEPT PREVIEW',title:'Every adventure starts somewhere.',image:'images/preview-hangar.png',alt:'AI-generated concept preview: spacecraft inside a vast industrial hangar.'},
 ];
 function Gallery(){
+  const [slides,setSlides]=useState<GallerySlide[]>(fallbackSlides);
+  const [community,setCommunity]=useState(false);
+  useEffect(()=>{
+    const controller=new AbortController();
+    const prefix=import.meta.env.DEV?'__sdas_preview__/':'screenshot-gallery/';
+    fetch(asset(prefix+'manifest.json'),{signal:controller.signal,cache:'no-store'})
+      .then(r=>{if(!r.ok)throw Error('No gallery bundle');return r.json()})
+      .then(data=>validateManifest(data,import.meta.env.DEV))
+      .then(manifest=>{
+        if(controller.signal.aborted||!manifest.images.length)return;
+        setActive(0);
+        setSlides(manifest.images.map(item=>({title:'From the SDAS crew',image:prefix+item.file,
+          alt:'Community screenshot shared in the SDAS Discord.',
+          label:item.approval==='officer-verified'?'OFFICER IDENTITY VERIFIED':'PROVISIONAL · REACTING OFFICER NOT VERIFIED'})));
+        setCommunity(true);
+      }).catch(()=>{/* Missing, malformed, or unapproved bundles retain concept fallbacks. */});
+    return()=>controller.abort();
+  },[]);
+  const imageFailed=()=>{setActive(0);setSlides(fallbackSlides);setCommunity(false)};
   const [active,setActive]=useState(0);
   const [playing,setPlaying]=useState(()=>!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const [hovered,setHovered]=useState(false);
@@ -30,17 +51,17 @@ function Gallery(){
   const touch=useRef({x:0,y:0});
   const move=(n:number)=>setActive(a=>(a+n+slides.length)%slides.length);
   useEffect(()=>{const fn=()=>setVisible(!document.hidden);document.addEventListener('visibilitychange',fn);return()=>document.removeEventListener('visibilitychange',fn)},[]);
-  useEffect(()=>{if(!playing||hovered||focused||!visible)return;const id=setInterval(()=>setActive(a=>(a+1)%slides.length),6000);return()=>clearInterval(id)},[playing,hovered,focused,visible]);
-  return <section className="section gallery" id="screenshots" aria-roledescription="carousel" aria-label="Temporary community gallery preview" onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)} onFocus={()=>setFocused(true)} onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget))setFocused(false)}}>
+  useEffect(()=>{if(!playing||hovered||focused||!visible)return;const id=setInterval(()=>setActive(a=>(a+1)%slides.length),6000);return()=>clearInterval(id)},[playing,hovered,focused,visible,slides.length]);
+  return <section className="section gallery" id="screenshots" aria-roledescription="carousel" aria-label={community?'SDAS community screenshot gallery':'Temporary community gallery preview'} onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)} onFocus={()=>setFocused(true)} onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget))setFocused(false)}}>
     <Heading eyebrow="COMMUNITY" title="SCREENSHOTS"><Button href={config.discord}><MessageCircle size={18}/> View more on Discord <ChevronRight size={16}/></Button></Heading>
     <div className="gallery-layout">
       <div className="active-slide" onTouchStart={e=>touch.current={x:e.changedTouches[0].clientX,y:e.changedTouches[0].clientY}} onTouchEnd={e=>{const dx=e.changedTouches[0].clientX-touch.current.x,dy=e.changedTouches[0].clientY-touch.current.y;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))move(dx<0?1:-1)}}>
-        {slides.map((slide,i)=><img key={slide.image} className={i===active?'featured-image selected':'featured-image'} src={asset(slide.image)} alt={i===active?slide.alt:''} aria-hidden={i!==active}/>)}
-        <div className="slide-overlay"><span className="preview-label">TEMPORARY PREVIEW · AI CONCEPT ART · NOT COMMUNITY SCREENSHOTS</span><h3>{slides[active].title}</h3></div>
+        {slides.map((slide,i)=><img key={slide.image} className={i===active?'featured-image selected':'featured-image'} src={asset(slide.image)} onError={community?imageFailed:undefined} alt={i===active?slide.alt:''} aria-hidden={i!==active}/>)}
+        <div className="slide-overlay"><span className="preview-label">{community?slides[active].label:'TEMPORARY PREVIEW · AI CONCEPT ART · NOT COMMUNITY SCREENSHOTS'}</span><h3>{slides[active].title}</h3></div>
         <button className="slide-arrow previous" aria-label="Previous screenshot" onClick={()=>move(-1)}><ChevronLeft/></button><button className="slide-arrow next" aria-label="Next screenshot" onClick={()=>move(1)}><ChevronRight/></button>
       </div>
-      <div className="thumbnails" aria-label="Preview thumbnails">{slides.map((slide,i)=><button key={slide.image} onClick={()=>setActive(i)} aria-label={`Show preview ${i+1}`} aria-pressed={active===i}><img src={asset(slide.image)} alt=""/><span>0{i+1} / CONCEPT PREVIEW</span></button>)}</div>
-      <div className="gallery-bottom"><p className="gallery-note">Temporary concept previews. Officer-approved Discord screenshots will replace these images after visual approval.</p><div className="dots">{slides.map((slide,i)=><button key={slide.image} aria-label={`Select slide ${i+1}`} aria-pressed={active===i} onClick={()=>setActive(i)}/>)}</div><button className="play-control" aria-label={playing?'Pause slideshow':'Play slideshow'} onClick={()=>setPlaying(!playing)}>{playing?<Pause size={14}/>:<Play size={14}/>} {playing?'Pause':'Play'}</button><span aria-live={playing?'off':'polite'}>0{active+1} / 02</span></div>
+      <div className="thumbnails" aria-label="Preview thumbnails">{slides.map((slide,i)=><button key={slide.image} onClick={()=>setActive(i)} aria-label={`Show preview ${i+1}`} aria-pressed={active===i}><img src={asset(slide.image)} alt=""/><span>{String(i+1).padStart(2,'0')} / {community?'SDAS SCREENSHOT':'CONCEPT PREVIEW'}</span></button>)}</div>
+      <div className="gallery-bottom"><p className="gallery-note">{community?(import.meta.env.DEV?'Local review only. Reaction matches are provisional unless an authorized officer’s user ID was verified.':'Screenshots approved by the SDAS crew.'):'Temporary concept previews. Community screenshots will appear after review.'}</p><div className="dots" style={{minWidth:0,overflowX:'auto',flexShrink:1}}>{slides.map((slide,i)=><button style={{flexShrink:0}} key={slide.image} aria-label={`Select slide ${i+1}`} aria-pressed={active===i} onClick={()=>setActive(i)}/>)}</div><button className="play-control" aria-label={playing?'Pause slideshow':'Play slideshow'} onClick={()=>setPlaying(!playing)}>{playing?<Pause size={14}/>:<Play size={14}/>} {playing?'Pause':'Play'}</button><span aria-live={playing?'off':'polite'}>{String(active+1).padStart(2,'0')} / {String(slides.length).padStart(2,'0')}</span></div>
     </div>
   </section>
 }

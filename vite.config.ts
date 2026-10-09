@@ -1,2 +1,3 @@
 import { defineConfig } from 'vite';
-export default defineConfig({ base: './', server: { host: '127.0.0.1' } });
+import { localScreenshots } from './scripts/local-screenshots.ts';
+export default defineConfig({ base: './', plugins: [localScreenshots()], server: { host: '127.0.0.1' } });

@@ -12,3 +12,21 @@
 /* Approved slogan: keep each phrase intact while allowing clean mobile wrapping. */
 .sdas-banner .brand-slogan{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 10px;text-transform:uppercase;line-height:1.5;letter-spacing:2px;margin-inline:auto;max-width:700px}.brand-slogan span{white-space:nowrap}
 @media(max-width:540px){.sdas-banner .brand-slogan{font-size:13px;letter-spacing:1px;gap:2px 7px;max-width:350px}}
+
+/* Treatment A: dissolve only the artwork boundary into the dark content panel.
+   Keep the existing image box/crop and all content geometry unchanged. */
+.hero-art {
+  --hero-edge-fade: linear-gradient(to right,
+    transparent 0%, rgba(0,0,0,.08) 3%, rgba(0,0,0,.38) 8%,
+    rgba(0,0,0,.76) 15%, #000 23%);
+  -webkit-mask-image: var(--hero-edge-fade);
+  mask-image: var(--hero-edge-fade);
+}
+@media (max-width:540px) {
+  /* The mobile composition stacks vertically, so soften its top edge instead. */
+  .hero-art {
+    --hero-edge-fade: linear-gradient(to bottom,
+      transparent 0, rgba(0,0,0,.1) 18px, rgba(0,0,0,.5) 55px,
+      rgba(0,0,0,.88) 90px, #000 120px);
+  }
+}

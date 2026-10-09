@@ -3,3 +3,6 @@ dist/
 .env*
 !.env.example
 previews/
+
+# Private review bundles: never commit or copy into public/
+.local/
