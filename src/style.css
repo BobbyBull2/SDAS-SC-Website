@@ -52,3 +52,7 @@
   .hero .art-credit{top:calc(224px + 150vw - 25px);bottom:auto;right:13px}
 }
 @media(min-width:541px) and (max-width:1100px){.hero-art img{object-position:right 57%}}
+
+/* Five links on wide screens; preserve two/one-column mobile layouts. */
+@media (min-width:1101px){.links-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (min-width:801px) and (max-width:1100px){.links-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
