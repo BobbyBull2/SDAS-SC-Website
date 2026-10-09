@@ -24,3 +24,9 @@ test('malformed, remote, traversing, duplicate, and wrong-source manifests rejec
   ]) { const data=manifest(); mutate(data); assert.throws(()=>validateManifest(data,true)); }
   assert.equal(validateManifest({...manifest(),images:[]},true).images.length,0);
 });
+
+test('oversized gallery rejected by importer and frontend as defense in depth',()=>{
+  const data=manifest();
+  data.images=Array.from({length:26},(_,i)=>({...item,id:`123-${i+1}`,file:`images/123-${i+1}-${item.sha256}.webp`}));
+  assert.throws(()=>validateManifest(data,true));
+});

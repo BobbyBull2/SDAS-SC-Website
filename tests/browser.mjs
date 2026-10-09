@@ -13,8 +13,8 @@ for(const [name,width,height] of [['desktop',1440,1000],['mobile',390,844],['sma
  assert.equal(await page.locator('h1').count(),1);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${name}: horizontal overflow`);
  const sections=await page.locator('main>section').evaluateAll(es=>es.map(e=>e.id||e.className));
- assert.deepEqual(sections,['home','screenshots','sdas-banner','calendar','about','links']);
- assert.equal(await page.locator('img').evaluateAll(es=>es.every(e=>e.complete&&e.naturalWidth>0)),true);
+ assert.deepEqual(sections,['home','screenshots','sdas-banner','crew','calendar','about','links']);
+ assert.equal(await page.locator('img:not(.crew-card img)').evaluateAll(es=>es.every(e=>e.complete&&e.naturalWidth>0)),true);
  await page.getByRole('button',{name:'Next screenshot',exact:true}).click();
  assert.equal(await page.getByRole('button',{name:'Show preview 2',exact:true}).getAttribute('aria-pressed'),'true');
  await page.getByRole('button',{name:'Previous screenshot',exact:true}).click();

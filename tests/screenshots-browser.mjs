@@ -31,11 +31,11 @@ for(const width of [1440,768,390,320]){
 }
 // More than one history page must not make carousel controls overflow.
 const many=await browser.newPage({viewport:{width:320,height:950},reducedMotion:'reduce'});
-const manyImages=Array.from({length:50},(_,i)=>({...images[0],id:`456-${i+1}`,file:`images/456-${i+1}-${'a'.repeat(64)}.webp`}));
+const manyImages=Array.from({length:25},(_,i)=>({...images[0],id:`456-${i+1}`,file:`images/456-${i+1}-${'a'.repeat(64)}.webp`}));
 await many.route('**/__sdas_preview__/manifest.json',r=>r.fulfill({json:{...manifest,images:manyImages}}));
 await many.route('**/__sdas_preview__/images/*',r=>r.fulfill({contentType:'image/png',body:fixtureImage}));
 await many.goto('http://127.0.0.1:5174/',{waitUntil:'networkidle'});
-assert.equal(await many.locator('.thumbnails button').count(),50);
+assert.equal(await many.locator('.thumbnails button').count(),25);
 assert.equal(await many.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
 await many.close();
 for(const broken of ['missing','invalid','empty','image']){

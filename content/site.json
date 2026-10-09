@@ -1,1 +1,11 @@
-{"heroImage":"images/Fox_hero_clean.png","heroPosition":"center 58%","mobileHeroPosition":"center 61%","heroAlt":"Fox’s artwork: friends gathered on a sunset landing pad beneath their spaceship.","posterImage":"images/Fox_poster_with_text.png","discord":"https://discord.gg/NrK6apayqH","org":"https://robertsspaceindustries.com/en/orgs/SDAS","calendar":"https://raw.githubusercontent.com/BobbyBull2/SDAS-SC-Calendar/main/star-citizen-events.ics"}
+{
+  "heroImage": "images/sdas-friends-sunset-portrait.jpg",
+  "heroPosition": "center 57%",
+  "mobileHeroPosition": "center center",
+  "heroAlt": "A large spaceship on a sunset landing pad, with friends relaxing together beneath it and a planet overhead.",
+  "posterImage": "images/Fox_poster_with_text.png",
+  "discord": "https://discord.gg/NrK6apayqH",
+  "org": "https://robertsspaceindustries.com/en/orgs/SDAS",
+  "calendar": "https://raw.githubusercontent.com/BobbyBull2/SDAS-SC-Calendar/main/star-citizen-events.ics",
+  "heroCredit": "SDAS COMMUNITY ARTWORK"
+}

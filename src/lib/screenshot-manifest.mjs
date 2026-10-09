@@ -2,7 +2,7 @@
 export function validateManifest(value, allowProvisional = false) {
   if (!value || value.schemaVersion !== 1 || value.guildId !== '1518410019249459236' ||
       value.channelId !== '1519105573067686000' || value.emojiId !== '1557915851922083880' ||
-      value.completeHistory !== true || !Array.isArray(value.images) ||
+      value.completeHistory !== true || !Array.isArray(value.images) || value.images.length > 25 ||
       (!allowProvisional && value.publicationApproved !== true)) throw Error('Unapproved or invalid screenshot manifest');
   const ids = new Set();
   for (const item of value.images) {
