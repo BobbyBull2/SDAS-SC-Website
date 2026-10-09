@@ -12,7 +12,7 @@ import './style.css';
 import { Crew } from './Crew';
 import { validateManifest } from './lib/screenshot-manifest.mjs';
 import { visibleEvent, eventState, dateRange } from './lib/event-window.mjs';
-const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+const asset = (path: string) => path.startsWith('https://bobbybull2.github.io/SDAS-SC-Calendar/screenshot-gallery/') ? path : `${import.meta.env.BASE_URL}${path}`;
 const nav = [['About','#about'],['Calendar','#calendar'],['Screenshots','#screenshots'],['Helpful links','#links'],['Join',config.org]];
 function Brand(){ return <a href="#home" className="brand" aria-label="SDAS home"><span className="brand-emblem"><img src={asset('images/sdas-spaceman.png')} width="48" height="48" alt="SDAS astronaut emblem"/></span><span><strong>SDAS</strong><small>SOME DUDES AND A SPACESHIP</small></span></a> }
 function Button({href,children,className=''}: {href:string,children:React.ReactNode,className?:string}) {return <a className={`button ${className}`} href={href}>{children}</a>}
@@ -29,7 +29,7 @@ function Gallery(){
   const [community,setCommunity]=useState(false);
   useEffect(()=>{
     const controller=new AbortController();
-    const prefix=import.meta.env.DEV?'__sdas_preview__/':'screenshot-gallery/';
+    const prefix=import.meta.env.DEV?'__sdas_preview__/':'https://bobbybull2.github.io/SDAS-SC-Calendar/screenshot-gallery/';
     fetch(asset(prefix+'manifest.json'),{signal:controller.signal,cache:'no-store'})
       .then(r=>{if(!r.ok)throw Error('No gallery bundle');return r.json()})
       .then(data=>validateManifest(data,import.meta.env.DEV))
@@ -38,7 +38,7 @@ function Gallery(){
         setActive(0);
         setSlides(manifest.images.map(item=>({title:'From the SDAS crew',image:prefix+item.file,
           alt:'Community screenshot shared in the SDAS Discord.',
-          label:item.approval==='officer-verified'?'OFFICER IDENTITY VERIFIED':'PROVISIONAL · REACTING OFFICER NOT VERIFIED'})));
+          label:item.approval==='reaction-approved'?'APPROVED BY SDAS SPACEMAN REACTION':item.approval==='officer-verified'?'APPROVED BY SDAS OFFICER':'PROVISIONAL · REACTION REVIEW'})));
         setCommunity(true);
       }).catch(()=>{/* Missing, malformed, or unapproved bundles retain concept fallbacks. */});
     return()=>controller.abort();
