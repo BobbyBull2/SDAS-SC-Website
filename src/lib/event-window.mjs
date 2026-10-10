@@ -23,6 +23,11 @@ export function eventState(event, now = new Date()) {
 export function visibleEvent(event, now = new Date()) {
   return ['upcoming','ongoing'].includes(eventState(event,now));
 }
+// Keep a finished timed event visible for the remainder of its end day in Chicago.
+export function completedToday(event, now = new Date()) {
+  if (!event || event.allDay || eventState(event, now) !== 'expired') return false;
+  return calendarDay(new Date(event.end)) === calendarDay(now);
+}
 export function dateRange(event) {
   if (!event.allDay) return '';
   const start=new Date(event.start+'T12:00:00Z');

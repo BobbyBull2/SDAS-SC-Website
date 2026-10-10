@@ -9,7 +9,7 @@ test('recurrence respects exclusion and unsafe URLs are dropped',()=>{const r=pa
 test('invalid source rejected; empty calendar is valid',()=>{assert.throws(()=>parseCalendar('<html>unavailable</html>'));assert.deepEqual(parseCalendar(wrap('')),[])});
 test('Chicago DST display preserves evening for materialized UTC events',()=>{const before=new Date('2026-10-29T00:00:00Z');const after=new Date('2026-11-05T01:00:00Z');const fmt=d=>d.toLocaleTimeString('en-US',{timeZone:'America/Chicago',hour:'numeric',minute:'2-digit'});assert.equal(fmt(before),'7:00 PM');assert.equal(fmt(after),'7:00 PM')});
 
-import {eventState,visibleEvent,dateRange} from '../src/lib/event-window.mjs';
+import {eventState,visibleEvent,completedToday,dateRange} from '../src/lib/event-window.mjs';
 const vara={start:'2026-10-01',end:'2026-11-01',allDay:true};
 test('Vara October window: upcoming, ongoing, final day and exclusive end in Chicago',()=>{
  assert.equal(eventState(vara,new Date('2026-09-30T23:00:00Z')),'upcoming');
@@ -32,4 +32,17 @@ test('ingestion keeps all-day entry through Chicago final evening, then removes 
  const source=wrap(event('DTSTART;VALUE=DATE:20261001\r\nDTEND;VALUE=DATE:20261101'));
  assert.equal(parseCalendar(source,new Date('2026-11-01T04:59:59Z')).length,1);
  assert.equal(parseCalendar(source,new Date('2026-11-01T05:00:00Z')).length,0);
+});
+
+test('finished event remains visible through local midnight and disappears next day',()=>{
+ const discovery=wrap(event('DTSTART:20261010T120000Z\r\nDTEND:20261010T160000Z'));
+ const afterFinish=new Date('2026-10-10T19:53:00Z');
+ const endOfDay=new Date('2026-10-11T04:59:59Z');
+ const midnight=new Date('2026-10-11T05:00:00Z');
+ assert.equal(parseCalendar(discovery,afterFinish).length,1);
+ assert.equal(parseCalendar(discovery,endOfDay).length,1);
+ assert.equal(parseCalendar(discovery,midnight).length,0);
+ const evt=parseCalendar(discovery,afterFinish)[0];
+ assert.equal(completedToday(evt,afterFinish),true);
+ assert.equal(completedToday(evt,midnight),false);
 });
