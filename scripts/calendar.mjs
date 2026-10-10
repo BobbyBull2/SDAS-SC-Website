@@ -1,5 +1,5 @@
 import ICAL from 'ical.js';
-import { visibleEvent, calendarDay } from '../src/lib/event-window.mjs';
+import { visibleEvent, completedToday, calendarDay } from '../src/lib/event-window.mjs';
 export function parseCalendar(text, now = new Date()) {
   if (!text.trim().startsWith('BEGIN:VCALENDAR') || !text.trim().endsWith('END:VCALENDAR')) throw new Error('Invalid calendar envelope');
   const root = new ICAL.Component(ICAL.parse(text));
@@ -20,7 +20,7 @@ export function parseCalendar(text, now = new Date()) {
       const url = item.component.getFirstPropertyValue('url');
       const safeUrl = typeof url === 'string' && /^https:\/\//i.test(url) ? url : null;
       const entry = { id: `${event.uid}:${start.toString()}`, title: item.summary, start: start.isDate ? start.toString() : sd.toISOString(), end: end.isDate ? end.toString() : ed.toISOString(), allDay: start.isDate, url: safeUrl, description: item.description || '' };
-      if (visibleEvent(entry,now)) results.set(entry.id, entry);
+      if (visibleEvent(entry,now) || completedToday(entry,now)) results.set(entry.id, entry);
     };
     if (event.isRecurring()) {
       const iterator = event.iterator();
