@@ -52,7 +52,7 @@ export function OrgNewsWire({discordUrl}:{discordUrl:string}){
   const [feed,setFeed]=useState<OrgNewsFeed|null>(null);
   const [error,setError]=useState(false);
   const rail=useRef<HTMLDivElement>(null);
-  useEffect(()=>{let alive=true;fetch(import.meta.env.BASE_URL+'data/org-news-preview.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Unable to load news preview');return r.json()}).then(payload=>{const parsed=parseOrgNews(payload);if(alive)setFeed(parsed)}).catch(()=>{if(alive)setError(true)});return()=>{alive=false}},[]);
+  useEffect(()=>{let alive=true;const liveUrl='https://raw.githubusercontent.com/BobbyBull2/SDAS-SC-Calendar/main/org-news/feed.json';const fallbackUrl=import.meta.env.BASE_URL+'data/org-news-preview.json';const read=async(url:string)=>{const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('News feed unavailable');return parseOrgNews(await response.json())};const update=async()=>{try{const published=await read(liveUrl);if(published.mode!=='live')throw Error('Feed not yet published');if(alive){setFeed(published);setError(false)}}catch{try{const demo=await read(fallbackUrl);if(alive){setFeed(demo);setError(false)}}catch{if(alive){setError(true);setFeed(null)}}}};void update();const timer=setInterval(()=>{if(!document.hidden)void update()},600000);return()=>{alive=false;clearInterval(timer)}},[]);
   return <section className="section news-wire" id="news" aria-labelledby="news-heading">
     <div className="section-heading">
       <div><p className="eyebrow">ORGANIZATION / COMMUNICATIONS</p><h2 id="news-heading">SDAS NEWS WIRE</h2><p className="toolkit-subtitle">Org announcements, without the Discord scroll.</p></div>
@@ -73,7 +73,7 @@ export function OrgNewsWire({discordUrl}:{discordUrl:string}){
         </div>
       </article>)}
     </div>
-    {!feed&&!error&&<p className="toolkit-note">Loading news wire preview…</p>}
+    {feed?.mode==='live'&&!feed.items.length&&<p className="toolkit-note">No recent public announcements. Check the SDAS Discord for the latest org news.</p>}{!feed&&!error&&<p className="toolkit-note">Loading news wire preview…</p>}
     <p className="news-wire-footnote">Swipe or use the arrows to browse announcements. Live Discord publishing comes after Fox approves the design.</p>
   </section>;
 }
