@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseOrgNews } from '../src/lib/org-news.mjs';
+import { parseOrgNews, newestNewsFirst } from '../src/lib/org-news.mjs';
 test('accepts labeled demo posts with no live Discord URLs',()=>{
  const feed=parseOrgNews({schemaVersion:1,mode:'demo',items:[{id:'preview-1',title:'Example post',body:'Clearly marked sample'}]});
  assert.equal(feed.mode,'demo');
@@ -21,3 +21,5 @@ test('rejects malicious links, invalid schema, duplicate ids and excessive text'
  ]});
  assert.deepEqual(feed.items.map(i=>i.id),['a']);
 });
+
+test('shows newest news on left without changing 10-item FIFO retention',()=>{const posts=[{id:'old',publishedAt:'2026-10-01T01:00:00Z'},{id:'new',publishedAt:'2026-10-10T01:00:00Z'}];assert.deepEqual(newestNewsFirst(posts).map(x=>x.id),['new','old']);assert.equal(posts[0].id,'old')});
