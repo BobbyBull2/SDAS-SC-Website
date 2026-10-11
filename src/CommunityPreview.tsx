@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { ArrowUpRight, BookOpen, Boxes, ChartNoAxesCombined, ChevronLeft, ChevronRight, Compass, ExternalLink, Languages, Radio, Shield, Wrench } from 'lucide-react';
-import { parseOrgNews, type OrgNewsFeed } from './lib/org-news.mjs';
+import { parseOrgNews, newestNewsFirst, type OrgNewsFeed } from './lib/org-news.mjs';
 import './community-preview.css';
 
 const tools = [
@@ -64,7 +64,7 @@ export function OrgNewsWire({discordUrl}:{discordUrl:string}){
     {feed?.mode==='demo'&&<p className="news-preview-notice"><Shield size={16}/> REVIEW PREVIEW — Example posts only. No real Discord messages are being published.</p>}
     {error&&<p className="news-preview-notice"><Shield size={16}/> News wire temporarily unavailable. Check SDAS Discord for updates.</p>}
     <div className="news-wire-grid preview-scroll-rail" ref={rail} role="region" tabIndex={0} aria-label="SDAS News Wire, scroll horizontally">
-      {feed?.items.slice(-10).map((post,index)=><article className="news-wire-card" key={post.id}>
+      {newestNewsFirst(feed?.items).map((post,index)=><article className="news-wire-card" key={post.id}>
         <div className="news-wire-card-head"><span className="news-sequence">TRANSMISSION {String(index+1).padStart(2,'0')}</span><span className="news-feed-source">{feed.mode==='demo'?'SAMPLE':'ORG NEWS'}</span></div>
         {post.imageUrl&&<a className="news-card-art-link" href={post.discordUrl||discordUrl} target="_blank" rel="noopener noreferrer"><img className="news-card-art" src={post.imageUrl} alt={post.imageAlt||'Artwork from SDAS news'} loading="lazy"/></a>}
         <h3>{post.title}</h3><p>{post.body}</p>
