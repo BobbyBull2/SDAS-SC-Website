@@ -64,7 +64,7 @@ export function OrgNewsWire({discordUrl}:{discordUrl:string}){
     {feed?.mode==='demo'&&<p className="news-preview-notice"><Shield size={16}/> REVIEW PREVIEW — Example posts only. No real Discord messages are being published.</p>}
     {error&&<p className="news-preview-notice"><Shield size={16}/> News wire temporarily unavailable. Check SDAS Discord for updates.</p>}
     <div className="news-wire-grid preview-scroll-rail" ref={rail} role="region" tabIndex={0} aria-label="SDAS News Wire, scroll horizontally">
-      {feed?.items.slice(0,12).map((post,index)=><article className="news-wire-card" key={post.id}>
+      {feed?.items.slice(0,100).map((post,index)=><article className="news-wire-card" key={post.id}>
         <div className="news-wire-card-head"><span className="news-sequence">TRANSMISSION {String(index+1).padStart(2,'0')}</span><span className="news-feed-source">{feed.mode==='demo'?'SAMPLE':'ORG NEWS'}</span></div>
         <h3>{post.title}</h3><p>{post.body}</p>
         <div className="news-wire-card-footer">
@@ -74,6 +74,6 @@ export function OrgNewsWire({discordUrl}:{discordUrl:string}){
       </article>)}
     </div>
     {feed?.mode==='live'&&!feed.items.length&&<p className="toolkit-note">No recent public announcements. Check the SDAS Discord for the latest org news.</p>}{!feed&&!error&&<p className="toolkit-note">Loading news wire preview…</p>}
-    <p className="news-wire-footnote">Swipe or use the arrows to browse announcements. Live Discord publishing comes after Fox approves the design.</p>
+    <p className="news-wire-footnote">Swipe or use the arrows to browse announcements. Automatically refreshed from the SDAS org-news channel.</p>
   </section>;
 }
