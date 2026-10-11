@@ -1,8 +1,10 @@
 /* SDAS preview features — deliberately isolated from the approved production layout. */
 .pilots-toolkit,.news-wire{border-top:1px solid var(--line);border-bottom:1px solid #12343d}
 .toolkit-subtitle{font:16px/1.4 var(--condensed);color:#a9bcc1;margin:8px 0 0;letter-spacing:.2px}
-.toolkit-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
-.toolkit-card{position:relative;min-width:0;min-height:174px;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;padding:15px;background:linear-gradient(145deg,#0c2630,#06141a 85%);border:1px solid #266570;transition:background .2s,border-color .2s,transform .2s}
+.preview-scroll-rail{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#34747a #08141b;padding:3px 0 14px;touch-action:pan-x pan-y}
+.preview-scroll-rail>*{scroll-snap-align:start;scroll-snap-stop:normal}
+.toolkit-grid{display:flex;gap:12px}
+.toolkit-card{position:relative;flex:0 0 244px;min-width:0;min-height:174px;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;padding:15px;background:linear-gradient(145deg,#0c2630,#06141a 85%);border:1px solid #266570;transition:background .2s,border-color .2s,transform .2s}
 .toolkit-card:hover,.toolkit-card:focus-visible{border-color:var(--cyan);background:linear-gradient(145deg,#153d45,#071922);transform:translateY(-2px)}
 .toolkit-icon{height:51px;width:51px;display:grid;place-items:center;color:#66e9e4;background:#04151c;border:1px solid #266e78;margin-bottom:15px}
 .toolkit-card strong{font:700 19px/1.1 var(--condensed);color:#f1f3f0;margin-bottom:5px}
@@ -14,8 +16,8 @@
 .news-discord-button:hover{background:#11424a}
 .news-preview-notice{display:flex;align-items:center;gap:9px;max-width:max-content;font:600 13px var(--condensed);letter-spacing:.35px;color:#f0d59a;background:#271d0a;border:1px solid #8e6a24;padding:9px 13px;margin:0 0 14px}
 .news-preview-notice svg{flex-shrink:0}
-.news-wire-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.news-wire-card{display:flex;flex-direction:column;min-height:214px;padding:18px 19px 14px;background:linear-gradient(160deg,#102933,#06151b 80%);border:1px solid #27626d}
+.news-wire-grid{display:flex;gap:16px}
+.news-wire-card{flex:0 0 min(520px,43vw);display:flex;flex-direction:column;min-height:214px;padding:18px 19px 14px;background:linear-gradient(160deg,#102933,#06151b 80%);border:1px solid #27626d}
 .news-wire-card-head{display:flex;justify-content:space-between;gap:10px;align-items:center;font:600 11px var(--condensed);letter-spacing:1.3px;color:#8eb7bc}
 .news-feed-source{color:var(--cyan);font-weight:700}
 .news-wire-card h3{font:700 23px/1.08 var(--condensed);letter-spacing:.2px;margin:18px 0 8px}
@@ -24,8 +26,16 @@
 .news-wire-card-footer a{display:flex;align-items:center;gap:5px;color:#6debe7}
 .news-wire-footnote{font:13px var(--condensed);color:#85a3a8;margin:14px 0 0}
 .links .links-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media(max-width:1100px){.toolkit-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.news-wire-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){.links .links-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.news-wire .section-heading{align-items:flex-start;flex-direction:column}.news-wire-grid{grid-template-columns:1fr}}
-@media(max-width:540px){.pilots-toolkit,.news-wire{padding-top:28px;padding-bottom:28px}.pilots-toolkit h2,.news-wire h2{font-size:30px}.toolkit-grid{display:flex;overflow-x:auto;gap:10px;scroll-snap-type:x mandatory;scrollbar-color:#35727a #07161c;padding-bottom:12px}.toolkit-card{flex:0 0 169px;min-height:159px;scroll-snap-align:start;padding:12px}.toolkit-icon{width:43px;height:43px;margin-bottom:12px}.toolkit-card strong{font-size:18px}.news-wire-card{min-height:175px}.links .links-grid{grid-template-columns:1fr}.news-preview-notice{line-height:1.25}}
+@media(max-width:1100px){.toolkit-card{flex-basis:225px}.news-wire-card{flex-basis:410px}}
+@media(max-width:800px){.links .links-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.news-wire .section-heading{align-items:flex-start;flex-direction:column}.news-wire-card{flex-basis:78vw}}
+@media(max-width:540px){.pilots-toolkit,.news-wire{padding-top:28px;padding-bottom:28px}.pilots-toolkit h2,.news-wire h2{font-size:30px}.toolkit-grid{gap:10px}.toolkit-card{flex:0 0 169px;min-height:159px;scroll-snap-align:start;padding:12px}.toolkit-icon{width:43px;height:43px;margin-bottom:12px}.toolkit-card strong{font-size:18px}.news-wire-card{flex:0 0 82vw;min-height:175px}.links .links-grid{grid-template-columns:1fr}.news-preview-notice{line-height:1.25}}
 
 .review-ribbon{display:flex;align-items:center;justify-content:center;text-align:center;min-height:27px;background:#144a51;color:#ddfffd;border-bottom:1px solid #3edbd5;font:700 11px/1.2 var(--condensed);letter-spacing:1.6px;padding:6px 12px}
+
+/* Shared, accessible scroll rails: carousel arrows mirror the Crew/Calendar controls. */
+.preview-rail-controls{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+.preview-rail-controls button{display:grid;place-items:center;width:36px;height:36px;padding:0;color:#c8f8f5;border:1px solid #31727b;background:#07181d}
+.preview-rail-controls button:hover{border-color:var(--cyan);background:#103640}
+.news-wire-actions{display:flex;gap:13px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:800px){.news-wire-actions{width:100%;justify-content:space-between}}
+@media(max-width:540px){.preview-rail-controls button{width:34px;height:34px}.news-wire-actions{gap:8px}.news-discord-button{font-size:12px;min-height:34px;padding:5px 9px}.pilots-toolkit .section-heading{align-items:flex-end;gap:9px}.pilots-toolkit .section-heading>div:first-child{min-width:0}}
