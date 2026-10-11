@@ -20,3 +20,13 @@ export function parseOrgNews(raw) {
   });
   return { mode: raw.mode, items };
 }
+
+/** The publisher keeps the last ten in FIFO order; render newest at the left. */
+export function newestNewsFirst(items) {
+  if (!Array.isArray(items)) return [];
+  const epoch = item => {
+    const parsed = Date.parse(item?.publishedAt || '');
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+  return [...items].sort((a, b) => epoch(b) - epoch(a)).slice(0, 10);
+}
