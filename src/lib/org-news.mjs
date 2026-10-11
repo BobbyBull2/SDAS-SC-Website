@@ -6,7 +6,7 @@ export function parseOrgNews(raw) {
     throw new Error('Invalid org news feed');
   }
   const ids = new Set();
-  const items = raw.items.slice(0,12).filter((item) => {
+  const items = raw.items.slice(0,100).filter((item) => {
     if (!item || typeof item.id !== 'string' || !/^[a-zA-Z0-9_-]{1,64}$/.test(item.id) || ids.has(item.id)) return false;
     if (typeof item.title !== 'string' || !item.title.trim() || item.title.length > 120) return false;
     if (typeof item.body !== 'string' || !item.body.trim() || item.body.length > 700) return false;
