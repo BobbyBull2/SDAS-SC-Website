@@ -39,3 +39,10 @@
 .news-wire-actions{display:flex;gap:13px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 @media(max-width:800px){.news-wire-actions{width:100%;justify-content:space-between}}
 @media(max-width:540px){.preview-rail-controls button{width:34px;height:34px}.news-wire-actions{gap:8px}.news-discord-button{font-size:12px;min-height:34px;padding:5px 9px}.pilots-toolkit .section-heading{align-items:flex-end;gap:9px}.pilots-toolkit .section-heading>div:first-child{min-width:0}}
+
+/* Preview news art: compact panoramic crops; never extend the carousel vertically. */
+.news-card-art-link{display:block;margin:12px 0 0;overflow:hidden;border:1px solid #27626d;background:#06151b}
+.news-card-art{display:block;width:100%;height:132px;object-fit:cover;object-position:center;transition:transform .25s}
+.news-card-art-link:hover .news-card-art{transform:scale(1.035)}
+.news-card-art-link + h3{margin-top:11px}
+@media(max-width:540px){.news-card-art{height:118px}}
