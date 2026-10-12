@@ -1,0 +1,43 @@
+name: Review SDAS Toolkit and News Wire (preview only)
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+# Preview is isolated from the main production deploy workflow.
+permissions:
+  contents: read
+
+concurrency:
+  group: sdas-toolkit-news-preview
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    # Never run deployment secrets for fork pull requests or unrelated feature branches.
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'preview/pilots-toolkit-news-wire'
+    name: Build and deploy review-only Pages URL
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out preview branch
+        uses: actions/checkout@v4
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Run unit tests
+        run: npm test
+      - name: Build site
+        run: npm run build
+      - name: Deploy to Cloudflare Pages PREVIEW (not production)
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=sdas-sc-website --branch=fox-review-toolkit-news

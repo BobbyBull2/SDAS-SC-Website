@@ -1,0 +1,87 @@
+/* SDAS preview features — deliberately isolated from the approved production layout. */
+.pilots-toolkit,.news-wire{border-top:1px solid var(--line);border-bottom:1px solid #12343d}
+.toolkit-subtitle{font:16px/1.4 var(--condensed);color:#a9bcc1;margin:8px 0 0;letter-spacing:.2px}
+.preview-scroll-rail{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#34747a #08141b;padding:3px 0 14px;touch-action:pan-x pan-y}
+.preview-scroll-rail>*{scroll-snap-align:start;scroll-snap-stop:normal}
+.toolkit-grid{display:flex;gap:12px}
+.toolkit-card{position:relative;flex:0 0 244px;min-width:0;min-height:174px;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;padding:15px;background:linear-gradient(145deg,#0c2630,#06141a 85%);border:1px solid #266570;transition:background .2s,border-color .2s,transform .2s}
+.toolkit-card:hover,.toolkit-card:focus-visible{border-color:var(--cyan);background:linear-gradient(145deg,#153d45,#071922);transform:translateY(-2px)}
+.toolkit-icon{height:51px;width:51px;display:grid;place-items:center;color:#66e9e4;background:#04151c;border:1px solid #266e78;margin-bottom:15px}
+.toolkit-card strong{font:700 19px/1.1 var(--condensed);color:#f1f3f0;margin-bottom:5px}
+.toolkit-card>span{font:600 12px/1.3 var(--condensed);text-transform:uppercase;letter-spacing:.8px;color:#9dbbbf;padding-right:12px}
+.toolkit-link-icon{color:#3ddbd5;position:absolute;right:12px;bottom:14px}
+.toolkit-note{font:12px var(--condensed);letter-spacing:.4px;color:#839fa5;margin:11px 0 0}
+.news-wire{padding-top:34px;padding-bottom:34px}
+.news-discord-button{min-height:39px;display:inline-flex;align-items:center;gap:10px;border:1px solid #3ab5b5;padding:8px 14px;font:600 14px var(--condensed);letter-spacing:.7px;text-transform:uppercase;color:#aff9f4}
+.news-discord-button:hover{background:#11424a}
+.news-preview-notice{display:flex;align-items:center;gap:9px;max-width:max-content;font:600 13px var(--condensed);letter-spacing:.35px;color:#f0d59a;background:#271d0a;border:1px solid #8e6a24;padding:9px 13px;margin:0 0 14px}
+.news-preview-notice svg{flex-shrink:0}
+.news-wire-grid{display:flex;gap:16px}
+.news-wire-card{flex:0 0 min(520px,43vw);display:flex;flex-direction:column;min-height:214px;padding:18px 19px 14px;background:linear-gradient(160deg,#102933,#06151b 80%);border:1px solid #27626d}
+.news-wire-card-head{display:flex;justify-content:space-between;gap:10px;align-items:center;font:600 11px var(--condensed);letter-spacing:1.3px;color:#8eb7bc}
+.news-feed-source{color:var(--cyan);font-weight:700}
+.news-wire-card h3{font:700 23px/1.08 var(--condensed);letter-spacing:.2px;margin:18px 0 8px}
+.news-wire-card p{font:16px/1.35 var(--condensed);color:#b5c8cb;margin:0 0 16px;overflow-wrap:anywhere}
+.news-wire-card-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto;padding-top:11px;border-top:1px solid #244951;font:600 12px var(--condensed);color:#88a5aa}
+.news-wire-card-footer a{display:flex;align-items:center;gap:5px;color:#6debe7}
+.news-wire-footnote{font:13px var(--condensed);color:#85a3a8;margin:14px 0 0}
+.links .links-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:1100px){.toolkit-card{flex-basis:225px}.news-wire-card{flex-basis:410px}}
+@media(max-width:800px){.links .links-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.news-wire .section-heading{align-items:flex-start;flex-direction:column}.news-wire-card{flex-basis:78vw}}
+@media(max-width:540px){.pilots-toolkit,.news-wire{padding-top:28px;padding-bottom:28px}.pilots-toolkit h2,.news-wire h2{font-size:30px}.toolkit-grid{gap:10px}.toolkit-card{flex:0 0 169px;min-height:159px;scroll-snap-align:start;padding:12px}.toolkit-icon{width:43px;height:43px;margin-bottom:12px}.toolkit-card strong{font-size:18px}.news-wire-card{flex:0 0 82vw;min-height:175px}.links .links-grid{grid-template-columns:1fr}.news-preview-notice{line-height:1.25}}
+
+.review-ribbon{display:flex;align-items:center;justify-content:center;text-align:center;min-height:27px;background:#144a51;color:#ddfffd;border-bottom:1px solid #3edbd5;font:700 11px/1.2 var(--condensed);letter-spacing:1.6px;padding:6px 12px}
+
+/* Shared, accessible scroll rails: carousel arrows mirror the Crew/Calendar controls. */
+.preview-rail-controls{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+.preview-rail-controls button{display:grid;place-items:center;width:36px;height:36px;padding:0;color:#c8f8f5;border:1px solid #31727b;background:#07181d}
+.preview-rail-controls button:hover{border-color:var(--cyan);background:#103640}
+.news-wire-actions{display:flex;gap:13px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:800px){.news-wire-actions{width:100%;justify-content:space-between}}
+@media(max-width:540px){.preview-rail-controls button{width:34px;height:34px}.news-wire-actions{gap:8px}.news-discord-button{font-size:12px;min-height:34px;padding:5px 9px}.pilots-toolkit .section-heading{align-items:flex-end;gap:9px}.pilots-toolkit .section-heading>div:first-child{min-width:0}}
+
+/* Preview news art: compact panoramic crops; never extend the carousel vertically. */
+.news-card-art-link{display:block;margin:12px 0 0;overflow:hidden;border:1px solid #27626d;background:#06151b}
+.news-card-art{display:block;width:100%;height:132px;object-fit:cover;object-position:center;transition:transform .25s}
+.news-card-art-link:hover .news-card-art{transform:scale(1.035)}
+.news-card-art-link + h3{margin-top:11px}
+@media(max-width:540px){.news-card-art{height:118px}}
+
+/* Fox review: every horizontal content card follows Upcoming Events geometry. */
+:root{--sdas-rail-card-width:calc((100% - 56px)/5);--sdas-rail-card-height:310px}
+.event-card,.toolkit-card,.news-wire-card,.crew-group .crew-card{
+  height:var(--sdas-rail-card-height);
+  min-height:var(--sdas-rail-card-height);
+  max-height:var(--sdas-rail-card-height);
+  overflow:hidden;
+}
+.event-card,.toolkit-card,.news-wire-card{flex:0 0 var(--sdas-rail-card-width);min-width:190px}
+.crew-group .crew-card{width:max(190px,(min(1440px,100vw) - 80px - 56px)/5);flex:0 0 max(190px,(min(1440px,100vw) - 80px - 56px)/5)}
+.event-card{display:flex;flex-direction:column}
+.event-copy{display:flex;flex:1;min-height:0;flex-direction:column;overflow:hidden}
+.event-copy h3{min-height:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.event-copy a{margin-top:auto}
+.toolkit-card{justify-content:flex-start}
+.news-wire-card{padding:12px;min-width:190px}
+.news-wire-card-head{font-size:10px;letter-spacing:.6px}
+.news-card-art-link{margin-top:9px;flex:0 0 auto}
+.news-card-art{height:87px}
+.news-wire-card h3{font-size:19px;line-height:1.1;margin:10px 0 7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.news-wire-card p{font-size:13px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px}
+.news-wire-card-footer{padding-top:8px}
+@media(max-width:1100px){.crew-group .crew-card{width:max(190px,(100vw - 56px - 56px)/5);flex-basis:max(190px,(100vw - 56px - 56px)/5)}}
+@media(max-width:540px){
+  :root{--sdas-rail-card-width:72%;--sdas-rail-card-height:320px}
+  .crew-group .crew-card{width:72vw;flex-basis:72vw}
+  .event-card,.toolkit-card,.news-wire-card{min-width:215px}
+  .news-card-art{height:104px}
+  .news-wire-card{padding:13px}
+}
+
+/* Official website preview artwork, contained so logos and page text stay visible. */
+.toolkit-art{position:relative;align-self:stretch;flex:0 0 155px;height:155px;margin:-15px -15px 18px;overflow:hidden;border-bottom:1px solid #266570;background:#08141b}
+.toolkit-art img{position:relative;display:block;width:100%;height:100%;object-fit:contain;background:#08141b;transition:transform .25s}
+.toolkit-art img[hidden]{display:none}
+.toolkit-art-fallback{position:absolute;inset:0;display:grid;place-items:center;color:#66e9e4;background:linear-gradient(145deg,#123b45,#06141a)}
+.toolkit-card:hover .toolkit-art img{transform:scale(1.035)}
+@media(max-width:540px){.toolkit-art{flex-basis:165px;height:165px;margin:-12px -12px 18px}}

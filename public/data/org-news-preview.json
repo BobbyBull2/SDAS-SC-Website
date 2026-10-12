@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "mode": "demo",
+  "items": [
+    {
+      "id": "preview-flight",
+      "title": "Upcoming operations",
+      "body": "An org announcement about a scheduled event or community operation would appear here once #org-news is connected."
+    },
+    {
+      "id": "preview-crew",
+      "title": "Crew updates",
+      "body": "New projects, community milestones, and noteworthy SDAS updates can be shared from Discord."
+    },
+    {
+      "id": "preview-verse",
+      "title": "News from the 'verse",
+      "body": "Important announcements can be summarized in this compact news wire without overwhelming the homepage."
+    }
+  ]
+}
