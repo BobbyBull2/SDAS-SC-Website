@@ -53,3 +53,36 @@
 .welcome-brand-text strong{font:400 32px/.95 'Audiowide',var(--display);letter-spacing:3px;color:#fff}
 .welcome-brand-text small{font:700 9px/1.3 var(--condensed);letter-spacing:1.4px;color:#badadd}
 @media(max-width:480px){.welcome-brand img{width:40px;height:40px}.welcome-brand-text strong{font-size:24px}.welcome-brand-text small{font-size:7px;letter-spacing:.5px}}
+
+
+/* SDAS Build v2 — homepage-aligned New Members art direction */
+.welcome-page{background:#061014}
+.welcome-header{height:77px;min-height:77px;background:#040b0f;border-color:#22616a}
+.welcome-nav{min-height:77px;max-width:1440px;padding:0 38px;gap:clamp(18px,3vw,42px)}
+.welcome-brand{display:flex;align-items:center;gap:0;max-width:250px}
+.welcome-brand .welcome-logo{display:block;width:100%;height:auto;max-height:70px;object-fit:contain;border-radius:0}
+.welcome-nav nav{gap:clamp(12px,2vw,31px)}
+.welcome-nav nav a{font-size:14px;letter-spacing:1px}
+.welcome-header-join{border-color:#43e7df;color:#b9fffa}
+.welcome-main{max-width:1440px;padding:0 0 48px}
+.welcome-hero{isolation:isolate;min-height:535px;padding:72px clamp(28px,7vw,110px) 58px;border:0;border-bottom:1px solid #22616a;background:#061014;display:flex;align-items:center}
+.welcome-hero:after{display:none}
+.welcome-hero-art{position:absolute!important;inset:0!important;z-index:-2!important;background-image:url('../images/sdas-new-member-bar.avif');background-size:cover;background-position:center 52%;opacity:1;pointer-events:none}
+.welcome-hero-overlay{position:absolute!important;inset:0!important;z-index:-1!important;pointer-events:none;background:linear-gradient(90deg,#061014 0%,#061014f9 23%,#061014d7 39%,#0610146e 58%,transparent 81%),linear-gradient(0deg,#061014d6,transparent 27%,#06101455)}
+.welcome-hero-content{position:relative;z-index:1;max-width:640px}
+.welcome-eyebrow{font-size:12px;color:#67dede;letter-spacing:2.5px}
+.welcome-hero h1{font-family:'Audiowide',var(--display);font-weight:400;font-size:clamp(43px,5.1vw,77px);letter-spacing:-1px;line-height:1.1;margin-bottom:24px;text-shadow:0 4px 20px #000b}
+.welcome-lead{font:600 clamp(23px,2.8vw,35px)/1.23 var(--condensed);color:#e1e9e9;max-width:540px;text-shadow:0 2px 8px #0009}
+.welcome-life{font:400 19px/1.4 var(--condensed);color:#c3d3d5;margin:22px 0 29px}
+.welcome-hero-actions{gap:14px}
+.welcome-action{font-size:15px;min-height:55px}
+.welcome-steps{max-width:1320px;margin:auto;padding:48px 32px 10px}
+.welcome-steps h2{font-size:clamp(33px,3.4vw,46px);margin-bottom:25px}
+.welcome-steps-grid{gap:16px}
+.welcome-step{min-height:205px;background:linear-gradient(135deg,#09242c,#06141b);padding:25px}
+.welcome-step-content strong{font-size:clamp(16px,1.6vw,21px)}
+.welcome-footnote,.welcome-return{max-width:1256px;margin-inline:auto}
+.welcome-footer{background:#040b0f;border-color:#22616a}
+@media(max-width:1050px){.welcome-brand{max-width:210px}.welcome-nav nav{gap:14px}.welcome-nav nav a{font-size:12px}.welcome-hero{min-height:505px;padding-inline:45px}}
+@media(max-width:800px){.welcome-header{min-height:76px;height:76px}.welcome-nav{min-height:76px;padding:0 19px}.welcome-brand{max-width:195px}.welcome-brand .welcome-logo{width:100%;height:auto}.welcome-hero{min-height:0;display:block;padding:0 0 35px}.welcome-hero-art{position:relative!important;inset:auto!important;z-index:0!important;height:auto;aspect-ratio:16/9;background-position:center;background-size:cover;mask-image:linear-gradient(to bottom,#000 0%,#000 75%,transparent 100%);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 75%,transparent 100%)}.welcome-hero-overlay{background:linear-gradient(0deg,#061014 12%,transparent 65%)}.welcome-hero-content{padding:0 28px;max-width:none;margin-top:-14px}.welcome-hero h1{font-size:clamp(38px,8vw,60px)}.welcome-lead{max-width:640px;font-size:28px}.welcome-steps{padding:42px 22px 10px}.welcome-step{min-height:0}.welcome-footnote,.welcome-return{margin-inline:23px}}
+@media(max-width:480px){.welcome-brand{max-width:150px}.welcome-hero-content{padding:0 19px}.welcome-hero h1{font-size:39px}.welcome-lead{font-size:24px}.welcome-life{font-size:18px;margin:14px 0 21px}.welcome-hero-actions{flex-direction:column;gap:10px}.welcome-action{width:100%;min-height:51px}.welcome-steps{padding:33px 17px 8px}.welcome-steps h2{font-size:28px}.welcome-step{padding:22px}.welcome-footnote,.welcome-return{margin-inline:17px}}
