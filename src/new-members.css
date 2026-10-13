@@ -86,3 +86,51 @@
 @media(max-width:1050px){.welcome-brand{max-width:210px}.welcome-nav nav{gap:14px}.welcome-nav nav a{font-size:12px}.welcome-hero{min-height:505px;padding-inline:45px}}
 @media(max-width:800px){.welcome-header{min-height:76px;height:76px}.welcome-nav{min-height:76px;padding:0 19px}.welcome-brand{max-width:195px}.welcome-brand .welcome-logo{width:100%;height:auto}.welcome-hero{min-height:0;display:block;padding:0 0 35px}.welcome-hero-art{position:relative!important;inset:auto!important;z-index:0!important;height:auto;aspect-ratio:16/9;background-position:center;background-size:cover;mask-image:linear-gradient(to bottom,#000 0%,#000 75%,transparent 100%);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 75%,transparent 100%)}.welcome-hero-overlay{background:linear-gradient(0deg,#061014 12%,transparent 65%)}.welcome-hero-content{padding:0 28px;max-width:none;margin-top:-14px}.welcome-hero h1{font-size:clamp(38px,8vw,60px)}.welcome-lead{max-width:640px;font-size:28px}.welcome-steps{padding:42px 22px 10px}.welcome-step{min-height:0}.welcome-footnote,.welcome-return{margin-inline:23px}}
 @media(max-width:480px){.welcome-brand{max-width:150px}.welcome-hero-content{padding:0 19px}.welcome-hero h1{font-size:39px}.welcome-lead{font-size:24px}.welcome-life{font-size:18px;margin:14px 0 21px}.welcome-hero-actions{flex-direction:column;gap:10px}.welcome-action{width:100%;min-height:51px}.welcome-steps{padding:33px 17px 8px}.welcome-steps h2{font-size:28px}.welcome-step{padding:22px}.welcome-footnote,.welcome-return{margin-inline:17px}}
+
+
+/* Fox review: restore the bar scene's natural widescreen presentation.
+   Give the original 1672 x 941 artwork a similarly proportioned hero so CSS does
+   not crop away major parts of the scene. Source image quality is independent. */
+.welcome-main{
+  width:100%;
+  max-width:1600px;
+  padding:0 0 48px;
+  margin-inline:auto;
+}
+.welcome-hero{
+  width:100%;
+  min-height:0;
+  height:auto;
+  aspect-ratio:1672 / 941;
+  max-height:940px;
+  padding:clamp(48px,6vw,96px) clamp(30px,7vw,118px);
+  align-items:center;
+  overflow:hidden;
+}
+.welcome-hero-art{
+  background-position:center center;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+.welcome-hero-overlay{
+  background:
+    linear-gradient(90deg,#061014f7 0%,#061014ec 15%,#061014c9 32%,#06101483 46%,#06101427 66%,transparent 88%),
+    linear-gradient(0deg,#06101490 0%,transparent 25%,transparent 75%,#06101432 100%);
+}
+.welcome-hero-content{max-width:640px}
+.welcome-hero h1{font-size:clamp(43px,5.35vw,81px)}
+@media (min-width:1601px){
+  .welcome-hero{height:940px;aspect-ratio:auto}
+}
+@media (min-width:801px) and (max-width:1100px){
+  .welcome-hero{min-height:0;padding:45px}
+  .welcome-hero h1{font-size:clamp(38px,5.2vw,61px)}
+  .welcome-lead{font-size:clamp(20px,2.65vw,30px);max-width:450px}
+  .welcome-hero-overlay{background:linear-gradient(90deg,#061014f7 0%,#061014cf 32%,#0610145e 68%,transparent 100%)}
+}
+@media (max-width:800px){
+  .welcome-hero{display:block;aspect-ratio:auto;max-height:none;min-height:0;padding:0 0 35px}
+  .welcome-hero-art{height:auto;aspect-ratio:1672/941;background-position:center}
+  .welcome-hero-content{max-width:none}
+  .welcome-hero-overlay{background:linear-gradient(0deg,#061014 0%,#06101442 28%,transparent 67%)}
+}
