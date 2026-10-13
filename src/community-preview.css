@@ -85,3 +85,7 @@
 .toolkit-art-fallback{position:absolute;inset:0;display:grid;place-items:center;color:#66e9e4;background:linear-gradient(145deg,#123b45,#06141a)}
 .toolkit-card:hover .toolkit-art img{transform:scale(1.035)}
 @media(max-width:540px){.toolkit-art{flex-basis:165px;height:165px;margin:-12px -12px 18px}}
+
+/* Fox review: authentic Star Citizen screenshots framed consistently with approved Erkul/Wiki cards. */
+.toolkit-art img.toolkit-art-scene{object-fit:cover;object-position:center center;background:#08141b}
+.toolkit-art:has(.toolkit-art-scene)::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 68%,#06141a5c);z-index:1}
