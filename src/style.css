@@ -83,3 +83,9 @@ header .nav-wrap>.brand>.brand-logo-full{display:block;width:100%;height:auto;ma
 header .nav-wrap>.brand>span:not(.brand-emblem){display:none}
 @media(max-width:800px){header .nav-wrap>.brand{max-width:170px}}
 @media(max-width:540px){header .nav-wrap>.brand{max-width:142px}}
+
+/* Fox preview: revert staggered two-line heading to unified SOME DUDES. */
+.hero h1 .hero-some-dudes{display:block;white-space:nowrap;font-size:clamp(34px,4.65vw,70px);letter-spacing:-1.4px}
+@media(min-width:1600px){.hero h1 .hero-some-dudes{font-size:75px}}
+@media(max-width:1100px){.hero h1 .hero-some-dudes{font-size:clamp(34px,4.9vw,57px)}}
+@media(max-width:540px){.hero h1 .hero-some-dudes{font-size:clamp(27px,7.75vw,43px);letter-spacing:-.8px}}
