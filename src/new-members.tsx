@@ -37,7 +37,7 @@ function WelcomeHeader(){
 const steps = [
   {num:'01',title:'Join the org',detail:'Request to join SDAS on RSI.',url:config.org,Icon:UserRound},
   {num:'02',title:'Meet the crew',detail:'Hop into Discord and say hello.',url:config.discord,Icon:MessageCircle},
-  {num:'03',title:'Pick a flight',detail:'Browse the calendar and join an event that sounds fun.',url:'../#calendar',Icon:CalendarDays},
+  {num:'03',title:'Pick a flight',detail:'Browse the calendar and join an event that sounds fun.',url:`${window.location.origin}/#calendar`,Icon:CalendarDays},
 ];
 
 function NewMembersPage(){
