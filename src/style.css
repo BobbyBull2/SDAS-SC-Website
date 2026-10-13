@@ -56,3 +56,12 @@
 /* Five links on wide screens; preserve two/one-column mobile layouts. */
 @media (min-width:1101px){.links-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media (min-width:801px) and (max-width:1100px){.links-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* Shared event-sized carousel footprints in Fox preview. */
+:root{--sdas-rail-card-width:calc((100% - 56px)/5);--sdas-rail-card-height:290px}
+.event-card{height:var(--sdas-rail-card-height);display:flex;flex-direction:column;overflow:hidden}
+.event-copy{display:flex;flex:1;min-height:0;flex-direction:column}
+.event-copy h3{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.crew-group .crew-card{width:max(190px,var(--sdas-rail-card-width));height:var(--sdas-rail-card-height);overflow:hidden}
+.crew-roles{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+@media(max-width:540px){:root{--sdas-rail-card-height:290px}.crew-group .crew-card{width:215px}}
