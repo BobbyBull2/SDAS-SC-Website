@@ -45,3 +45,11 @@
 @media(max-width:1050px){.welcome-nav nav{gap:13px}.welcome-nav nav a{font-size:11px}.welcome-header-join{padding:10px;font-size:11px}}
 @media(max-width:800px){.welcome-nav{min-height:76px;padding:10px 22px;gap:12px}.welcome-brand img{width:197px}.welcome-mobile-menu{display:flex;width:40px;height:38px;align-items:center;justify-content:center;margin-left:auto}.welcome-nav nav{display:none;position:absolute;top:100%;left:0;right:0;padding:15px 25px 25px;background:#06131b;border-bottom:1px solid #267781;flex-direction:column;align-items:flex-start;gap:0}.welcome-nav nav.is-open{display:flex}.welcome-nav nav a{width:100%;padding:13px 0;font-size:14px}.welcome-header-join{padding:11px}.welcome-main{padding:24px 20px 30px}.welcome-hero{padding:33px 25px}.welcome-steps{padding-top:47px}.welcome-steps-grid{grid-template-columns:1fr}.welcome-step{min-height:0;padding:24px;display:grid;grid-template-columns:auto 1fr;column-gap:18px}.welcome-step-number{grid-column:1/-1;margin-bottom:14px}.welcome-step>svg:not(.welcome-step-arrow){margin:4px 0;grid-column:1}.welcome-step-content{grid-column:2}.welcome-return{padding:24px 0}.welcome-footer{padding:22px}}
 @media(max-width:480px){.welcome-brand img{width:151px}.welcome-header-join{font-size:10px;padding:9px;gap:5px}.welcome-header-join svg{display:none}.welcome-main{padding:18px 15px 26px}.welcome-hero{padding:30px 19px}.welcome-hero h1{font-size:41px;letter-spacing:-1px}.welcome-wordmark{font-size:17px;letter-spacing:0;line-height:1.5}.welcome-action{width:100%;justify-content:flex-start}.welcome-steps h2{font-size:29px}.welcome-step-content strong{font-size:18px}}
+
+/* Emblem and large NASA-inspired brand type; untouched small typography */
+.welcome-brand{display:flex;align-items:center;gap:11px}
+.welcome-brand img{width:58px;height:58px;border-radius:50%;flex-shrink:0}
+.welcome-brand-text{display:flex;flex-direction:column;gap:4px;max-width:218px}
+.welcome-brand-text strong{font:400 32px/.95 'Audiowide',var(--display);letter-spacing:3px;color:#fff}
+.welcome-brand-text small{font:700 9px/1.3 var(--condensed);letter-spacing:1.4px;color:#badadd}
+@media(max-width:480px){.welcome-brand img{width:40px;height:40px}.welcome-brand-text strong{font-size:24px}.welcome-brand-text small{font-size:7px;letter-spacing:.5px}}
