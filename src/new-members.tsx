@@ -25,7 +25,7 @@ function WelcomeHeader(){
   return <header className="welcome-header">
     <div className="welcome-nav">
       <a href={home} className="welcome-brand" aria-label="SDAS home">
-        <img src="../images/sdas-brand-logo.webp" width="225" height="67" alt="SDAS: Some Dudes and a Spaceship" />
+        <img src="../images/sdas-spaceman.png" width="58" height="58" alt="SDAS astronaut emblem" /><span className="welcome-brand-text"><strong>SDAS</strong><small>SOME DUDES AND A SPACESHIP</small></span>
       </a>
       <button className="welcome-mobile-menu" type="button" aria-label={open?'Close menu':'Open menu'} aria-controls="welcome-navigation" aria-expanded={open} onClick={()=>setOpen(v=>!v)}>{open?<X size={21}/>:<Menu size={21}/>}</button>
       <nav id="welcome-navigation" className={open?'is-open':''} aria-label="Website navigation">{nav.map(item=><a href={item.url} key={item.text}>{item.text}</a>)}</nav>
