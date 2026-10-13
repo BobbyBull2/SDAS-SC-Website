@@ -56,3 +56,18 @@
 /* Five links on wide screens; preserve two/one-column mobile layouts. */
 @media (min-width:1101px){.links-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media (min-width:801px) and (max-width:1100px){.links-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+
+/* SDAS Build v2 (Fox approval preview only): NASA-inspired display type.
+   Keep ordinary paragraph, caption, navigation and small text untouched. */
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+:root{--sdas-nasa:'Audiowide',var(--display)}
+.brand strong,.hero h1,.hero h2,.section-heading h2,.about-card h2,.resource-card h3,
+.event-copy h3,.banner-word strong,.crew-card h3,.slide-overlay h3,.toolkit-card strong,
+.news-wire-card h3,.sdas-banner .brand-slogan{font-family:var(--sdas-nasa)!important;font-weight:400!important}
+.brand strong{letter-spacing:2px!important;font-size:clamp(26px,2.6vw,37px)!important}
+.hero h1{letter-spacing:-.5px}
+.hero h2{letter-spacing:.4px}
+.section-heading h2{letter-spacing:0}
+.hero-buttons .button.primary{min-height:53px;max-width:100%;line-height:1.3;text-align:center}
+@media(max-width:540px){.brand strong{font-size:24px!important}.hero-buttons .button.primary{font-size:13px}}
