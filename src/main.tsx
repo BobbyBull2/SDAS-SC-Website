@@ -76,15 +76,29 @@ function About(){return <section className="section about" id="about"><p classNa
 function Links(){return <section className="section links" id="links"><p className="eyebrow">STAY CONNECTED</p><div className="links-grid">{[{title:'RSI ORG PAGE',desc:'Find your crew on Roberts Space Industries.',href:config.org,Icon:Shield},{title:'DISCORD',desc:'Chat with the crew. Plan the next adventure.',href:config.discord,Icon:MessageCircle},{title:'CALENDAR',desc:'Subscribe and never miss an operation.',href:config.calendar,Icon:CalendarDays}].map(({title,desc,href,Icon})=><a href={href} className="resource-card" key={title}><Icon/><div><h3>{title}</h3><p>{desc}</p></div><ChevronRight size={16}/></a>)}</div><a className="poster-download" href={asset(config.posterImage)} download>Download Fox’s original SDAS poster <ArrowUpRight size={14}/></a></section>}
 function ScrollToHomepageSection(){
   useEffect(()=>{
+    let pending:number[]=[];
     const jump=()=>{
       const hash=window.location.hash.slice(1);
       if(!hash)return;
       const target=document.getElementById(decodeURIComponent(hash));
       if(target)target.scrollIntoView({behavior:'instant',block:'start'});
     };
-    const frame=window.requestAnimationFrame(jump);
-    window.addEventListener('hashchange',jump);
-    return ()=>{window.cancelAnimationFrame(frame);window.removeEventListener('hashchange',jump)};
+    const start=()=>{
+      pending.forEach(window.clearTimeout);
+      pending=[];
+      jump();
+      // The crew and event rails hydrate after first paint; revisit the target
+      // after those above-the-fold panels finish changing height.
+      pending.push(window.setTimeout(jump,300));
+      pending.push(window.setTimeout(jump,1100));
+    };
+    const frame=window.requestAnimationFrame(start);
+    window.addEventListener('hashchange',start);
+    return ()=>{
+      window.cancelAnimationFrame(frame);
+      pending.forEach(window.clearTimeout);
+      window.removeEventListener('hashchange',start);
+    };
   },[]);
   return null;
 }
