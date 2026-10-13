@@ -6,7 +6,7 @@ import '@fontsource/barlow-condensed/latin-400.css';
 import '@fontsource/barlow-condensed/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
 import '@fontsource/barlow/latin-400.css';
-import '../src/style.css';
+import './style.css';
 import './new-members.css';
 import config from '../content/site.json';
 
@@ -50,7 +50,7 @@ function NewMembersPage(){
         <p className="welcome-eyebrow">GUIDES / GET STARTED</p>
         <h1 id="welcome-heading">NEW TO SDAS?</h1>
         <p className="welcome-lead">Welcome aboard. Find your crew and enjoy the ’verse at your own pace.</p>
-        <p className="welcome-life">Life comes first. Join a flight whenever you can.</p>
+        <p className="welcome-life">Life comes first. Join a flight whenever you can.</p><p className="welcome-wordmark">SOME DUDES AND A SPACESHIP</p>
         <div className="welcome-hero-actions">
           <a className="welcome-action is-primary" href={config.org} target="_blank" rel="noopener noreferrer"><UserRoundPlus size={26}/> <span>JOIN SDAS ON RSI</span><ExternalLink size={19}/></a>
           <a className="welcome-action" href={config.discord} target="_blank" rel="noopener noreferrer"><MessageCircle size={25}/><span>JOIN OUR DISCORD</span><ExternalLink size={19}/></a>
