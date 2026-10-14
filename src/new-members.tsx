@@ -43,7 +43,7 @@ const steps = [
 function NewMembersPage(){
   return <div className="welcome-page">
     <a className="welcome-skip" href="#welcome-main">Skip to content</a>
-    <div className="welcome-review-banner">FOX REVIEW PREVIEW · NOT THE LIVE SDAS WEBSITE</div>
+    {window.location.hostname.includes('preview') && <div className="welcome-review-banner">FOX REVIEW PREVIEW · NOT THE LIVE SDAS WEBSITE</div>}
     <WelcomeHeader/>
     <main className="welcome-main" id="welcome-main">
       <section className="welcome-hero" aria-labelledby="welcome-heading">
