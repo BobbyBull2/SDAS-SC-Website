@@ -53,7 +53,7 @@ function NewMembersPage(){
           <p className="welcome-eyebrow">A STAR CITIZEN COMMUNITY / YOUR CREW AWAITS</p>
           <h1 id="welcome-heading">NEW TO SDAS?</h1>
           <p className="welcome-lead">Welcome aboard. Find your crew and enjoy the ’verse at your own pace.</p>
-          <p className="welcome-life">Life comes first. Join a flight whenever you can.</p>
+          <p className="welcome-life">Life comes first. Join the fun whenever you can.</p>
           <div className="welcome-hero-actions">
             <a className="welcome-action is-primary" href={config.org} target="_blank" rel="noopener noreferrer"><UserRoundPlus size={22}/><span>JOIN SDAS ON RSI</span><ExternalLink size={17}/></a>
             <a className="welcome-action" href={config.discord} target="_blank" rel="noopener noreferrer"><MessageCircle size={22}/><span>JOIN OUR DISCORD</span><ExternalLink size={17}/></a>
