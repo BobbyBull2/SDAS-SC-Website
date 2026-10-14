@@ -3,13 +3,16 @@ import { ArrowUpRight, BookOpen, Boxes, ChartNoAxesCombined, ChevronLeft, Chevro
 import { parseOrgNews, newestNewsFirst, type OrgNewsFeed } from './lib/org-news.mjs';
 import './community-preview.css';
 
+// Authentic Star Citizen imagery from the Star Citizen Wiki's media archive.
+// Erkul and Wiki preserve their approved original artwork; four other cards use
+// real in-game / official CIG imagery rather than generated illustrations.
 const tools = [
-  {title:'UEX',description:'Trade • Market Data',url:'https://uexcorp.space/',image:'https://edge.uexcorp.space/img/logo-social-media.jpg',Icon:ChartNoAxesCombined},
-  {title:'Erkul',description:'Ship Loadouts',url:'https://erkul.games/',image:'https://erkul.games/images/og_logo.jpg',Icon:Wrench},
-  {title:'SC Craft Tools',description:'Crafting & Blueprints',url:'https://sc-craft.tools/',image:'https://sc-craft.tools/logo.png',Icon:Boxes},
-  {title:'SC Trade Tools',description:'Routes & Commodities',url:'https://sc-trade.tools/',image:'https://sc-trade.tools/assets/home.png',Icon:Compass},
-  {title:'Star Citizen Wiki',description:'Guides & Reference',url:'https://starcitizen.tools/',image:'https://media.starcitizen.tools/thumb/9/99/Sc-patch-4102-delivery.webp/1200px-Sc-patch-4102-delivery.webp?2y3c2',Icon:BookOpen},
-  {title:'StarStrings',description:'Community Text Project',url:'https://github.com/MrKraken/StarStrings',image:'https://opengraph.githubassets.com/3d1d20596f79116482879d6e9fe06916d7df636c26ef8f66df10ce7483b50ae6/MrKraken/StarStrings',Icon:Languages},
+  {title:'UEX',description:'Trade • Market Data',url:'https://uexcorp.space/',image:'https://media.starcitizen.tools/thumb/2/21/Commodities.png/1280px-Commodities.png.webp',imageAlt:'Star Citizen commodity trading terminal screen',scene:true,Icon:ChartNoAxesCombined},
+  {title:'Erkul',description:'Ship Loadouts',url:'https://erkul.games/',image:'https://erkul.games/images/og_logo.jpg',imageAlt:'Erkul ship loadout website',scene:false,Icon:Wrench},
+  {title:'SC Craft Tools',description:'Crafting & Blueprints',url:'https://sc-craft.tools/',image:'https://media.starcitizen.tools/thumb/6/63/Item_fabricator_keyshot.webp/1280px-Item_fabricator_keyshot.webp',imageAlt:'Star Citizen item fabricator in a workshop',scene:true,Icon:Boxes},
+  {title:'SC Trade Tools',description:'Routes & Commodities',url:'https://sc-trade.tools/',image:'https://media.starcitizen.tools/thumb/e/ed/Constellation_Taurus_-_Inside_hangar_transferring_cargo.jpg/1280px-Constellation_Taurus_-_Inside_hangar_transferring_cargo.jpg.webp',imageAlt:'Star Citizen Constellation Taurus transferring cargo inside a hangar',scene:true,Icon:Compass},
+  {title:'Star Citizen Wiki',description:'Guides & Reference',url:'https://starcitizen.tools/',image:'https://media.starcitizen.tools/thumb/9/99/Sc-patch-4102-delivery.webp/1200px-Sc-patch-4102-delivery.webp?2y3c2',imageAlt:'Star Citizen Wiki website artwork',scene:false,Icon:BookOpen},
+  {title:'StarStrings',description:'Community Text Project',url:'https://github.com/MrKraken/StarStrings',image:'https://media.starcitizen.tools/thumb/f/ff/07_mobiglas_components.jpg/1280px-07_mobiglas_components.jpg.webp',imageAlt:'Star Citizen mobiGlas holographic interface component illustration',scene:true,Icon:Languages},
 ];
 
 // Native overflow scrolling provides touch swipe, trackpad, mouse wheel and keyboard access.
@@ -37,10 +40,10 @@ export function PilotsToolkit(){
       <RailArrows rail={rail} title="Pilot's Toolkit"/>
     </div>
     <div className="toolkit-grid preview-scroll-rail" ref={rail} role="region" tabIndex={0} aria-label="Pilot's Toolkit links, scroll horizontally">
-      {tools.map(({title,description,url,image,Icon})=><a key={url} href={url} target="_blank" rel="noopener noreferrer" className="toolkit-card" aria-label={'Open '+title+' in a new tab'}>
+      {tools.map(({title,description,url,image,imageAlt,scene,Icon})=><a key={url} href={url} target="_blank" rel="noopener noreferrer" className="toolkit-card" aria-label={'Open '+title+' in a new tab'}>
         <div className="toolkit-art">
           <div className="toolkit-art-fallback" aria-hidden="true"><Icon size={40} strokeWidth={1.7}/></div>
-          <img src={image} alt={title+' website preview'} loading="lazy" decoding="async" onError={(event)=>{event.currentTarget.hidden=true}}/>
+          <img src={image} alt={imageAlt} className={scene?'toolkit-art-scene':''} loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={(event)=>{event.currentTarget.hidden=true}}/>
         </div>
         <strong>{title}</strong><span>{description}</span><ExternalLink className="toolkit-link-icon" size={14}/>
       </a>)}
