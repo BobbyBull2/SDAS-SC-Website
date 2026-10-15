@@ -1,0 +1,33 @@
+name: Fleet Terminal v2.5 Preview
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fleet-terminal-v25-review
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'preview/fleet-terminal-v2'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage standalone Fleet Terminal (no production site changes)
+        run: |
+          test -s fleet-preview/index.html
+          mkdir -p dist
+          cp fleet-preview/index.html dist/index.html
+      - name: Deploy private-design review to non-production Cloudflare branch
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=sdas-sc-website --branch=fleet-terminal-review
