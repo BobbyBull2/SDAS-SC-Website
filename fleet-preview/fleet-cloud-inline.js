@@ -40,8 +40,14 @@
  }
  async function uploadPhoto(ship){
    if(!ship.image?.startsWith("data:image/"))return;
-   const b=await fetch(ship.image).then(r=>r.blob());
-   if(b.size>2097152)throw Error("Screenshot too large after compression (2 MB max).");
+   const source=await fetch(ship.image).then(r=>r.blob());
+   const picture=await createImageBitmap(source);
+   const ratio=Math.min(1,1600/Math.max(picture.width,picture.height));
+   const canvas=document.createElement("canvas");
+   canvas.width=Math.round(picture.width*ratio);canvas.height=Math.round(picture.height*ratio);
+   canvas.getContext("2d").drawImage(picture,0,0,canvas.width,canvas.height);picture.close();
+   const b=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",.75));
+   if(!b||b.size>2097152)throw Error("Image exceeds 2 MB after compression.");
    const path=user.id+"/"+ship.id+"/"+Date.now()+".jpg";
    const up=await client.storage.from("fleet-photos").upload(path,b,{contentType:"image/jpeg",upsert:false});
    if(up.error)throw up.error;
