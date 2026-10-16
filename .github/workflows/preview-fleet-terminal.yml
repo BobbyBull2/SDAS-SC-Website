@@ -1,18 +1,14 @@
 name: Fleet Terminal v2.5 Preview
-
 on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: fleet-terminal-v25-review
   cancel-in-progress: true
-
 jobs:
   preview:
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'preview/fleet-terminal-v2'
@@ -20,12 +16,22 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - name: Stage standalone Fleet Terminal (no production site changes)
+      - name: Stage Fleet Terminal and Discord login test
         run: |
           test -s fleet-preview/index.html
+          test -s fleet-preview/auth-preview.js
           mkdir -p dist
           cp fleet-preview/index.html dist/index.html
-      - name: Deploy private-design review to non-production Cloudflare branch
+          cp fleet-preview/auth-preview.js dist/auth-preview.js
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('dist/index.html')
+          s=p.read_text()
+          assert '</body>' in s
+          s=s.replace('</body>','<script type="module" src="/auth-preview.js"></script></body>',1)
+          p.write_text(s)
+          PY
+      - name: Deploy non-production Fleet Terminal review
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
