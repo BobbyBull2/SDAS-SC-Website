@@ -47,9 +47,9 @@
    if(up.error)throw up.error;
    const old=await client.from("ship_photos").select("id,object_path").eq("ship_id",ship.id);
    if(old.error)throw old.error;
-   for(const x of old.data||[]){await client.from("ship_photos").delete().eq("id",x.id);await client.storage.from("fleet-photos").remove([x.object_path]);}
    const ins=await client.from("ship_photos").insert({ship_id:ship.id,object_path:path});
    if(ins.error)throw ins.error;
+   for(const x of old.data||[]){await client.from("ship_photos").delete().eq("id",x.id);await client.storage.from("fleet-photos").remove([x.object_path]);}
    const {data:sign}=await client.storage.from("fleet-photos").createSignedUrl(path,3600);
    if(sign?.signedUrl)ship.image=sign.signedUrl;
  }
