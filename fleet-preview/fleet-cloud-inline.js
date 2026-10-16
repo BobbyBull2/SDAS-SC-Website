@@ -87,7 +87,8 @@
    const records=legacy.ships.filter(s=>s.owner==="bobby");
    if(!records.length)return alert("No local Bobby demo ships to import.");
    if(!confirm("Import "+records.length+" local Bobby ships into YOUR cloud hangar? They may include demo examples. Existing cloud ships will be kept."))return;
-   for(const s of records){db.ships.push({...clone(s),id:crypto.randomUUID(),owner:user.id,visibility:"private"});}
+   const existing=new Set(db.ships.filter(s=>s.owner===user.id).map(s=>String(s.name).toLowerCase()+"|"+String(s.nickname||"").toLowerCase()));
+   for(const s of records){const fingerprint=String(s.name).toLowerCase()+"|"+String(s.nickname||"").toLowerCase();if(existing.has(fingerprint))continue;db.ships.push({...clone(s),id:crypto.randomUUID(),owner:user.id,visibility:"private"});existing.add(fingerprint);}
    render();sync();back.disabled=true;back.textContent="LOCAL IMPORT REQUESTED";
  };
  import("https://esm.sh/@supabase/supabase-js@2").then(async mod=>{
