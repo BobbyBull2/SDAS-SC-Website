@@ -80,6 +80,8 @@
  window.sdasCloudQueueSave=()=>{if(ready)sync()};
  window.addEventListener("sdas-auth-ready",()=>{loadCloud()});
  const back=document.createElement("button");back.textContent="IMPORT MY EXISTING LOCAL SHIPS";back.className="btn";back.style.margin="8px 0";label.after(back);
+ const refresh=document.createElement("button");refresh.textContent="REFRESH ORG FLEET";refresh.className="btn";refresh.style.margin="8px";back.after(refresh);
+ refresh.onclick=async()=>{if(!ready||busy)return;await loadCloud();};
  back.onclick=async()=>{
    if(!ready)return alert("Verify SDAS login first.");
    const records=legacy.ships.filter(s=>s.owner==="bobby");
