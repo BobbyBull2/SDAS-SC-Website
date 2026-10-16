@@ -95,6 +95,20 @@
   if(added){render();await sync();}
   return added;
  };
+ const nameButton=document.createElement("button");
+ nameButton.type="button";nameButton.className="btn";nameButton.style.margin="8px";nameButton.textContent="EDIT PILOT NAME";label.after(nameButton);
+ nameButton.onclick=async()=>{
+  if(!ready||!user)return alert("Sign in and verify SDAS membership first.");
+  const me=db.members.find(m=>m.id===user.id);
+  const next=prompt("Choose your SDAS pilot display name (3–40 characters):",me?.name||"");
+  if(next===null)return;
+  const name=next.trim();
+  if(name.length<3||name.length>40)return alert("Display name must be 3–40 characters.");
+  const {error}=await client.from("pilot_profiles").update({display_name:name}).eq("user_id",user.id);
+  if(error)return alert("Could not update display name: "+error.message);
+  if(me)me.name=name;
+  render();status("Pilot display name updated to "+name+". Discord sign-in is unchanged.");
+ };
  window.sdasCloudQueueSave=()=>{if(ready)sync()};
  window.addEventListener("sdas-auth-ready",()=>{loadCloud()});
  const back=document.createElement("button");back.textContent="IMPORT MY EXISTING LOCAL SHIPS";back.className="btn";back.style.margin="8px 0";label.after(back);
