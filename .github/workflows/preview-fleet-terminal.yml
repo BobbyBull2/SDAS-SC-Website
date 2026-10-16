@@ -36,6 +36,18 @@ jobs:
           s=s.replace('function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}', 'function save(){try{localStorage.setItem(KEY,JSON.stringify(db));window.sdasCloudQueueSave?.();return true}',1)
           assert "const uid=()=> 'ship_'+Date.now()" in s
           s=s.replace("const uid=()=> 'ship_'+Date.now()", "const uid=()=> window.sdasCloudActive?crypto.randomUUID():'ship_'+Date.now()",1)
+          # Mount RSI importer in the actual Data/Import view template, never on home.
+          data_anchor='<p class="sub">Export your saved fleet as JSON or import a CSV of pledged ships</p></div></div><div class="layout"><section class="panel pad stack"><h3>BACKUP / RESTORE'
+          assert s.count(data_anchor)==1, 'Data/Import render template has changed'
+          data_replacement='<p class="sub">Export your saved fleet as JSON or import a CSV of pledged ships</p></div></div><div id="sdas-rsi-import-host" style="border-top:3px solid #5ed1e7;margin:22px 0;padding-top:12px"></div><div class="layout"><section class="panel pad stack" style="border-top:3px solid #5ed1e7"><h3>BACKUP / RESTORE'
+          s=s.replace(data_anchor,data_replacement,1)
+          csv_anchor='<section class="panel pad stack"><h3>PLEDGED SHIP CSV IMPORT'
+          assert s.count(csv_anchor)==1
+          s=s.replace(csv_anchor,'<section class="panel pad stack" style="border-top:3px solid #5ed1e7"><h3>MANUAL PLEDGED SHIP CSV IMPORT',1)
+          profile_anchor='<section class="panel pad" style="margin-top:15px"><h3>MEMBER PROFILES (DEMO)'
+          assert s.count(profile_anchor)==1
+          s=s.replace(profile_anchor,'<section class="panel pad" style="margin-top:20px;border-top:3px solid #5ed1e7"><h3>MEMBER PROFILES (DEMO)',1)
+          assert s.count('id="sdas-rsi-import-host"')==1
           assert '</script></body>' in s
           s=s.replace('</script></body>', '\n'+bridge+'\n</script><script defer src="/rsi-import.js"></script><script type="module" src="/auth-preview.js"></script></body>',1)
           p.write_text(s)
