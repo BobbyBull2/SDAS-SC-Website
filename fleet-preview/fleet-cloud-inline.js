@@ -77,6 +77,24 @@
   }catch(e){status("Save failed: "+e.message+". Please export a JSON backup before leaving.");}
   finally{busy=false;if(again){again=false;sync();}}
  }
+ window.sdasImportRsiHangar=async records=>{
+  if(!ready||!user||busy)throw Error("Cloud hangar must be connected and idle.");
+  const existing=new Set(db.ships.filter(s=>s.owner===user.id).map(s=>String(s.name||"").trim().toLowerCase()+"|"+String(s.nickname||"").trim().toLowerCase()));
+  let added=0;
+  for(const row of records){
+    const name=String(row.name||"").trim().slice(0,150);if(!name)continue;
+    const nickname=String(row.nickname||"").trim().slice(0,100);
+    const fingerprint=name.toLowerCase()+"|"+nickname.toLowerCase();
+    const qty=Math.max(1,Math.min(50,Number(row.qty)||1));
+    for(let i=0;i<qty;i++){
+      if(existing.has(fingerprint)&&qty===1)continue;
+      db.ships.push({id:crypto.randomUUID(),owner:user.id,name,nickname,origin:"Pledged",role:"Other",visibility:"private",paint:"",notes:"RSI hangar import"+(row.insurance?" | Insurance: "+row.insurance:""),image:"",loadout:{}});
+      existing.add(fingerprint);added++;
+    }
+  }
+  if(added){render();await sync();}
+  return added;
+ };
  window.sdasCloudQueueSave=()=>{if(ready)sync()};
  window.addEventListener("sdas-auth-ready",()=>{loadCloud()});
  const back=document.createElement("button");back.textContent="IMPORT MY EXISTING LOCAL SHIPS";back.className="btn";back.style.margin="8px 0";label.after(back);
