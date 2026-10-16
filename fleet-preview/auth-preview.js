@@ -1,4 +1,4 @@
-/* SDAS Fleet Terminal — preview-only Discord session test. No fleet data writes. */
+/* SDAS Fleet Terminal — verified Discord membership preview. Fleet writes remain disabled. */
 (async function(){
  const url="https://zfvfpbfkbvudaezichrh.supabase.co";
  const key="sb_publishable_n10yR_G-0OOmFWjHdrb8Yw_8lJfs8io";
@@ -11,18 +11,30 @@
  try{
  const lib=await import("https://esm.sh/@supabase/supabase-js@2");
  const sb=lib.createClient(url,key,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});
+ let renderNumber=0;
  const render=async()=>{
-  actions.replaceChildren();const {data:{user},error}=await sb.auth.getUser();
+  const current=++renderNumber;
+  const {data:{user},error}=await sb.auth.getUser();
+  if(current!==renderNumber)return;
+  actions.replaceChildren();
   if(error||!user){
    state.textContent="Not signed in. Sign in to test your Discord connection.";
-   button("LOGIN WITH DISCORD",async()=>{const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify"}});if(r.error)state.textContent=r.error.message;});
+   button("LOGIN WITH DISCORD",async()=>{const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify guilds"}});if(r.error)state.textContent=r.error.message;});
    return;
   }
   const name=user.user_metadata?.full_name||user.user_metadata?.name||user.email||"Discord pilot";
   const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role").eq("user_id",user.id).maybeSingle();
+  if(current!==renderNumber)return;
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
   else if(membership){state.textContent="Signed in as "+name+". SDAS membership: "+membership.role+". Live fleet sync is not connected yet.";}
   else{state.textContent="Signed in as "+name+". SDAS membership pending verification. Org database access remains restricted.";}
+  if(!membership){button("VERIFY SDAS MEMBERSHIP",async()=>{
+     actions.replaceChildren();state.textContent="Checking SDAS server membership…";
+     const {data:{session}}=await sb.auth.getSession();
+     if(!session?.provider_token){state.textContent="Discord guild permission is needed. Sign out and sign in again.";button("SIGN OUT",async()=>{await sb.auth.signOut();await render()});return;}
+     try {const res=await fetch(url+"/functions/v1/verify-sdas-discord",{method:"POST",headers:{"Content-Type":"application/json","apikey":key,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({provider_token:session.provider_token})});const json=await res.json();if(!res.ok)throw Error(json.error||"Verification failed");await render();}
+     catch(e){state.textContent="Verification failed: "+e.message;button("TRY AGAIN",render);button("SIGN OUT",async()=>{await sb.auth.signOut();await render()})}
+   });}
   button("SIGN OUT",async()=>{await sb.auth.signOut();await render();});
  };
  sb.auth.onAuthStateChange(()=>{setTimeout(render,0)});
