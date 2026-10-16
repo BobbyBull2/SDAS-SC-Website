@@ -39,25 +39,12 @@ function translate(raw){
 }
 let pending=[];
 function ensure(){
- if(document.getElementById("sdas-rsi-import"))return;
- const heads=[...document.querySelectorAll("h1,h2,h3,h4,[role=heading]")];
- const heading=heads.find(n=>/data\s*import/i.test(normal(n.textContent)));
- if(!heading)return; // Never fall back to landing page.
+ const host=document.getElementById("sdas-rsi-import-host");
+ if(!host||host.querySelector("#sdas-rsi-import"))return;
  const panel=document.createElement("section");panel.id="sdas-rsi-import";
  panel.style.cssText="background:linear-gradient(135deg,#091d2a,#102b39);border:1px solid #57baca;border-radius:12px;padding:18px;margin:18px 0;color:#d5f5ff;max-width:920px";
  panel.innerHTML='<h3 style="font-size:17px;letter-spacing:.08em;color:#8be8f5;margin:0 0 12px">RSI PLEDGED SHIPS // IMPORT</h3><p style="font-size:13px;line-height:1.6">Export your ships from the RSI My Hangar page using a trusted browser extension, then import its JSON or CSV file here. No RSI password or session token is ever requested.</p><p style="font-size:12px;margin:10px 0"><a id="sdas-rsi-ext" target="_blank" rel="noopener noreferrer" style="color:#7bddf3;text-decoration:underline">Install Hangar XPLORer — export-capable version (Chrome) ↗</a> · <a href="https://robertsspaceindustries.com/account/pledges" target="_blank" rel="noopener noreferrer" style="color:#7bddf3;text-decoration:underline">Open RSI My Hangar ↗</a></p><div style="border-left:2px solid #57baca;padding:8px 12px;margin:12px 0;background:#0b2330"><strong style="color:#8be8f5;font-size:12px">HOW TO IMPORT</strong><ol style="font-size:12px;line-height:1.9;margin:7px 0;padding-left:20px"><li>On a desktop browser, install Hangar XPLORer using the extension link above.</li><li>Sign in to RSI, open My Hangar, and use your hangar exporter to save a JSON or CSV file.</li><li>Return to Fleet Terminal → Data Import, then choose the exported file below.</li><li>Review the detected ships and select IMPORT PLEDGED SHIPS.</li></ol></div><label style="display:block;margin:12px 0 6px;font-size:12px">Choose a hangar export (.json or .csv)</label><input id="sdas-rsi-file" type="file" accept=".json,.csv,text/csv,application/json" style="max-width:100%;font-size:12px"><div id="sdas-rsi-message" role="status" style="margin-top:12px;font-size:12px"></div><div id="sdas-rsi-preview" style="margin-top:8px"></div><button id="sdas-rsi-confirm" type="button" disabled style="display:none;background:#12495e;color:#b0f3ff;border:1px solid #56c6d9;padding:10px 15px;border-radius:8px;margin-top:12px;cursor:pointer">IMPORT PLEDGED SHIPS</button><p style="font-size:11px;opacity:.8;margin-top:12px">New imports are private by default. Review the preview before saving. Some extension export formats may require further mapping.</p>';
- heading.insertAdjacentElement("afterend",panel);
- // Keep RSI import in the same Data Import view container as its heading.
- // Add restrained dividers between top-level Data Import sections only.
- const view=heading.closest('[role="tabpanel"], .tab-panel, .page, .view, main')||heading.parentElement;
- if(view&&!view.dataset.sdasImportDividers){
-   view.dataset.sdasImportDividers="1";
-   const style=document.createElement("style");style.id="sdas-import-dividers";
-   style.textContent="#sdas-rsi-import{border-top:2px solid #57baca!important;margin-top:22px!important;padding-top:20px!important} #sdas-rsi-import h3{border-bottom:1px solid rgba(111,212,230,.45);padding-bottom:12px} #sdas-rsi-import label{border-top:1px solid rgba(111,212,230,.35);padding-top:16px}";
-   if(!document.getElementById(style.id))document.head.append(style);
-   const siblings=[...heading.parentElement.children].filter(n=>n!==heading&&n!==panel&&/^(SECTION|ARTICLE|DIV)$/i.test(n.tagName));
-   for(const element of siblings){if(element.id==="cloudBanner")continue;element.style.borderTop=element.style.borderTop||"1px solid rgba(111,212,230,.25)";element.style.paddingTop=element.style.paddingTop||"14px";element.style.marginTop=element.style.marginTop||"14px";}
- }
+ host.replaceChildren(panel);
  panel.querySelector("#sdas-rsi-ext").href=EXT;
  const msg=panel.querySelector("#sdas-rsi-message"),preview=panel.querySelector("#sdas-rsi-preview"),confirm=panel.querySelector("#sdas-rsi-confirm");
  panel.querySelector("#sdas-rsi-file").addEventListener("change",async e=>{
