@@ -23,12 +23,19 @@ jobs:
           mkdir -p dist
           cp fleet-preview/index.html dist/index.html
           cp fleet-preview/auth-preview.js dist/auth-preview.js
+          test -s fleet-preview/fleet-cloud-inline.js
           python3 - <<'PY'
           from pathlib import Path
           p=Path('dist/index.html')
           s=p.read_text()
           assert '</body>' in s
-          s=s.replace('</body>','<script type="module" src="/auth-preview.js"></script></body>',1)
+          bridge=Path('fleet-preview/fleet-cloud-inline.js').read_text()
+          assert 'function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}' in s
+          s=s.replace('function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}', 'function save(){try{localStorage.setItem(KEY,JSON.stringify(db));window.sdasCloudQueueSave?.();return true}',1)
+          assert "const uid=()=> 'ship_'+Date.now()" in s
+          s=s.replace("const uid=()=> 'ship_'+Date.now()", "const uid=()=> window.sdasCloudActive?crypto.randomUUID():'ship_'+Date.now()",1)
+          assert '</script></body>' in s
+          s=s.replace('</script></body>', '\n'+bridge+'\n</script><script type="module" src="/auth-preview.js"></script></body>',1)
           p.write_text(s)
           PY
       - name: Deploy non-production Fleet Terminal review
