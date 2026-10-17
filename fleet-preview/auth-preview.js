@@ -1,50 +1,37 @@
 /* SDAS Fleet Terminal — verified Discord membership preview. Fleet writes remain disabled. */
 (async function(){
 
-// Branding matches the SDAS.space display treatment; no authentication changes.
+// SDAS-style site masthead, kept independent from Discord auth.
 (function(){
- const font=document.createElement('link');font.rel='stylesheet';font.href='https://fonts.googleapis.com/css2?family=Audiowide&display=swap';document.head.append(font);
- const css=document.createElement("style");css.id="sdas-fleet-brand-style";
+ if(document.getElementById("sdas-fleet-masthead"))return;
+ const css=document.createElement("style");
+ css.id="sdas-fleet-masthead-css";
  css.textContent=`
- #sdas-fleet-brand{max-width:1100px;margin:22px auto 25px;padding:12px 20px;text-align:center;line-height:1.04;text-transform:uppercase;user-select:none}
- #sdas-fleet-brand .fleet-kicker{display:flex;align-items:center;justify-content:center;gap:15px;color:#a8d5da;font:600 12px 'Rajdhani',sans-serif;letter-spacing:.42em;margin-bottom:18px}
- #sdas-fleet-brand .fleet-kicker:before{content:"";height:1px;width:38px;background:#57bec9}
- #sdas-fleet-brand .fleet-line{display:block;font-family:'Audiowide','Nasalization','Orbitron',sans-serif;font-weight:700;letter-spacing:.02em;white-space:nowrap}
- #sdas-fleet-brand .fleet-first{color:#e4e6e4;font-size:clamp(30px,7.7vw,88px);text-shadow:5px 6px 0 #030b0f}
- #sdas-fleet-brand .fleet-middle{color:#f1f1ec;font-size:clamp(13px,2.2vw,25px);letter-spacing:.48em;margin:12px 0}
- #sdas-fleet-brand .fleet-last{color:#e5c587;font-size:clamp(27px,6.5vw,76px);text-shadow:5px 6px 0 #030b0f}
-
- /* SDAS-style restrained navbar logo and centered main heading */
- #sdas-fleet-brand{width:min(100%,1120px);max-width:1120px;box-sizing:border-box;margin:32px auto 38px;padding:20px 24px 28px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#08141b 0%,#061016 100%);border-top:1px solid #23565d;border-bottom:1px solid #23565d;clear:both}
- #sdas-fleet-brand .fleet-first{font-size:clamp(28px,6.4vw,78px)}
- #sdas-fleet-brand .fleet-last{font-size:clamp(25px,5.4vw,65px)}
- #sdas-fleet-brand .fleet-kicker{justify-content:center}
- #sdas-fleet-nav-emblem{position:absolute;top:12px;left:18px;z-index:10;display:flex;align-items:center;justify-content:center;width:54px;height:54px;padding:3px;border:1px solid #6f6443;background:#040b0f;text-decoration:none}
- #sdas-fleet-nav-emblem img{width:47px;height:47px;object-fit:contain;display:block}
- body:has(#sdas-fleet-nav-emblem) .header,body:has(#sdas-fleet-nav-emblem) header{position:relative}
- body:has(#sdas-fleet-nav-emblem) .header{padding-left:max(76px,6vw)}
-  @media(max-width:540px){#sdas-fleet-brand{padding:8px 10px}#sdas-fleet-brand .fleet-kicker{font-size:9px;letter-spacing:.21em}#sdas-fleet-brand .fleet-middle{margin:9px 0}}
+ #sdas-fleet-masthead{position:relative;isolation:isolate;box-sizing:border-box;width:100%;min-height:290px;padding:32px 100px 30px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;text-align:center;background:radial-gradient(ellipse at 50% 0%,#14333d78,transparent 70%),#061118;border-bottom:1px solid #23565d;color:#e9ecec}
+ #sdas-fleet-masthead,#sdas-fleet-masthead *{box-sizing:border-box}
+ #sdas-fleet-masthead .fleet-kicker{font:600 11px 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:3.7px;color:#9cbbc1;display:flex;align-items:center;gap:12px;margin:0 0 17px}
+ #sdas-fleet-masthead .fleet-kicker:before{content:"";display:block;width:36px;height:1px;background:#43e7df}
+ #sdas-fleet-masthead .fleet-title{font-family:'Audiowide',sans-serif;font-size:clamp(30px,4.4vw,69px);line-height:1.1;letter-spacing:-.015em;font-weight:400;display:block;white-space:nowrap;text-shadow:3px 5px 0 #02090c}
+ #sdas-fleet-masthead .fleet-and{margin:13px 0 11px;font:600 clamp(15px,1.4vw,23px) 'Barlow Condensed',sans-serif;letter-spacing:9px;color:#e5e7e6}
+ #sdas-fleet-masthead .fleet-gold{color:#e3c489;font-size:clamp(27px,4vw,63px)}
+ #sdas-fleet-masthead .fleet-emblem{position:absolute;left:24px;top:24px;width:52px;height:52px;display:block;z-index:2}
+ #sdas-fleet-masthead .fleet-emblem img{display:block;width:100%;height:100%;object-fit:contain}
+ @media(max-width:760px){#sdas-fleet-masthead{min-height:225px;padding:65px 12px 25px}#sdas-fleet-masthead .fleet-emblem{top:12px;left:15px;width:44px;height:44px}#sdas-fleet-masthead .fleet-title{font-size:clamp(20px,5.5vw,42px);white-space:normal}#sdas-fleet-masthead .fleet-gold{font-size:clamp(19px,5vw,39px)}#sdas-fleet-masthead .fleet-kicker{font-size:9px;letter-spacing:2px}#sdas-fleet-masthead .fleet-and{letter-spacing:5px}}
  `;
  document.head.append(css);
- const oldTitle="Some Dudes Fleet Manager",newTitle="Some Dudes and a Fleet Manager";
- document.title=(document.title||oldTitle).replace(/Some Dudes (?:and a )?Fleet Manager/gi,newTitle);
- const nodes=[...document.querySelectorAll("h1,h2,.brand-title,.site-title,.hero-title")];
- const target=nodes.find(el=>/some dudes(?: and a)? fleet manager/i.test(el.textContent||""));
- if(target){target.textContent="";target.style.display="none";}
- const brand=document.createElement("div");brand.id="sdas-fleet-brand";brand.setAttribute("role","heading");brand.setAttribute("aria-level","1");
- brand.setAttribute("aria-label",newTitle);
- brand.innerHTML='<div class="fleet-kicker">A STAR CITIZEN COMMUNITY</div><span class="fleet-line fleet-first">SOME DUDES</span><span class="fleet-line fleet-middle">AND A</span><span class="fleet-line fleet-last">FLEET MANAGER</span>';
+ const font=document.createElement("link");font.rel="stylesheet";font.href="https://fonts.googleapis.com/css2?family=Audiowide&family=Barlow+Condensed:wght@600&display=swap";document.head.append(font);
+ const mast=document.createElement("section");mast.id="sdas-fleet-masthead";mast.setAttribute("aria-label","Some Dudes and a Fleet Manager");
+ const emblem=document.createElement("a");emblem.className="fleet-emblem";emblem.href="https://sdas.space/";emblem.title="Back to SDAS.space";
+ const logo=document.createElement("img");logo.alt="SDAS astronaut emblem";logo.src="data:image/webp;base64,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";emblem.append(logo);
+ const kicker=document.createElement("div");kicker.className="fleet-kicker";kicker.textContent="A STAR CITIZEN COMMUNITY";
+ const line1=document.createElement("div");line1.className="fleet-title";line1.textContent="SOME DUDES";
+ const and=document.createElement("div");and.className="fleet-and";and.textContent="AND A";
+ const line2=document.createElement("div");line2.className="fleet-title fleet-gold";line2.textContent="FLEET MANAGER";
+ mast.append(emblem,kicker,line1,and,line2);
  const header=document.querySelector(".header")||document.querySelector("header");
- // The same approved compact SDAS emblem used by the primary site.
- const emblem=document.createElement("a");emblem.id="sdas-fleet-nav-emblem";emblem.href="https://sdas.space/";emblem.title="Some Dudes and a Spaceship";emblem.setAttribute("aria-label","SDAS home");
- const logo=document.createElement("img");logo.src="../images/sdas-fox-approved-logo.webp";logo.alt="SDAS astronaut emblem";emblem.append(logo);
- (header||document.body).prepend(emblem);
- // Prevent an oversized copy of the logo dominating the Fleet Manager header.
- const nearbyImages=[...document.querySelectorAll("img")].filter(img=>img!==logo&&/sdas.*(logo|emblem)|astronaut.*(logo|emblem)|fox-approved-logo/i.test((img.alt||"")+" "+(img.getAttribute("src")||"")));
- for(const img of nearbyImages){if(!img.closest("#sdas-fleet-brand")&&img.getBoundingClientRect().width>110&&img.getBoundingClientRect().top<600){img.style.maxWidth="54px";img.style.maxHeight="54px";img.style.objectFit="contain";}}
- if(target){target.insertAdjacentElement("afterend",brand);}
- else if(header){header.insertAdjacentElement("afterend",brand);}
- else document.body.prepend(brand);
+ if(header)header.parentNode.insertBefore(mast,header);
+ else document.body.prepend(mast);
+ document.title="Some Dudes and a Fleet Manager";
 })();
 
  const url="https://zfvfpbfkbvudaezichrh.supabase.co";
