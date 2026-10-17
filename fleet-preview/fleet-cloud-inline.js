@@ -5,7 +5,7 @@
  let client=null,user=null,ready=false,busy=false,again=false,known=new Set(),booting=false;
  const legacy=clone(db);
  const label=document.createElement("div");label.id="cloudBanner";
- label.style.cssText="position:relative;z-index:2;border:1px solid #4dbbcc;background:#092e40;padding:10px 15px;margin:10px 0;border-radius:10px;color:#c7f4ff";
+ label.style.cssText="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0";label.setAttribute("role","status");label.setAttribute("aria-live","polite");
  label.textContent="FLEET CLOUD // Demo records remain local until verified login.";
  document.querySelector(".header")?.after(label);
  const status=t=>{label.textContent="FLEET CLOUD // "+t};
