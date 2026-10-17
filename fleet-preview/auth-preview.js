@@ -13,7 +13,17 @@
  #sdas-fleet-brand .fleet-first{color:#e4e6e4;font-size:clamp(30px,7.7vw,88px);text-shadow:5px 6px 0 #030b0f}
  #sdas-fleet-brand .fleet-middle{color:#f1f1ec;font-size:clamp(13px,2.2vw,25px);letter-spacing:.48em;margin:12px 0}
  #sdas-fleet-brand .fleet-last{color:#e5c587;font-size:clamp(27px,6.5vw,76px);text-shadow:5px 6px 0 #030b0f}
- @media(max-width:540px){#sdas-fleet-brand{padding:8px 10px}#sdas-fleet-brand .fleet-kicker{font-size:9px;letter-spacing:.21em}#sdas-fleet-brand .fleet-middle{margin:9px 0}}
+
+ /* SDAS-style restrained navbar logo and centered main heading */
+ #sdas-fleet-brand{width:min(100%,1120px);max-width:1120px;box-sizing:border-box;margin:32px auto 38px;padding:20px 24px 28px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#08141b 0%,#061016 100%);border-top:1px solid #23565d;border-bottom:1px solid #23565d;clear:both}
+ #sdas-fleet-brand .fleet-first{font-size:clamp(28px,6.4vw,78px)}
+ #sdas-fleet-brand .fleet-last{font-size:clamp(25px,5.4vw,65px)}
+ #sdas-fleet-brand .fleet-kicker{justify-content:center}
+ #sdas-fleet-nav-emblem{position:absolute;top:12px;left:18px;z-index:10;display:flex;align-items:center;justify-content:center;width:54px;height:54px;padding:3px;border:1px solid #6f6443;background:#040b0f;text-decoration:none}
+ #sdas-fleet-nav-emblem img{width:47px;height:47px;object-fit:contain;display:block}
+ body:has(#sdas-fleet-nav-emblem) .header,body:has(#sdas-fleet-nav-emblem) header{position:relative}
+ body:has(#sdas-fleet-nav-emblem) .header{padding-left:max(76px,6vw)}
+  @media(max-width:540px){#sdas-fleet-brand{padding:8px 10px}#sdas-fleet-brand .fleet-kicker{font-size:9px;letter-spacing:.21em}#sdas-fleet-brand .fleet-middle{margin:9px 0}}
  `;
  document.head.append(css);
  const oldTitle="Some Dudes Fleet Manager",newTitle="Some Dudes and a Fleet Manager";
@@ -25,6 +35,13 @@
  brand.setAttribute("aria-label",newTitle);
  brand.innerHTML='<div class="fleet-kicker">A STAR CITIZEN COMMUNITY</div><span class="fleet-line fleet-first">SOME DUDES</span><span class="fleet-line fleet-middle">AND A</span><span class="fleet-line fleet-last">FLEET MANAGER</span>';
  const header=document.querySelector(".header")||document.querySelector("header");
+ // The same approved compact SDAS emblem used by the primary site.
+ const emblem=document.createElement("a");emblem.id="sdas-fleet-nav-emblem";emblem.href="https://sdas.space/";emblem.title="Some Dudes and a Spaceship";emblem.setAttribute("aria-label","SDAS home");
+ const logo=document.createElement("img");logo.src="../images/sdas-fox-approved-logo.webp";logo.alt="SDAS astronaut emblem";emblem.append(logo);
+ (header||document.body).prepend(emblem);
+ // Prevent an oversized copy of the logo dominating the Fleet Manager header.
+ const nearbyImages=[...document.querySelectorAll("img")].filter(img=>img!==logo&&/sdas.*(logo|emblem)|astronaut.*(logo|emblem)|fox-approved-logo/i.test((img.alt||"")+" "+(img.getAttribute("src")||"")));
+ for(const img of nearbyImages){if(!img.closest("#sdas-fleet-brand")&&img.getBoundingClientRect().width>110&&img.getBoundingClientRect().top<600){img.style.maxWidth="54px";img.style.maxHeight="54px";img.style.objectFit="contain";}}
  if(target){target.insertAdjacentElement("afterend",brand);}
  else if(header){header.insertAdjacentElement("afterend",brand);}
  else document.body.prepend(brand);
