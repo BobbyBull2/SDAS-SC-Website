@@ -22,19 +22,19 @@
   actions.replaceChildren();
   if(error||!user){
    state.textContent="";
-   button("LOGIN WITH DISCORD",async()=>{const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify guilds"}});if(r.error)state.textContent=r.error.message;});
+   button("LOGIN WITH DISCORD",async()=>{const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify guilds guilds.members.read"}});if(r.error)state.textContent=r.error.message;});
    return;
   }
   const name=user.user_metadata?.full_name||user.user_metadata?.name||user.email||"Discord pilot";
   const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role").eq("user_id",user.id).maybeSingle();
   if(current!==renderNumber)return;
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
-  else if(membership){state.textContent=name+" • "+membership.role;}
+  else if(membership){state.textContent=name+" • SDAS "+membership.role.toUpperCase();}
   else{state.textContent="PILOT: "+name+" • Verification pending";}
-  if(!membership){button("VERIFY SDAS MEMBERSHIP",async()=>{
-     actions.replaceChildren();state.textContent="Checking SDAS server membership…";
+  if(!membership){button("VERIFY SDAS ROLES",async()=>{
+     actions.replaceChildren();state.textContent="Checking SDAS Discord roles…";
      const {data:{session}}=await sb.auth.getSession();
-     if(!session?.provider_token){state.textContent="Discord guild permission is needed. Sign out and sign in again.";button("SIGN OUT",async()=>{await sb.auth.signOut();await render()});return;}
+     if(!session?.provider_token){state.textContent="Discord roles permission is needed. Sign out and sign in again.";button("SIGN OUT",async()=>{await sb.auth.signOut();await render()});return;}
      try {const res=await fetch(url+"/functions/v1/verify-sdas-discord",{method:"POST",headers:{"Content-Type":"application/json","apikey":key,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({provider_token:session.provider_token})});const json=await res.json();if(!res.ok)throw Error(json.error||"Verification failed");await render();window.dispatchEvent(new Event("sdas-auth-ready"));}
      catch(e){state.textContent="Verification failed: "+e.message;button("TRY AGAIN",render);button("SIGN OUT",async()=>{await sb.auth.signOut();await render()})}
    });}
