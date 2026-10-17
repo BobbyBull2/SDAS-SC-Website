@@ -94,6 +94,28 @@
    for(const el of document.querySelectorAll("button,a")){
     if(/^(add|create|use|select|switch to|load)\s+(a\s+)?demo\s+pilot$/i.test(normalize(el.textContent)))el.style.display="none";
    }
+   // Remove the complete simulated member-profile editor, not just its buttons.
+   // It is unrelated to authenticated Discord membership and can mislead users.
+   const demoHeadings=[...document.querySelectorAll("h1,h2,h3,h4,h5,h6,legend,strong,div,span,p")].filter(el=>{
+     const label=normalize(el.textContent);
+     return label.length<100&&/^(member profiles\s*\(demo\)|local demo configuration|demo pilot profiles)$/i.test(label);
+   });
+   for(const heading of demoHeadings){
+     let p=heading;
+     for(let i=0;i<7&&p?.parentElement;i++){
+       if(p.querySelector('input[placeholder*="demo" i],button')&&p.querySelectorAll('input').length<=3&&p.querySelectorAll('button').length<=4)break;
+       p=p.parentElement;
+     }
+     if(p&&p!==document.body&&!p.contains(document.querySelector('#sdas-auth-preview'))){
+       p.remove();
+     }
+   }
+   for(const el of document.querySelectorAll('input[placeholder*="demo pilot" i],button')){
+     if(el.matches('input[placeholder*="demo pilot" i]')||(/demo pilot|reset demo data/i.test(normalize(el.textContent))&&el.matches('button'))){
+       const wrap=el.closest('section,.card,.panel,.form-row')||el;
+       if(wrap!==document.body&&!wrap.contains(document.querySelector('#sdas-auth-preview')))wrap.remove();
+     }
+   }
    const headings=[...document.querySelectorAll("h2,h3,h4,legend,strong")];
    const panels=names.map(rx=>{const h=headings.find(el=>rx.test(normalize(el.textContent))&&normalize(el.textContent).length<90);return h?panelOf(h):null;});
    if(panels.some(p=>!p)||new Set(panels).size!==3)return;
