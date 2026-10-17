@@ -58,6 +58,59 @@
  document.title="Some Dudes and a Fleet Manager";
 })();
 
+
+ // Keep the approved import page three-column layout separate from login and data handlers.
+ (function(){
+  const css=document.createElement("style");
+  css.id="sdas-data-import-layout";
+  css.textContent=`
+   .sdas-import-three{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important;gap:16px!important;width:100%!important;max-width:none!important;margin:22px 0!important}
+   .sdas-import-three>.sdas-import-card{min-width:0!important;width:100%!important;max-width:none!important;margin:0!important;box-sizing:border-box!important;background:linear-gradient(180deg,#0b2634 0%,#061924 100%)!important;border:1px solid #48cce5!important;border-radius:12px!important;padding:18px!important;box-shadow:0 12px 25px #0003!important;float:none!important}
+   .sdas-import-three>.sdas-import-card input,.sdas-import-three>.sdas-import-card textarea{max-width:100%;box-sizing:border-box}
+   .sdas-import-three>.sdas-import-card button{max-width:100%}
+   .sdas-import-three>.sdas-import-card h2,.sdas-import-three>.sdas-import-card h3{color:#90e7f8;letter-spacing:.08em}
+   @media(max-width:1050px){.sdas-import-three{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+   @media(max-width:700px){.sdas-import-three{grid-template-columns:1fr!important}}
+  `;
+  document.head.append(css);
+  const names=[/RSI PLEDGED SHIPS\s*\/\/\s*IMPORT/i,/BACKUP\s*\/\s*RESTORE/i,/MANUAL PLEDGED SHIP CSV IMPORT/i];
+  function normalize(s){return(s||"").replace(/\s+/g," ").trim()}
+  function panelOf(heading){
+   let p=heading;
+   for(let i=0;i<6&&p?.parentElement;i++){
+    p=p.parentElement;
+    const cls=String(p.className||"");
+    if(/^(SECTION|ARTICLE)$/.test(p.tagName)||/card|panel|box|import-/i.test(cls)){
+      if(p.querySelectorAll("h1,h2,h3,h4").length<=2)return p;
+    }
+   }
+   return heading.parentElement;
+  }
+  function activate(){
+   // Remove only demo-pilot selections; never remove real user profiles.
+   for(const el of document.querySelectorAll("select option")){
+    if(/demo pilot|sample pilot|test pilot/i.test(normalize(el.textContent)))el.remove();
+   }
+   for(const el of document.querySelectorAll("button,a")){
+    if(/^(add|create|use|select|switch to|load)\s+(a\s+)?demo\s+pilot$/i.test(normalize(el.textContent)))el.style.display="none";
+   }
+   const headings=[...document.querySelectorAll("h2,h3,h4,legend,strong")];
+   const panels=names.map(rx=>{const h=headings.find(el=>rx.test(normalize(el.textContent))&&normalize(el.textContent).length<90);return h?panelOf(h):null;});
+   if(panels.some(p=>!p)||new Set(panels).size!==3)return;
+   const [first,second,third]=panels;
+   if(first.closest(".sdas-import-three"))return;
+   const parent=first.parentElement;
+   const grid=document.createElement("div");grid.className="sdas-import-three";
+   parent.insertBefore(grid,first);
+   for(const p of panels){p.classList.add("sdas-import-card");grid.append(p);}
+  }
+  const go=()=>{if(document.getElementById("sdas-data-import-layout"))activate()};
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go,{once:true});else go();
+  document.addEventListener("click",()=>setTimeout(activate,30),true);
+  // The legacy single-page app swaps panels dynamically; reapply when the Import tab is rendered.
+  let scheduled=false;
+  new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(()=>{scheduled=false;activate()})}}).observe(document.body,{childList:true,subtree:true});
+ })();
  const url="https://zfvfpbfkbvudaezichrh.supabase.co";
  const key="sb_publishable_n10yR_G-0OOmFWjHdrb8Yw_8lJfs8io";
  const root=document.createElement("div");root.id="sdas-auth-preview";
