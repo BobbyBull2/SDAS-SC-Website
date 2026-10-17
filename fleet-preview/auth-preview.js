@@ -29,7 +29,7 @@
   const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role").eq("user_id",user.id).maybeSingle();
   if(current!==renderNumber)return;
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
-  else if(membership){state.textContent=name+" • SDAS "+membership.role.toUpperCase();}
+  else if(membership){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch"}[membership.role]||"Restricted")+" access";}
   else{state.textContent="PILOT: "+name+" • Verification pending";}
   const verifyRoles=async()=>{
     actions.replaceChildren();state.textContent="Checking SDAS Discord roles…";
