@@ -133,6 +133,51 @@
   let scheduled=false;
   new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(()=>{scheduled=false;activate()})}}).observe(document.body,{childList:true,subtree:true});
  })();
+
+ // Golden-ratio visual redesign: purely presentational, preserving legacy fleet handlers.
+ (function(){
+  const style=document.createElement("style");
+  style.id="sdas-golden-ratio-redesign";
+  style.textContent=`
+  :root{--sdas-gold:#e3c489;--sdas-cyan:#55d8ed;--sdas-ink:#04131d}
+  body{background:linear-gradient(180deg,#071722,#041019 75%)!important;color:#e9f4fa}
+  #sdas-fleet-masthead{min-height:238px!important;margin:0 0 0!important;padding:29px 30px 35px 41%!important;align-items:flex-start!important;text-align:left!important;background:linear-gradient(90deg,#041019d4,#04101997 42%,#0410194d 75%),url("https://raw.githubusercontent.com/BobbyBull2/SDAS-SC-Website/preview/fleet-terminal-v2/public/images/preview-hangar.png") center 50%/cover no-repeat,#05141d!important;-webkit-mask-image:none!important;mask-image:none!important;border-bottom:0!important}
+  #sdas-fleet-masthead .fleet-emblem{left:3%!important;top:24px!important;width:35%!important;height:163px!important}
+  #sdas-fleet-masthead .fleet-kicker{margin:0 0 5px!important;letter-spacing:.3em!important;font-size:12px!important}
+  #sdas-fleet-masthead .fleet-kicker:before{display:none!important}
+  #sdas-fleet-masthead .fleet-title{font-size:clamp(32px,3.55vw,65px)!important;line-height:1.13!important;letter-spacing:.01em!important}
+  #sdas-fleet-masthead .fleet-title:not(.fleet-gold){display:none!important}
+  #sdas-fleet-masthead .fleet-and{display:none!important}
+  #sdas-fleet-masthead .fleet-gold{color:var(--sdas-gold)!important;font-size:clamp(32px,3.55vw,65px)!important;border:1px solid #3bcde9;border-left-width:2px;padding:8px 16px;background:#04192466;box-shadow:0 0 14px #13bde529}
+  #sdas-fleet-masthead:after{content:"MANAGE  •  TRACK  •  ORGANIZE  •  DEPLOY";color:#76e5f2;letter-spacing:.34em;font:600 11px 'Barlow Condensed',sans-serif;margin-top:10px}
+  .header{background:#04131cb5!important;border:0!important;box-shadow:none!important}
+  .tabs,.tab-bar,.nav-tabs{display:flex!important;flex-wrap:wrap;gap:8px!important;background:transparent!important}
+  .tabs button,.tab-bar button,.nav-tabs button{border:1px solid #31788a!important;border-radius:7px 7px 0 0!important;min-height:43px!important;padding:10px 18px!important;background:linear-gradient(180deg,#103244ee,#041522ee)!important;color:#c8eef5!important}
+  .tabs button.active,.tab-bar button.active,.nav-tabs button.active{border-color:#f2c96b!important;color:#f2c96b!important;box-shadow:inset 0 -2px #eac16a,0 0 10px #eac16a24!important}
+  .panel,.card,.section-card{box-shadow:0 9px 30px #0003}
+  button{transition:box-shadow .2s ease,border-color .2s ease}
+  button:hover{box-shadow:0 0 12px #44d9f02b}
+  #sdas-golden-gutter{height:1px;background:linear-gradient(90deg,transparent,#67d7e66f,transparent);margin:0 2% 12px}
+  @media(max-width:950px){#sdas-fleet-masthead{padding:180px 20px 30px!important;align-items:center!important;text-align:center!important}#sdas-fleet-masthead .fleet-emblem{top:12px!important;left:calc(50% - 165px)!important;width:330px!important;height:135px!important}#sdas-fleet-masthead .fleet-gold{font-size:clamp(26px,5vw,45px)!important}#sdas-fleet-masthead:after{letter-spacing:.18em!important}}
+  @media(max-width:530px){#sdas-fleet-masthead{padding-top:130px!important}#sdas-fleet-masthead .fleet-emblem{height:104px!important;width:260px!important;left:calc(50% - 130px)!important}#sdas-fleet-masthead:after{font-size:9px!important;letter-spacing:.1em!important}}
+  `;
+  document.head.append(style);
+  const apply=()=>{
+    const mast=document.getElementById("sdas-fleet-masthead");if(!mast)return;
+    // Put the full official SDAS mark on the left and the new Fleet Manager wordmark on the right.
+    const title=mast.querySelector(".fleet-gold");if(title)title.textContent="FLEET MANAGER";
+    if(!document.getElementById("sdas-golden-gutter")){
+      const rule=document.createElement("div");rule.id="sdas-golden-gutter";mast.insertAdjacentElement("afterend",rule);
+    }
+    // Beautify currently rendered fleet panels without inserting mock/example ship data.
+    for(const el of document.querySelectorAll("h1,h2,h3")){
+      if(/^access fleet terminal$/i.test((el.textContent||"").trim())&& !el.dataset.sdasPolished){
+        el.dataset.sdasPolished="true";el.style.color="#e3c489";el.style.letterSpacing=".065em";
+      }
+    }
+  };
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apply,{once:true});else apply();
+ })();
  const url="https://zfvfpbfkbvudaezichrh.supabase.co";
  const key="sb_publishable_n10yR_G-0OOmFWjHdrb8Yw_8lJfs8io";
  const root=document.createElement("div");root.id="sdas-auth-preview";
