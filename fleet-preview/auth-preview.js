@@ -1,5 +1,34 @@
 /* SDAS Fleet Terminal — verified Discord membership preview. Fleet writes remain disabled. */
 (async function(){
+
+// Branding matches the SDAS.space display treatment; no authentication changes.
+(function(){
+ const css=document.createElement("style");css.id="sdas-fleet-brand-style";
+ css.textContent=`
+ #sdas-fleet-brand{max-width:1100px;margin:22px auto 25px;padding:12px 20px;text-align:center;line-height:1.04;text-transform:uppercase;user-select:none}
+ #sdas-fleet-brand .fleet-kicker{display:flex;align-items:center;justify-content:center;gap:15px;color:#a8d5da;font:600 12px 'Rajdhani',sans-serif;letter-spacing:.42em;margin-bottom:18px}
+ #sdas-fleet-brand .fleet-kicker:before{content:"";height:1px;width:38px;background:#57bec9}
+ #sdas-fleet-brand .fleet-line{display:block;font-family:'Nasalization','NASA','Michroma','Orbitron',sans-serif;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+ #sdas-fleet-brand .fleet-first{color:#e4e6e4;font-size:clamp(30px,7.7vw,88px);text-shadow:5px 6px 0 #030b0f}
+ #sdas-fleet-brand .fleet-middle{color:#f1f1ec;font-size:clamp(13px,2.2vw,25px);letter-spacing:.48em;margin:12px 0}
+ #sdas-fleet-brand .fleet-last{color:#e5c587;font-size:clamp(27px,6.5vw,76px);text-shadow:5px 6px 0 #030b0f}
+ @media(max-width:540px){#sdas-fleet-brand{padding:8px 10px}#sdas-fleet-brand .fleet-kicker{font-size:9px;letter-spacing:.21em}#sdas-fleet-brand .fleet-middle{margin:9px 0}}
+ `;
+ document.head.append(css);
+ const oldTitle="Some Dudes Fleet Manager",newTitle="Some Dudes and a Fleet Manager";
+ document.title=(document.title||oldTitle).replace(/Some Dudes (?:and a )?Fleet Manager/gi,newTitle);
+ const nodes=[...document.querySelectorAll("h1,h2,.brand-title,.site-title,.hero-title")];
+ const target=nodes.find(el=>/some dudes(?: and a)? fleet manager/i.test(el.textContent||""));
+ if(target){target.textContent="";target.style.display="none";}
+ const brand=document.createElement("div");brand.id="sdas-fleet-brand";brand.setAttribute("role","heading");brand.setAttribute("aria-level","1");
+ brand.setAttribute("aria-label",newTitle);
+ brand.innerHTML='<div class="fleet-kicker">A STAR CITIZEN COMMUNITY</div><span class="fleet-line fleet-first">SOME DUDES</span><span class="fleet-line fleet-middle">AND A</span><span class="fleet-line fleet-last">FLEET MANAGER</span>';
+ const header=document.querySelector(".header")||document.querySelector("header");
+ if(target){target.insertAdjacentElement("afterend",brand);}
+ else if(header){header.insertAdjacentElement("afterend",brand);}
+ else document.body.prepend(brand);
+})();
+
  const url="https://zfvfpbfkbvudaezichrh.supabase.co";
  const key="sb_publishable_n10yR_G-0OOmFWjHdrb8Yw_8lJfs8io";
  const root=document.createElement("div");root.id="sdas-auth-preview";
