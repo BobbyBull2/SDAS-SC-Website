@@ -31,14 +31,30 @@
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
   else if(membership){state.textContent=name+" • SDAS "+membership.role.toUpperCase();}
   else{state.textContent="PILOT: "+name+" • Verification pending";}
-  if(!membership){button("VERIFY SDAS ROLES",async()=>{
-     actions.replaceChildren();state.textContent="Checking SDAS Discord roles…";
-     const {data:{session}}=await sb.auth.getSession();
-     if(!session?.provider_token){state.textContent="Discord roles permission is needed. Sign out and sign in again.";button("SIGN OUT",async()=>{await sb.auth.signOut();await render()});return;}
-     try {const res=await fetch(url+"/functions/v1/verify-sdas-discord",{method:"POST",headers:{"Content-Type":"application/json","apikey":key,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({provider_token:session.provider_token})});const json=await res.json();if(!res.ok)throw Error(json.error||"Verification failed");await render();window.dispatchEvent(new Event("sdas-auth-ready"));}
-     catch(e){state.textContent="Verification failed: "+e.message;button("TRY AGAIN",render);button("SIGN OUT",async()=>{await sb.auth.signOut();await render()})}
-   });}
-  button("SIGN OUT",async()=>{await sb.auth.signOut();await render();});
+  const verifyRoles=async()=>{
+    actions.replaceChildren();state.textContent="Checking SDAS Discord roles…";
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session?.provider_token){
+      state.textContent="Reconnect Discord to grant permission to view SDAS roles.";
+      button("SIGN OUT / RECONNECT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
+      return;
+    }
+    try{
+      const res=await fetch(url+"/functions/v1/verify-sdas-discord",{method:"POST",
+        headers:{"Content-Type":"application/json","apikey":key,"Authorization":"Bearer "+session.access_token},
+        body:JSON.stringify({provider_token:session.provider_token})});
+      const json=await res.json();
+      if(!res.ok)throw Error(json.error||"Role verification failed");
+      await render();
+      window.dispatchEvent(new Event("sdas-auth-ready"));
+    }catch(e){
+      state.textContent="Role access: "+e.message;
+      button("RETRY ROLE CHECK",verifyRoles);
+      button("SIGN OUT / RECONNECT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
+    }
+  };
+  button(membership?"REFRESH SDAS ROLES":"VERIFY SDAS ROLES",verifyRoles);
+  button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
  };
  sb.auth.onAuthStateChange(()=>{setTimeout(render,0)});
  await render();
