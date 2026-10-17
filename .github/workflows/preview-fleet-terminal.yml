@@ -48,6 +48,21 @@ jobs:
           assert s.count(profile_anchor)==1
           s=s.replace(profile_anchor,'<section class="panel pad" style="margin-top:20px;border-top:3px solid #5ed1e7"><h3>MEMBER PROFILES (DEMO)',1)
           assert s.count('id="sdas-rsi-import-host"')==1
+          # Branding for the isolated Fleet Manager preview.
+          s=s.replace('FLEET OPERATIONS TERMINAL','SOME DUDES FLEET MANAGER')
+          s=s.replace('Fleet Operations Terminal','Some Dudes Fleet Manager')
+          s=s.replace('<title>SDAS Fleet Terminal','<title>Some Dudes Fleet Manager')
+          # Preserve the original site font for small controls and copy.
+          # Large titles use the NASA-inspired display face with a readable fallback.
+          font_css='''<style id="sdas-nasa-heading-font">
+          @font-face{font-family:SDASNASA;src:local("Nasalization"),local("Nasalization Rg"),local("Eurostile Extended");font-display:swap}
+          .sdas-large-heading{font-family:SDASNASA,"Arial Black",sans-serif!important;letter-spacing:.085em!important;text-transform:uppercase}
+          </style>'''
+          s=s.replace('</head>',font_css+'</head>',1)
+          nasa_script='''<script>
+          (()=>{const tag=()=>{document.querySelectorAll("h1,h2,h3,h4,h5,h6,.title,.brand").forEach(el=>{const n=parseFloat(getComputedStyle(el).fontSize)||0;if(n>20)el.classList.add("sdas-large-heading");else el.classList.remove("sdas-large-heading")})};new MutationObserver(()=>requestAnimationFrame(tag)).observe(document.body,{childList:true,subtree:true});tag()})();
+          </script>'''
+          s=s.replace('</body>',nasa_script+'</body>',1)
           assert '</script></body>' in s
           s=s.replace('</script></body>', '\n'+bridge+'\n</script><script defer src="/rsi-import.js"></script><script type="module" src="/auth-preview.js"></script></body>',1)
           p.write_text(s)
