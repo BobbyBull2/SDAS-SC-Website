@@ -7,8 +7,11 @@
  const css=document.createElement("style");
  css.id="sdas-fleet-masthead-css";
  css.textContent=`
- #sdas-fleet-masthead{position:relative;isolation:isolate;box-sizing:border-box;width:100%;min-height:290px;padding:32px 100px 30px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;text-align:center;background:linear-gradient(90deg,#061118e8 0%,#061118a8 48%,#0611188c 100%),url("https://raw.githubusercontent.com/BobbyBull2/SDAS-SC-Website/preview/fleet-terminal-v2/public/images/preview-hangar.png") center 46%/cover no-repeat,#061118;border-bottom:1px solid #23565d;color:#e9ecec}
+ #sdas-fleet-masthead{position:relative;isolation:isolate;box-sizing:border-box;width:100%;min-height:290px;padding:32px 100px 30px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;text-align:center;background:linear-gradient(90deg,#061118e8 0%,#061118a8 48%,#0611188c 100%),url("https://raw.githubusercontent.com/BobbyBull2/SDAS-SC-Website/preview/fleet-terminal-v2/public/images/preview-hangar.png") center 46%/cover no-repeat,#061118;border-bottom:0;color:#e9ecec;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 67%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 67%,transparent 100%)}
  #sdas-fleet-masthead,#sdas-fleet-masthead *{box-sizing:border-box}
+ #sdas-fleet-masthead{margin-bottom:-12px}
+ body:has(#sdas-fleet-masthead){background-color:#061118}
+
  #sdas-fleet-masthead .fleet-kicker{font:600 11px 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:3.7px;color:#9cbbc1;display:flex;align-items:center;gap:12px;margin:0 0 17px}
  #sdas-fleet-masthead .fleet-kicker:before{content:"";display:block;width:36px;height:1px;background:#43e7df}
  #sdas-fleet-masthead .fleet-title{font-family:'Audiowide',sans-serif;font-size:clamp(30px,4.4vw,69px);line-height:1.1;letter-spacing:-.015em;font-weight:400;display:block;white-space:nowrap;text-shadow:3px 5px 0 #02090c}
