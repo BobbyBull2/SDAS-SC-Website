@@ -23,6 +23,9 @@ jobs:
           mkdir -p dist
           cp fleet-preview/index.html dist/index.html
           cp fleet-preview/auth-preview.js dist/auth-preview.js
+          cp fleet-preview/fleet-design.css dist/fleet-design.css
+          mkdir -p dist/public/images
+          cp public/images/preview-hangar.png dist/public/images/preview-hangar.png
           test -s fleet-preview/fleet-cloud-inline.js
           test -s fleet-preview/rsi-import.js
           cp fleet-preview/rsi-import.js dist/rsi-import.js
@@ -58,7 +61,7 @@ jobs:
           @font-face{font-family:SDASNASA;src:local("Nasalization"),local("Nasalization Rg"),local("Eurostile Extended");font-display:swap}
           .sdas-large-heading{font-family:SDASNASA,"Arial Black",sans-serif!important;letter-spacing:.085em!important;text-transform:uppercase}
           </style>'''
-          s=s.replace('</head>',font_css+'</head>',1)
+          s=s.replace('</head>',font_css+'<link rel="stylesheet" href="/fleet-design.css"></head>',1)
           nasa_script='''<script>
           (()=>{const tag=()=>{document.querySelectorAll("h1,h2,h3,h4,h5,h6,.title,.brand").forEach(el=>{const n=parseFloat(getComputedStyle(el).fontSize)||0;if(n>20)el.classList.add("sdas-large-heading");else el.classList.remove("sdas-large-heading")})};new MutationObserver(()=>requestAnimationFrame(tag)).observe(document.body,{childList:true,subtree:true});tag()})();
           </script>'''
