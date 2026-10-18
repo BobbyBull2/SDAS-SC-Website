@@ -1,0 +1,73 @@
+/* SDAS Fleet Manager • design matched to SDAS.space NASA-inspired typography */
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+:root{--fm-type:'Audiowide','Arial Black',sans-serif;--fm-small:'Barlow Condensed','Segoe UI',sans-serif;--fm-gold:#e4c488;--fm-cyan:#62d7d5}
+body{background:radial-gradient(ellipse at 80% -10%,#22535937,transparent 46%),linear-gradient(180deg,#040c11 0%,#07131a 38%,#030a0f 100%);color:#e9f3f2}
+.shell{max-width:1500px;padding:18px clamp(14px,3vw,42px) 42px}
+.header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;padding:20px 2px 24px;border-color:#23565e}
+.header .brand{display:flex;align-items:center;gap:clamp(16px,2.8vw,38px);min-width:0;width:100%}
+.sdas-logo{width:clamp(105px,15vw,210px)!important;height:auto!important;max-height:180px;object-fit:contain;flex:none;filter:drop-shadow(0 0 18px #3db6be20)}
+.terminal-heading{width:min(100%,930px);min-width:0}
+.terminal-heading .fleet-kicker{display:flex;align-items:center;gap:14px;color:#a8d2d4;font:600 12px/1.2 var(--fm-small);letter-spacing:.33em;margin-bottom:12px}
+.terminal-heading .fleet-kicker:before{content:"";width:38px;height:1px;background:#4bcbd2;flex:none}
+.fleet-wordmark{font:400 clamp(26px,4.8vw,76px)/.99 var(--fm-type);letter-spacing:-.035em;text-shadow:4px 5px 0 #010609;display:flex;flex-direction:column;align-items:flex-start;text-transform:uppercase}
+.fleet-wordmark .word-top{color:#e7e9e5;white-space:nowrap}
+.fleet-wordmark .word-connector{color:#e7e9e5;font:600 clamp(13px,1.2vw,20px)/1.5 var(--fm-small);letter-spacing:.45em;align-self:center;margin:6px 0 3px;text-shadow:none}
+.fleet-wordmark .word-bottom{color:var(--fm-gold);font-size:.67em;letter-spacing:-.027em;white-space:nowrap}
+.header>.row{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:9px;max-width:235px}
+.header>.row select{max-width:210px;font:600 12px var(--fm-small);letter-spacing:.045em}
+.header .pill{background:#08232b;border-color:#427b7b;color:#9de1db;border-radius:3px}
+.nav{gap:5px;padding:12px 0 22px;flex-wrap:wrap;border-bottom:1px solid #1d444b}
+.nav .btn{border-radius:2px 2px 0 0;flex:1 1 auto;padding:14px 12px;color:#b1c5c9;background:linear-gradient(180deg,#0b222a,#061218);border:1px solid #29515b;border-bottom:2px solid transparent;box-shadow:inset 0 1px 0 #ffffff0e;font:600 clamp(11px,1vw,14px) var(--fm-small);letter-spacing:.1em}
+.nav .btn.active,.nav .btn:hover{color:#c4fff6;border-color:#54bdb9;border-bottom:2px solid var(--fm-gold);background:linear-gradient(180deg,#194048,#0b232d);box-shadow:inset 0 1px 0 #76efe93c,0 0 14px #3ceee420}
+h1,h2,.page-head h2,.welcome h2,.kpi strong{font-family:var(--fm-type)!important;font-weight:400!important}
+h2,.page-head h2{letter-spacing:.035em}
+.panel{border-radius:5px;border-color:#285560;background:linear-gradient(155deg,#0d242df7,#051118f7);box-shadow:inset 0 1px 0 #b1edeb12,0 10px 30px #0005}
+.btn{border-radius:3px;background:linear-gradient(180deg,#173641,#0a1e28);border-color:#39757d}
+.btn.primary{background:linear-gradient(180deg,#1e7779,#0d444d);border-color:#64d5d4}
+.btn:focus-visible,tr[data-open]:focus-visible{outline:2px solid #90ede4;outline-offset:3px}
+footer{font-family:var(--fm-small);color:#72999f!important;letter-spacing:.04em}
+.fleet-home{padding-top:22px}
+.fleet-hero{position:relative;min-height:190px;display:flex;justify-content:space-between;align-items:center;gap:20px;overflow:hidden;margin-bottom:18px;padding:24px clamp(18px,3vw,42px);border:1px solid #366671;background:linear-gradient(90deg,#04121cf0 0%,#071c25cf 45%,#06202b7a 100%),radial-gradient(circle at 87% 20%,#3c778042,transparent 38%);isolation:isolate}
+.fleet-hero:before{content:"";position:absolute;right:-55px;top:-120px;width:460px;height:430px;border:1px solid #d6b87a44;border-radius:50%;box-shadow:0 0 0 28px #d6b87a09,0 0 0 58px #55d3cb0b;transform:rotate(-22deg);z-index:-1}
+.fleet-hero:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(150deg,transparent 0,transparent 27px,#93c7c207 28px,#93c7c207 29px);pointer-events:none;z-index:-1}
+.fleet-hero .eyebrow{font:600 12px var(--fm-small);letter-spacing:.3em;color:#9bd9d4;margin-bottom:12px}
+.fleet-hero h2{font:400 clamp(24px,2.8vw,43px)/1.16 var(--fm-type);letter-spacing:0;color:#f0f2eb;margin:0 0 12px}
+.fleet-hero h2 span{color:var(--fm-gold)}
+.fleet-hero p{color:#bed4d6;max-width:720px;line-height:1.55}
+.fleet-hero .btn{white-space:nowrap;position:relative;z-index:1}
+.fleet-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.fleet-metric{padding:16px 18px;border:1px solid #2b5058;background:linear-gradient(145deg,#102a35,#07141d);min-width:0}
+.fleet-metric .metric-label{font:600 12px var(--fm-small);letter-spacing:.2em;color:#9abdc1}
+.fleet-metric strong{display:block;font:400 clamp(28px,3vw,44px)/1.24 var(--fm-type);color:var(--fm-gold);margin:9px 0 2px}
+.fleet-metric small{font:500 12px var(--fm-small);color:#86b9b8}
+.fleet-dashboard{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(275px,.85fr);gap:18px}
+.fleet-dashboard .panel{padding:23px}
+.fleet-panel-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;padding-bottom:18px;border-bottom:1px solid #2b5960}
+.fleet-panel-heading h2{font:400 clamp(20px,2vw,29px)/1.25 var(--fm-type);color:#f2f4f0}
+.fleet-panel-heading .eyebrow{margin-bottom:6px;font:600 11px var(--fm-small);letter-spacing:.22em;color:#76c9c8}
+.fleet-ship-table{width:100%;border-collapse:collapse}
+.fleet-ship-table th{font:700 12px var(--fm-small);letter-spacing:.14em;color:#8dc0c1;padding:17px 12px;border-bottom:1px solid #30525e;text-align:left}
+.fleet-ship-table td{padding:17px 12px;border-bottom:1px solid #20404a;color:#cfe2e0;vertical-align:middle}
+.fleet-ship-table tr[data-open]{cursor:pointer}
+.fleet-ship-table tr[data-open]:hover{background:#1846535c}
+.fleet-ship-table strong{font:600 16px var(--fm-small);color:#e2f0ee}
+.fleet-ship-table .small{font:500 12px var(--fm-small)}
+.fleet-ship-table .role-tag{display:inline-flex;border:1px solid #477782;color:#9fd1cf;padding:3px 7px;font:600 11px var(--fm-small);letter-spacing:.05em}
+.fleet-empty{padding:35px 15px;text-align:center;color:#a9c9ca}
+.fleet-sidebar{display:grid;align-content:start;gap:14px}
+.fleet-sidebar .panel{padding:19px}
+.fleet-sidebar h3{font:400 18px var(--fm-type);letter-spacing:0;color:#edece5;margin-bottom:13px}
+.fleet-sidebar .side-kicker{font:600 11px var(--fm-small);color:#75b9bc;letter-spacing:.2em;margin-bottom:8px}
+.fleet-sidebar .side-status{display:flex;align-items:center;gap:8px;color:#f0cb91;font:700 17px var(--fm-small);margin-bottom:7px}
+.fleet-sidebar .side-status:before{content:"";height:8px;width:8px;background:#e4c08a;border-radius:50%;box-shadow:0 0 12px #e4c08a66}
+.fleet-sidebar .side-copy{font:500 14px/1.5 var(--fm-small);color:#b1c5c6}
+.fleet-sidebar .side-actions{display:grid;gap:8px}
+.fleet-sidebar .side-actions .btn{text-align:left;display:flex;justify-content:space-between;width:100%;gap:10px;font:600 14px var(--fm-small);letter-spacing:.08em}
+.fleet-sidebar .role-grid{display:grid;gap:8px;font:500 14px var(--fm-small);color:#b1c6c8}
+.fleet-sidebar .role-grid strong{color:#e7c888;font-weight:700}
+.fleet-note{margin-top:14px;font:500 13px/1.45 var(--fm-small);letter-spacing:.045em;color:#7da9aa}
+@media(min-width:1200px){.fleet-wordmark{font-size:clamp(54px,5vw,78px)}}
+@media(max-width:1100px){.header{grid-template-columns:1fr}.header>.row{flex-direction:row;align-items:center;max-width:none;justify-content:flex-end}.fleet-dashboard{grid-template-columns:minmax(0,1.7fr) minmax(240px,.9fr)}.fleet-wordmark{font-size:clamp(32px,6vw,66px)}}
+@media(max-width:760px){.shell{padding:12px 13px 30px}.header .brand{gap:13px}.sdas-logo{width:95px!important}.terminal-heading .fleet-kicker{font-size:10px;letter-spacing:.18em;gap:7px}.terminal-heading .fleet-kicker:before{width:22px}.fleet-wordmark{font-size:clamp(24px,6vw,44px)}.fleet-wordmark .word-connector{font-size:12px}.header>.row{justify-content:flex-start}.nav .btn{flex:1 1 43%;padding:11px 7px}.fleet-hero{min-height:165px}.fleet-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.fleet-dashboard{grid-template-columns:1fr}.fleet-dashboard .panel{padding:16px}.fleet-hero .btn{display:none}}
+@media(max-width:440px){.header .brand{flex-direction:column;align-items:flex-start}.sdas-logo{width:118px!important;max-height:85px}.terminal-heading{width:100%}.fleet-wordmark{font-size:clamp(29px,8.2vw,44px)}.fleet-wordmark .word-bottom{font-size:.67em}.fleet-ship-table th:nth-child(3),.fleet-ship-table td:nth-child(3){display:none}.fleet-ship-table th,.fleet-ship-table td{padding:12px 6px}.fleet-panel-heading{flex-direction:column}.fleet-hero{padding:18px}}
+@media(prefers-reduced-motion:reduce){.fleet-hero *{animation:none!important;transition:none!important}}
