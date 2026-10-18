@@ -192,3 +192,92 @@ text-align:center;margin-top:38px!important}
  #sdas-auth-preview {width:100%!important}
  #sdas-auth-state {max-width:none!important}
 }
+
+/* SDAS Fleet Manager cinematic screenshot-alignment pass — 2026-10-18.
+   Layout-only overrides: authentication, permissions and ship data remain untouched. */
+:root {--sdas-display:'Audiowide','Black Ops One',sans-serif;--sdas-space:#051019;--sdas-glow:#43dbe5;--sdas-gold:#e9c481;}
+html,body {min-height:100%;background-color:#040d15!important;}
+body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparent 75%),linear-gradient(155deg,#071722 0%,#031019 80%)!important;}
+.shell{width:100%;max-width:1600px!important;margin-inline:auto!important;padding-inline:clamp(12px,2.4vw,40px)!important;}
+#sdas-fleet-masthead{
+  position:relative!important;isolation:isolate!important;
+  min-height:clamp(275px,28vw,425px)!important;
+  padding:clamp(95px,10vw,145px) 5% 54px 39%!important;
+  align-items:flex-start!important;text-align:left!important;
+  background:linear-gradient(90deg,#030c17ba 0%,#04111dad 32%,#04111bd1 63%,#030b15bc 100%),
+    url('../public/images/preview-hangar.png') center 42%/cover no-repeat,#04111b!important;
+  border-bottom:1px solid #55d9e261!important;
+  box-shadow:inset 0 -90px 110px #04111be0,0 14px 50px #0008!important;
+}
+#sdas-fleet-masthead:before{
+  content:""!important;position:absolute!important;pointer-events:none!important;
+  left:7%!important;right:auto!important;top:-100px!important;
+  width:clamp(280px,42vw,590px)!important;height:clamp(280px,42vw,590px)!important;
+  border:1px solid #dbb76c60!important;border-radius:50%!important;
+  box-shadow:0 0 0 45px #dcb66c0b,0 0 0 105px #c39d5708,inset 0 0 30px #d8b36416!important;
+  transform:rotate(-24deg)!important;
+}
+#sdas-fleet-masthead .fleet-emblem{
+  top:clamp(28px,5vw,66px)!important;left:clamp(20px,4vw,58px)!important;
+  width:clamp(220px,30vw,440px)!important;height:clamp(95px,14vw,190px)!important;
+  filter:drop-shadow(0 5px 18px #000a);
+}
+#sdas-fleet-masthead .fleet-kicker{font-family:var(--sdas-condensed)!important;color:#91c7d0!important;font-size:12px!important;letter-spacing:.27em!important}
+#sdas-fleet-masthead .fleet-title:not(.fleet-gold){display:block!important;color:#f0f2ef!important;font-family:var(--sdas-display)!important;font-size:clamp(30px,4.1vw,68px)!important;line-height:1.12!important;}
+#sdas-fleet-masthead .fleet-and{display:block!important;color:#bddbe0!important;letter-spacing:.45em!important;font-size:clamp(12px,1.25vw,18px)!important;margin:7px 0!important}
+#sdas-fleet-masthead .fleet-gold{
+  display:block!important;font-family:var(--sdas-display)!important;font-size:clamp(30px,4.1vw,68px)!important;
+  line-height:1.12!important;letter-spacing:.01em!important;color:var(--sdas-gold)!important;
+  border:0!important;background:none!important;padding:0!important;box-shadow:none!important;
+  text-shadow:0 3px 19px #000d,0 0 25px #c395451f!important;
+}
+#sdas-fleet-masthead:after{color:#83d9e3!important;letter-spacing:.19em!important;opacity:.85;}
+.header{padding-top:12px!important;padding-bottom:12px!important}
+#nav,.nav{position:relative;z-index:2;gap:6px!important;padding:10px!important;border:1px solid #347784!important;border-radius:12px!important;
+  background:linear-gradient(180deg,#102b39ed,#061822f5)!important;box-shadow:0 9px 30px #0008,inset 0 1px #c7fcff17!important;}
+#nav .btn{min-height:51px!important;border-radius:8px!important;border:1px solid #306373!important;
+  background:linear-gradient(180deg,#102e3bd9,#061720ec)!important;color:#c2e2e6!important;
+  transition:background .18s ease,box-shadow .18s ease,color .18s ease!important;}
+#nav .btn.active{border-color:#c8a35e!important;color:#f1d498!important;
+  background:linear-gradient(180deg,#20404a,#12232a)!important;
+  box-shadow:inset 0 -3px #e1bd75,0 0 21px #deb66123!important;}
+#nav .btn:hover{border-color:#60cbd3!important;box-shadow:0 0 18px #46d0e51f!important}
+#sdas-golden-live{grid-template-columns:minmax(0,1.8fr) minmax(290px,.75fr)!important;gap:20px!important;}
+#sdas-golden-live .gbox,#sdas-golden-live .gmain,#sdas-golden-live .gside .gbox{
+  border-radius:14px!important;border:1px solid #387888!important;
+  background:linear-gradient(155deg,#0c2837f5,#061824fa 78%)!important;
+  box-shadow:0 15px 40px #0008,inset 0 1px #eaffff18!important;}
+#sdas-golden-live .gmain{padding:clamp(16px,2.25vw,34px)!important;min-width:0;}
+#sdas-golden-live .gside{gap:15px!important}
+#sdas-golden-live .gside .gbox{padding:clamp(16px,1.8vw,26px)!important}
+#sdas-golden-live .gside .gbox:nth-child(2){border-color:#967c52!important}
+#sdas-golden-live h2,#sdas-golden-live h3,
+.fleet-dashboard h2,.fleet-sidebar h3,.fleet-panel-heading h2{font-family:var(--sdas-display)!important;font-weight:400!important;}
+#sdas-golden-live table{width:100%;border-collapse:collapse;}
+#sdas-golden-live th{background:#14334366;color:#a9dce2!important;border-bottom:1px solid #4a8090!important;padding:13px 11px!important}
+#sdas-golden-live td{padding:14px 11px!important;border-bottom:1px solid #31515d!important}
+#sdas-golden-live tbody tr:hover{background:#1d536144!important}
+#sdas-golden-live .gbtn,.fleet-sidebar .btn{border-radius:7px!important;border:1px solid #49899c!important;}
+.fleet-home .fleet-hero{border-radius:14px;border-color:#447e88;background:linear-gradient(90deg,#061a25f0,#0a3241b0),url('../public/images/preview-hangar.png') center/cover!important}
+.fleet-home .fleet-dashboard{grid-template-columns:minmax(0,1.8fr) minmax(280px,.72fr);gap:18px}
+.fleet-home .fleet-dashboard .panel{border-radius:14px!important;border-color:#397986!important}
+.fleet-ship-table tbody tr{transition:background .2s ease}
+.fleet-ship-table .ship-mark{display:inline-grid;place-items:center;vertical-align:middle;flex:none;width:55px;height:42px;
+  border:1px solid #3b707b;border-radius:7px;background:radial-gradient(ellipse at center,#2e778352,#061822);color:#80d7dc;font-size:25px;}
+.fleet-ship-table .ship-identity{display:flex;align-items:center;gap:12px;min-width:0}
+.fleet-ship-table .ship-identity>span:last-child{min-width:0}
+@media(max-width:970px){
+ #sdas-golden-live,.fleet-home .fleet-dashboard{grid-template-columns:1fr!important}
+ #sdas-fleet-masthead{padding:178px 22px 42px!important;align-items:center!important;text-align:center!important;}
+ #sdas-fleet-masthead .fleet-emblem{top:17px!important;left:50%!important;transform:translateX(-50%)!important;width:300px!important;height:125px!important}
+ #sdas-fleet-masthead .fleet-title:not(.fleet-gold),#sdas-fleet-masthead .fleet-gold{font-size:clamp(26px,6vw,54px)!important}
+}
+@media(max-width:560px){
+ #sdas-fleet-masthead{min-height:310px!important;padding:135px 12px 30px!important}
+ #sdas-fleet-masthead .fleet-emblem{width:245px!important;height:96px!important}
+ #sdas-fleet-masthead .fleet-title:not(.fleet-gold),#sdas-fleet-masthead .fleet-gold{font-size:clamp(23px,6.25vw,38px)!important}
+ #sdas-fleet-masthead:after{font-size:9px!important;letter-spacing:.08em!important}
+ #nav,.nav{padding:5px!important;gap:4px!important}
+ #nav .btn{min-height:47px!important;font-size:11px!important}
+ .fleet-ship-table .ship-mark{width:35px;height:32px;font-size:19px}
+}
