@@ -193,11 +193,31 @@
   (options.find(x=>x.offsetParent!==null)||options[0])?.click();
  };return b;};
  let last="";
+ let hiddenOriginal=null;
  function draw(){
+  // The legacy app replaces #app contents on tab switches. Never conceal non-terminal views.
+  const active=[...document.querySelectorAll("#nav button,.nav button")].find(b=>b.classList.contains("active"));
+  const currentTab=(active?.textContent||"").trim().toUpperCase();
+  const terminalTab=!currentTab||/^(TERMINAL|⌂ TERMINAL|< TERMINAL)/.test(currentTab)||currentTab.endsWith(" TERMINAL");
+  if(!terminalTab){
+    if(hiddenOriginal?.isConnected)hiddenOriginal.style.display="";
+    hiddenOriginal=null;
+    document.getElementById("sdas-golden-live")?.remove();
+    last="";
+    return;
+  }
   const heading=[...document.querySelectorAll("h1,h2,h3")].find(x=>/ACCESS FLEET TERMINAL/i.test(x.textContent||""));
-  if(!heading)return;
+  if(!heading){
+    if(hiddenOriginal?.isConnected)hiddenOriginal.style.display="";
+    hiddenOriginal=null;
+    document.getElementById("sdas-golden-live")?.remove();
+    last="";
+    return;
+  }
   const original=heading.closest(".hero,.welcome,.terminal-intro,section,article,.panel")||heading.parentElement?.parentElement;
   if(!original||!original.parentElement)return;
+  if(hiddenOriginal&&hiddenOriginal!==original&&hiddenOriginal.isConnected)hiddenOriginal.style.display="";
+  hiddenOriginal=original;
   const owned=ready&&user?db.ships.filter(x=>x.owner===user.id):[];
   const org=ready&&user?db.ships.filter(x=>x.visibility==="org"):[];
   const role=document.querySelector("#sdas-auth-state")?.textContent?.trim()||"Discord role verification required";
