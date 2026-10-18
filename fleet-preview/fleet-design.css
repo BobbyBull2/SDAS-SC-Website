@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&family=Black+Ops+One&display=swap');
+
+/* Fleet Manager — SDAS.space visual system. Preview branch only. */
+:root {
+  --bg:#050e13; --panel:#081c26; --panel2:#102c35;
+  --border:#32727c; --cyan:#43e7df; --bright:#e9edef;
+  --muted:#a0b9be; --gold:#e3c489; --warn:#ff9c87;
+  --sdas-display:'Black Ops One','Audiowide',sans-serif;
+  --sdas-tech:'Audiowide','Trebuchet MS',sans-serif;
+  --sdas-body:'Barlow',Arial,sans-serif;
+  --sdas-condensed:'Barlow Condensed','Arial Narrow',sans-serif;
+}
+html { background:#050e13; }
+body {
+  font-family:var(--sdas-body);
+  color:#e8eeee;
+  background:
+    radial-gradient(ellipse at 6% 35%,#10323c6b,transparent 34%),
+    radial-gradient(ellipse at 93% 48%,#10354061,transparent 34%),
+    repeating-linear-gradient(130deg,#ffffff03 0 1px,transparent 1px 5px),
+    #050e13 !important;
+}
+body:before { opacity:.25!important; }
+body:after { opacity:.18!important; }
+.shell { max-width:1500px; padding:0 clamp(13px,2.4vw,36px) 44px; }
+#sdas-fleet-masthead {
+  min-height:clamp(290px,30vw,440px)!important;
+  margin:0 calc(-1 * clamp(13px,2.4vw,36px)) 2px!important;
+  padding:68px clamp(15px,4vw,60px) 38px!important;
+  border-bottom:1px solid #247886!important;
+  -webkit-mask-image:none!important; mask-image:none!important;
+  background:
+    linear-gradient(90deg,#030c13f2 0%,#030c13d9 42%,#030c13a0 100%),
+    url('../public/images/preview-hangar.png') center 44%/cover no-repeat,
+    #030c13!important;
+  box-shadow:inset 0 -65px 100px #020b12b7;
+}
+#sdas-fleet-masthead:before {
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  width:380px;height:380px;right:8%;top:15px;
+  border:1px solid #ddba7150;border-radius:50%;
+  box-shadow:0 0 0 30px #e2bf7007,0 0 0 78px #e2bf7008,inset 0 0 36px #e2bf7012;
+}
+#sdas-fleet-masthead .fleet-emblem {
+  position:absolute!important;top:17px!important;left:clamp(15px,3vw,44px)!important;
+  width:clamp(150px,17vw,236px)!important;height:82px!important;
+  display:flex!important;align-items:center!important;justify-content:start!important;
+  z-index:2;
+}
+#sdas-fleet-masthead .fleet-emblem img {max-width:100%;width:100%;height:100%;object-fit:contain}
+#sdas-fleet-masthead .fleet-kicker {
+  color:#9bc1c3!important;font:600 clamp(10px,1vw,13px) var(--sdas-condensed)!important;
+  letter-spacing:.33em!important; margin:0 0 13px!important;
+}
+#sdas-fleet-masthead .fleet-kicker:before {background:#43e7df!important;width:37px!important}
+#sdas-fleet-masthead .fleet-title {
+  display:block!important;
+  font:400 clamp(38px,6vw,89px)/1.04 var(--sdas-tech)!important;
+  letter-spacing:-.035em!important;
+  text-shadow:4px 5px #03070a!important;
+  white-space:nowrap!important;
+  color:#e5e6e4!important;
+}
+#sdas-fleet-masthead .fleet-and {
+  display:block!important;color:#ededeb!important;
+  margin:9px 0 8px!important;
+  font:600 clamp(15px,1.5vw,22px) var(--sdas-condensed)!important;
+  letter-spacing:.55em!important;
+}
+#sdas-fleet-masthead .fleet-title.fleet-gold {
+  color:#e3c489!important;font-size:clamp(34px,5.5vw,78px)!important;
+  background:none!important;border:0!important;padding:0!important;
+  box-shadow:none!important;
+}
+#sdas-fleet-masthead:after{
+  content:"GOOD FRIENDS. BAD IDEAS. LEGENDARY STORIES.";
+  position:absolute;bottom:15px;left:0;right:0;text-align:center;
+  font:600 11px var(--sdas-condensed);letter-spacing:.24em;color:#a0bbc0;
+}
+#sdas-golden-gutter{height:2px!important;margin:0 0 9px!important;
+background:linear-gradient(90deg,transparent,#43e7df77 20%,#e3c489c0 50%,#43e7df77 80%,transparent)!important}
+.header {
+  margin-top:0!important;padding:13px 0!important;min-height:56px!important;
+  background:#041117dc!important;border-bottom:1px solid #27525a!important;
+  justify-content:space-between!important;gap:15px!important;flex-wrap:wrap!important;
+}
+.header:before,.header:after {display:none!important;}
+.header .terminal-heading {display:none!important;}
+.header .brand { min-width:0!important;max-width:0!important;overflow:hidden!important; }
+.header>.row {margin-left:auto!important;}
+.header .pill {border-radius:2px!important;background:#072027!important;box-shadow:none!important;
+font-family:var(--sdas-condensed);font-size:11px;letter-spacing:.12em}
+#pilotSelect{max-width:200px;font-family:var(--sdas-condensed)}
+#sdas-auth-preview {gap:12px!important}
+#sdas-auth-state {max-width:320px!important;font:600 12px var(--sdas-condensed)!important;letter-spacing:.04em}
+#sdas-auth-actions button {border-radius:2px!important;font-family:var(--sdas-condensed)!important;
+font-size:13px!important;font-weight:600!important;min-height:36px!important}
+.nav {
+  margin:0 0 23px!important;padding:0!important;
+  border-bottom:1px solid #316774!important;
+  background:#06151dd6!important;gap:2px!important;
+  display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+}
+#nav .btn {
+  display:flex;align-items:center;justify-content:center;
+  min-height:54px;margin:0;border:1px solid transparent!important;
+  border-bottom:3px solid transparent!important;
+  border-radius:0!important;box-shadow:none!important;
+  background:linear-gradient(180deg,#0b28329e,#06151be8)!important;
+  font:600 clamp(11px,1vw,14px) var(--sdas-condensed)!important;
+  letter-spacing:.11em!important;color:#b9d5d8!important;
+  white-space:normal;text-align:center;padding:10px 8px!important;
+}
+#nav .btn:hover {color:#e2e9e9!important;background:#153b44!important;border-bottom-color:#43e7df!important;}
+#nav .btn.active {color:#f0d091!important;background:#102d36!important;
+  border-bottom-color:#e3c489!important;box-shadow:inset 0 -2px 12px #deb96819!important;}
+#app {min-height:350px}
+h1,h2,h3 {font-family:var(--sdas-display);font-weight:400}
+.page-head h2 {font:400 clamp(25px,2.7vw,38px)/1.07 var(--sdas-display);letter-spacing:.025em}
+.page-head .eyebrow,.eyebrow {font:600 12px var(--sdas-condensed);letter-spacing:.25em;color:#55cbd0}
+.panel {
+  background:linear-gradient(145deg,#102a35ed 0%,#071923f5 55%,#051018f9)!important;
+  border:1px solid #326f7a!important;border-radius:10px!important;
+  box-shadow:inset 0 1px #bcf1ed10,0 10px 27px #0007!important;
+}
+.panel.pad {padding:clamp(14px,1.65vw,22px)}
+.btn,.entry,.member {font-family:var(--sdas-condensed);letter-spacing:.04em}
+.btn {border-radius:3px!important;box-shadow:none!important}
+.btn.active,.btn:hover {box-shadow:0 0 14px #43e7df30!important}
+.btn.primary {border:1px solid #a2cbbd!important;background:#235159!important}
+.btn:focus-visible,button:focus-visible {outline:2px solid #43e7df;outline-offset:2px}
+table th {font:600 12px var(--sdas-condensed);letter-spacing:.14em;color:#a3d4d6}
+table td {font:400 13px var(--sdas-body);color:#d7e5e7}
+table tbody tr:hover {background:#2e677326}
+input,select,textarea {border-radius:4px!important}
+#sdas-golden-live {
+  grid-template-columns:minmax(0,1.65fr) minmax(290px,1fr)!important;
+  gap:18px!important;margin:7px 0 28px!important;
+}
+#sdas-golden-live .gbox {
+  background:linear-gradient(155deg,#0b2732ee,#04141df5)!important;
+  border:1px solid #347785!important;border-radius:10px!important;
+  box-shadow:inset 0 1px #dff7fd13,0 16px 35px #0009!important;
+}
+#sdas-golden-live .gmain {padding:24px!important;border-radius:12px!important;}
+#sdas-golden-live h2,#sdas-golden-live h3 {
+  font:400 clamp(19px,2.2vw,29px) var(--sdas-display)!important;
+  letter-spacing:.05em!important;text-shadow:none!important;
+}
+#sdas-golden-live h2 span {color:#e3c489!important}
+#sdas-golden-live h3 {font-size:18px!important}
+#sdas-golden-live .gside .gbox {padding:20px!important;border-radius:10px!important}
+#sdas-golden-live .gside .gbox:nth-child(2) {border-color:#ad9268!important}
+#sdas-golden-live .gbtn {
+  background:linear-gradient(180deg,#103541,#09232c)!important;
+  border:1px solid #397c89!important;border-radius:4px!important;
+  font:600 12px var(--sdas-condensed)!important;letter-spacing:.11em!important;
+}
+#sdas-golden-live .gbtn:hover {border-color:#dfbc78!important;color:#e3c489!important}
+#sdas-golden-live .gorb {background:#09262d!important}
+#sdas-golden-live .gstate {font:400 20px var(--sdas-display)!important}
+#sdas-golden-live .gtablewrap {min-height:175px}
+#sdas-golden-live .gfoot {padding-top:19px!important}
+footer {font:12px/1.5 var(--sdas-condensed);letter-spacing:.05em;color:#91b3b7!important;
+text-align:center;margin-top:38px!important}
+@media(max-width:970px){
+ #sdas-golden-live {grid-template-columns:1fr!important}
+ #sdas-golden-live .gside {display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #sdas-golden-live .gside .gbox:last-child {grid-column:1/-1}
+}
+@media(max-width:760px){
+ #sdas-fleet-masthead {min-height:290px!important;padding:102px 12px 36px!important}
+ #sdas-fleet-masthead .fleet-emblem {width:170px!important;height:58px!important;top:13px!important;left:16px!important}
+ #sdas-fleet-masthead .fleet-title {font-size:clamp(28px,7.8vw,50px)!important}
+ #sdas-fleet-masthead .fleet-title.fleet-gold {font-size:clamp(25px,7.1vw,46px)!important}
+ #sdas-fleet-masthead:before {width:230px;height:230px;right:-60px;top:25px}
+ .nav {grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #nav .btn {min-height:48px}
+ #sdas-golden-live .gmain {padding:16px!important}
+}
+@media(max-width:560px){
+ #sdas-fleet-masthead {min-height:265px!important;padding:101px 9px 32px!important}
+ #sdas-fleet-masthead .fleet-title {font-size:clamp(23px,7.2vw,38px)!important}
+ #sdas-fleet-masthead .fleet-title.fleet-gold {font-size:clamp(21px,6.65vw,37px)!important}
+ #sdas-fleet-masthead .fleet-kicker {font-size:9px!important;letter-spacing:.17em!important}
+ #sdas-fleet-masthead .fleet-and {font-size:13px!important;letter-spacing:.3em!important}
+ #sdas-fleet-masthead:after {font-size:9px;letter-spacing:.11em}
+ .nav {grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #nav .btn {font-size:12px!important}
+ #sdas-golden-live .gside {display:flex!important}
+ #sdas-golden-live .ghead {flex-direction:column!important}
+ #sdas-auth-preview {width:100%!important}
+ #sdas-auth-state {max-width:none!important}
+}
