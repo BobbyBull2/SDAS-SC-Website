@@ -1,5 +1,9 @@
 /* Cloud bridge: inserted into the legacy script for access to its existing UI functions. */
 (function(){
+ // This bridge may be embedded by an older preview and a deployment wrapper.
+ // Initialize once so it cannot create duplicate buttons, listeners or cloud clients.
+ if(window.__sdasFleetCloudBridgeInstalled)return;
+ window.__sdasFleetCloudBridgeInstalled=true;
  const SUPA="https://zfvfpbfkbvudaezichrh.supabase.co";
  const PUB="sb_publishable_n10yR_G-0OOmFWjHdrb8Yw_8lJfs8io";
  let client=null,user=null,ready=false,busy=false,again=false,known=new Set(),booting=false;
@@ -95,6 +99,21 @@
   if(added){render();await sync();}
   return added;
  };
+ // Remove duplicate legacy cloud commands only when they share the same command strip.
+ // Retain the first actual control and its listener; don't touch controls in other views.
+ const commandLabels=new Set(["IMPORT MY EXISTING LOCAL SHIPS","REFRESH ORG FLEET","EDIT PILOT NAME"]);
+ function dedupeCloudCommands(){
+   const controls=[...document.querySelectorAll("button")].filter(b=>commandLabels.has((b.textContent||"").trim().toUpperCase()) && !b.closest("#sdas-golden-live"));
+   const groups=new Map();
+   for(const b of controls){
+     const group=b.closest(".header")||b.parentElement;
+     if(!group)continue;
+     const key=(b.textContent||"").trim().toUpperCase();
+     if(!groups.has(group))groups.set(group,new Set());
+     const seen=groups.get(group);
+     if(seen.has(key))b.remove();else seen.add(key);
+   }
+ }
  const nameButton=document.createElement("button");
  nameButton.type="button";nameButton.className="btn";nameButton.style.margin="8px";nameButton.textContent="EDIT PILOT NAME";label.after(nameButton);
  nameButton.onclick=async()=>{
@@ -114,6 +133,7 @@
  const back=document.createElement("button");back.textContent="IMPORT MY EXISTING LOCAL SHIPS";back.className="btn";back.style.margin="8px 0";label.after(back);
  const refresh=document.createElement("button");refresh.textContent="REFRESH ORG FLEET";refresh.className="btn";refresh.style.margin="8px";back.after(refresh);
  refresh.onclick=async()=>{if(!ready||busy)return;await loadCloud();};
+ dedupeCloudCommands();
  back.onclick=async()=>{
    if(!ready)return alert("Verify SDAS login first.");
    const records=legacy.ships.filter(s=>s.owner==="bobby");
