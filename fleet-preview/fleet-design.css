@@ -281,3 +281,12 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
  #nav .btn{min-height:47px!important;font-size:11px!important}
  .fleet-ship-table .ship-mark{width:35px;height:32px;font-size:19px}
 }
+
+/* Compact cloud controls and prevent the unused terminal intro from reserving vertical space. */
+#cloudBanner{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important}
+.header + #cloudBanner{margin:0!important;padding:0!important}
+#nav,.nav{margin-top:5px!important;margin-bottom:14px!important}
+#app{min-height:0!important}
+#app:empty{display:none}
+#sdas-golden-live{margin-top:8px!important;margin-bottom:14px!important}
+.shell>footer{margin-top:15px!important}
