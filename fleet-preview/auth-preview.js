@@ -180,6 +180,17 @@
  })();
  const url="https://zfvfpbfkbvudaezichrh.supabase.co";
  const key="sb_publishable_n10yR_G-0OOmFWjHdrb8Yw_8lJfs8io";
+ // Only one Discord sign-in / role-status area should appear on the page.
+ // The preview can include this script more than once; a second initialization
+ // must not create another set of login/refresh/sign-out controls.
+ if(document.getElementById("sdas-auth-preview"))return;
+ const removeDuplicateSignIn=()=>{
+  const areas=document.querySelectorAll('[id="sdas-auth-preview"]');
+  for(let i=1;i<areas.length;i++)areas[i].remove();
+ };
+ // Also remove late duplicate injections from cached or inline preview scripts.
+ const authDeduper=new MutationObserver(removeDuplicateSignIn);
+ authDeduper.observe(document.body,{childList:true,subtree:true});
  const root=document.createElement("div");root.id="sdas-auth-preview";
  root.style.cssText="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;vertical-align:middle;max-width:100%;color:#b8eefa;font:12px system-ui,Arial";
  root.innerHTML='<div id="sdas-auth-actions" style="display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap"></div><span id="sdas-auth-state" style="font-size:10px;color:#9bcbd5;max-width:200px"></span>';
