@@ -181,7 +181,7 @@
   const owned=ready&&user?db.ships.filter(x=>x.owner===user.id):[];
   const org=ready&&user?db.ships.filter(x=>x.visibility==="org"):[];
   const role=document.querySelector("#sdas-auth-state")?.textContent?.trim()||"Discord role verification required";
-  const digest=JSON.stringify([!!ready,user?.id,owned.map(x=>[x.id,x.name,x.nickname,x.image,x.role,x.visibility]),org.length,role]);
+  const digest=JSON.stringify([!!ready,user?.id,owned.map(x=>[x.id,x.name,x.role,x.visibility]),org.length,role]);
   const existing=document.getElementById("sdas-golden-live");
   if(existing&&digest===last){original.style.display="none";return;}
   last=digest;existing?.remove();
@@ -197,8 +197,8 @@
   if(!owned.length){const tr=e("tr"),td=e("td","",ready?"No personal vessels have been added yet.":"Your ships appear after Discord sign-in.");td.colSpan=6;tr.append(td);body.append(tr);}
   for(const s of owned){
     const tr=e("tr"),td=e("td","gship");
-    if(s.image&&(/^(https:\/\/|data:image\/)/i).test(s.image)){const im=e("img","gship-img");im.src=s.image;im.alt="";td.append(im);}
-    td.append(document.createTextNode(s.nickname||s.name||"Unnamed ship"));tr.append(td);
+    // Overview is a text-only quick reference: show the model name, never a nickname or photograph.
+    td.textContent=s.name||"Unnamed ship";tr.append(td);
     const manufacturer=/^(RSI|Drake|Anvil|Aegis|MISC|Origin|Argo|Crusader|Mirai|Esperia|Tumbril|Gatac|Banu)\b/i.exec(s.name||"")?.[1]||"—";
     [manufacturer,s.role||"—",s.origin||"—",s.visibility==="org"?"Org shared":"Private"].forEach(t=>tr.append(e("td","",t)));
     tr.append(add(e("td"),realButton("MY HANGAR →",/^MY HANGAR$/i)));body.append(tr);
