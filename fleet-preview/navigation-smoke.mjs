@@ -70,6 +70,28 @@ try {
       throw new Error('Data Import view missing BACKUP / RESTORE: ' + JSON.stringify(state));
     }
   }
+  // Header guardrail: keep original command onclick handlers after reparenting.
+  await page.waitForTimeout(500);
+  const headerCheck = await page.evaluate(() => {
+    const mast = document.querySelector("#sdas-fleet-masthead");
+    const logo = mast?.querySelector(".fleet-emblem");
+    const br = mast?.getBoundingClientRect(), lr = logo?.getBoundingClientRect();
+    const rail = document.querySelector("#sdas-fleet-header-actions");
+    const buttons = [...(rail?.querySelectorAll("button") || [])];
+    const text = buttons.map(x => x.textContent.trim().toUpperCase());
+    return {headerText: document.querySelector(".header")?.innerText || "",
+      text, handlers: buttons.map(b => typeof b.onclick),
+      logoTop: lr?.top, mastTop: br?.top, logoBottom: lr?.bottom, mastBottom: br?.bottom,
+      shellClass:document.querySelector(".shell")?.className,
+      commandCount:document.querySelectorAll("#sdas-fleet-header-actions button").length};
+  });
+  console.log("HEADER_CHECK", JSON.stringify(headerCheck));
+  if(headerCheck.shellClass.includes("sdas-top-action-group"))throw Error("Shell improperly styled as action group");
+  if(headerCheck.headerText.includes("PRIVATE FUNCTIONAL PREVIEW"))throw Error("Obsolete preview pill still shown");
+  if(headerCheck.commandCount!==2||!headerCheck.text.includes("REFRESH ORG FLEET")||!headerCheck.text.includes("EDIT PILOT NAME")||
+      headerCheck.handlers.some(x=>x!=="function"))throw Error("Fleet header actions missing or detached: "+JSON.stringify(headerCheck));
+  if(headerCheck.logoTop<headerCheck.mastTop+3||headerCheck.logoBottom>headerCheck.mastBottom+3)
+      throw Error("SDAS emblem extends beyond masthead: "+JSON.stringify(headerCheck));
   // Visual inspection artifacts and objective connected-tab geometry checks.
   await page.locator('#nav [data-view="home"]').click();
   await page.waitForTimeout(350);
