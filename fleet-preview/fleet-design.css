@@ -648,3 +648,11 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
 #nav.nav > button[data-view] {
   transition:background .16s ease!important;
 }
+
+/* Never animate a selected state across tab boundaries. */
+#nav.nav > button[data-view],
+#nav.nav > button[data-view].active,
+#nav.nav > button[data-view]:hover {
+  transition:none!important;
+  animation:none!important;
+}
