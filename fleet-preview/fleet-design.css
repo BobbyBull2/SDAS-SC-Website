@@ -509,3 +509,11 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
   #nav.nav > button[data-view="data"]{grid-column:1/-1}
   #nav.nav > button[data-view="data"]::after {display:none!important}
 }
+
+/* Complete diagonal separators: left tab overlays only its divider, not its neighbors' content. */
+#nav.nav > button[data-view]:nth-child(1){z-index:5!important}
+#nav.nav > button[data-view]:nth-child(2){z-index:4!important}
+#nav.nav > button[data-view]:nth-child(3){z-index:3!important}
+#nav.nav > button[data-view]:nth-child(4){z-index:2!important}
+#nav.nav > button[data-view]:nth-child(5){z-index:1!important}
+#nav.nav > button[data-view].active{z-index:6!important}
