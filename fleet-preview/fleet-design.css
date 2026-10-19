@@ -980,3 +980,38 @@ body>.shell,.shell{
   #sdas-fleet-masthead .fleet-kicker,
   #sdas-fleet-masthead .fleet-title.fleet-gold{top:0!important}
 }
+
+/* MK XIV — final hero balance, official site link and unmistakable screen glyph */
+@media(min-width:971px){
+  #sdas-fleet-masthead .fleet-emblem{top:calc(50% - 42px)!important}
+  #sdas-fleet-masthead .fleet-kicker,
+  #sdas-fleet-masthead .fleet-title.fleet-gold{top:61px!important}
+}
+#sdas-fleet-header-actions>a.sdas-header-action{
+  box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;
+  justify-content:center!important;height:34px!important;min-height:34px!important;
+  margin:0!important;padding:7px 10px!important;border:1px solid #2d6878!important;
+  border-radius:999px!important;background:#06171fcc!important;color:#e6eef0!important;
+  text-decoration:none!important;font:600 clamp(9px,.7vw,11px)/1.2 var(--fleet-nasa)!important;
+  letter-spacing:.03em!important;white-space:nowrap!important;
+  box-shadow:inset 0 1px #acefff13!important;backdrop-filter:blur(6px)!important
+}
+#sdas-fleet-header-actions>a.sdas-header-action:hover{border-color:#5bcae0!important;background:#12333ecc!important}
+#nav.nav>button[data-view="home"]::before{
+  /* Filled mask of a hollow rectangular monitor, rather than the previous solid block. */
+  content:""!important;display:inline-block!important;flex:none!important;
+  width:clamp(24px,2vw,31px)!important;height:clamp(24px,2vw,31px)!important;
+  background:currentColor!important;opacity:1!important;
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' fill-rule='evenodd' d='M3 3h18a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-7v2h4v2H6v-2h4v-2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 3v10h16V6H4Z' clip-rule='evenodd'/%3E%3C/svg%3E")!important;
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' fill-rule='evenodd' d='M3 3h18a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-7v2h4v2H6v-2h4v-2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 3v10h16V6H4Z' clip-rule='evenodd'/%3E%3C/svg%3E")!important;
+  -webkit-mask-position:center!important;mask-position:center!important;
+  -webkit-mask-size:contain!important;mask-size:contain!important;
+  -webkit-mask-repeat:no-repeat!important;mask-repeat:no-repeat!important;
+}
+/* Remove obsolete native home icon so only the CSS monitor appears. */
+#nav.nav>button[data-view="home"]>svg,
+#nav.nav>button[data-view="home"]>.icon,
+#nav.nav>button[data-view="home"]>i{display:none!important}
+@media(max-width:970px){
+  #sdas-fleet-masthead .fleet-kicker,#sdas-fleet-masthead .fleet-title.fleet-gold{top:0!important}
+}
