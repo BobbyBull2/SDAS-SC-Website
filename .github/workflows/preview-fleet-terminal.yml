@@ -79,6 +79,11 @@ jobs:
               print('DIAG_EXCERPT',s[max(0,index-350):min(len(s),index+1800)].replace('\\n',' ')[:2150])
           for needle in ["demoHeadings","if(p&&p!==document.body","p.remove()","sdas-data-import-layout","sdas-golden-live-css","cloudBanner","sdas-golden-ratio-redesign"]:
             print("DIAG_LEGACY",needle,"count",s.count(needle))
+          import re
+          for needle in ['const legacy=clone(db)', 'sdas-golden-live-css', 's.nickname||s.name', 's.image&&', 'function draw()', 'window.sdasGoldenRefresh=refresh', '__sdasFleetCloudBridgeInstalled']:
+            hits=[m.start() for m in re.finditer(re.escape(needle),s)]
+            print("LEGACY_CHECK",needle,"HITS",hits)
+            for index in hits[:4]: print("LEGACY_CONTEXT",needle,"AT",index,repr(s[max(0,index-400):min(len(s),index+400)]))
           p.write_text(s)
           PY
       - name: Validate deployed JavaScript syntax
