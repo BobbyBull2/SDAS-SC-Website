@@ -10,6 +10,14 @@ page.on('console', msg => {
 try {
   await page.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded' });
   await page.locator('#nav [data-view]').first().waitFor({ timeout: 10000 });
+  const snapshot = () => page.evaluate(() => ({
+    hasApp:!!document.querySelector('#app'),
+    ids:[...document.querySelectorAll('[id]')].slice(0,35).map(e=>e.id),
+    children:[...document.body.children].map(e=>e.tagName+':'+(e.id||e.className||'')).slice(0,20),
+    appHTML:document.querySelector('#app')?.outerHTML.slice(0,180),
+    navParent:document.querySelector('#nav')?.parentElement?.tagName
+  }));
+  console.log('INITIAL_DOM',JSON.stringify(await snapshot()));
   for (const tab of ['data','hangar','registry','pilots','home','data']) {
     await page.locator('#nav [data-view="' + tab + '"]').click();
     await page.waitForTimeout(400);
@@ -20,6 +28,7 @@ try {
       return { text: el.innerText.slice(0, 280), markup: el.innerHTML.length, display: cs.display, visible: el.getBoundingClientRect().height, active: document.querySelector('#nav .active')?.getAttribute('data-view') };
     });
     console.log('NAV_TEST', tab, JSON.stringify(state));
+    if (state.missing) console.log('MISSING_APP_DOM', JSON.stringify(await snapshot()));
     if (state.missing || state.active !== tab || !state.visible || state.markup < 50) {
       throw new Error('Navigation failed on ' + tab + ': ' + JSON.stringify(state));
     }
