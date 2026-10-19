@@ -643,3 +643,8 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
 @media(prefers-reduced-motion:reduce) {
   #nav.nav > button[data-view]{transition:none!important}
 }
+
+/* Gold follows selection immediately; old tab must never retain gold during an animation. */
+#nav.nav > button[data-view] {
+  transition:background .16s ease!important;
+}
