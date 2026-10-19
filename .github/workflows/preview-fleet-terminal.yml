@@ -63,6 +63,14 @@ jobs:
           s=s.replace('</body>',nasa_script+'</body>',1)
           assert '</script></body>' in s
           s=s.replace('</script></body>', '\n'+bridge+'\n</script><script defer src="/rsi-import.js"></script><script type="module" src="/auth-preview.js"></script></body>',1)
+          # Diagnostic: inspect only short code fragments around relevant app selectors.
+          import re
+          for needle in [r'function render\\(',r'function data\\(',r'function home\\(',r'data-go',r'case [\\\"\\\']data',r'BACKUP / RESTORE',r'PLEDGED SHIP CSV IMPORT',r'nav\\.addEventListener',r'addEventListener\\(\\\"click']:
+            hits=list(re.finditer(needle,s,re.I))
+            print('DIAG_SELECTOR',needle,'hits',len(hits))
+            for match in hits[:3]:
+              frag=s[max(0,match.start()-320):min(len(s),match.start()+1350)]
+              print('DIAG_EXCERPT',frag[:1670].replace('\\n',' '))
           p.write_text(s)
           PY
       - name: Validate deployed JavaScript syntax
