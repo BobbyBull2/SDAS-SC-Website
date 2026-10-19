@@ -936,3 +936,30 @@ body>.shell,.shell{
 @media(max-width:680px){
   #sdas-fleet-header-actions,#sdas-auth-preview,#sdas-auth-actions{flex-wrap:wrap!important;justify-content:center!important}
 }
+
+/* MK XII — header alignment and consistent pilot-command buttons */
+#sdas-fleet-header-actions>.sdas-header-action,
+#sdas-auth-actions>button{
+  box-sizing:border-box!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  height:34px!important;min-height:34px!important;
+  margin:0!important;padding:7px 10px!important;
+  border-radius:999px!important;border:1px solid #2d6878!important;
+  background:#06171fcc!important;color:#e6eef0!important;
+  font:600 clamp(9px,.7vw,11px)/1.2 var(--fleet-nasa)!important;
+  letter-spacing:.03em!important;white-space:nowrap!important;
+  box-shadow:inset 0 1px #acefff13!important;
+  text-shadow:0 1px 1px #000b!important;
+  backdrop-filter:blur(6px)!important;
+}
+#sdas-fleet-header-actions>.sdas-header-action:hover,
+#sdas-auth-actions>button:hover{border-color:#5bcae0!important;background:#12333ecc!important}
+#sdas-fleet-masthead .fleet-emblem{
+  top:calc(50% + 76px)!important;
+  transform:translateY(-50%)!important;
+  height:clamp(105px,9.5vw,145px)!important;
+  max-height:calc(100% - 48px)!important;
+}
+@media(max-width:970px){
+  #sdas-fleet-masthead .fleet-emblem{position:relative!important;top:auto!important;transform:none!important;margin:24px auto 12px!important}
+}
