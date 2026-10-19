@@ -29,6 +29,7 @@ jobs:
           test -s fleet-preview/fleet-cloud-inline.js
           test -s fleet-preview/rsi-import.js
           cp fleet-preview/rsi-import.js dist/rsi-import.js
+          cp fleet-preview/fleet-ui-polish.js dist/fleet-ui-polish.js
           python3 - <<'PY'
           from pathlib import Path
           p=Path('dist/index.html')
@@ -82,6 +83,7 @@ jobs:
           .sdas-large-heading{font-family:SDASNASA,"Arial Black",sans-serif!important;letter-spacing:.085em!important;text-transform:uppercase}
           </style>'''
           s=s.replace('</head>',font_css+'<link rel="stylesheet" href="/fleet-design.css"></head>',1)
+          s=s.replace('</head>', '<script defer src="/fleet-ui-polish.js"></script></head>', 1)
           nasa_script='''<script>
           (()=>{const tag=()=>{document.querySelectorAll("h1,h2,h3,h4,h5,h6,.title,.brand").forEach(el=>{const n=parseFloat(getComputedStyle(el).fontSize)||0;if(n>20)el.classList.add("sdas-large-heading");else el.classList.remove("sdas-large-heading")})};new MutationObserver(()=>requestAnimationFrame(tag)).observe(document.body,{childList:true,subtree:true});tag()})();
           </script>'''
@@ -129,6 +131,7 @@ jobs:
           for file in /tmp/fleet-script-*.js; do node --check "$file"; done
           node --check dist/auth-preview.js
           node --check dist/rsi-import.js
+          node --check dist/fleet-ui-polish.js
       - name: Browser navigation smoke test
         run: |
           npm ci --ignore-scripts
