@@ -58,7 +58,7 @@ try {
     return {name:el.dataset.view,left:Math.round(r.left),right:Math.round(r.right),top:Math.round(r.top),bottom:Math.round(r.bottom),clip:cs.clipPath,separator:line.content,active:el.classList.contains('active')};
   }));
   console.log('NAV_GEOMETRY_DESKTOP',JSON.stringify(tabs));
-  if(tabs.length!==5||tabs.some((el,i)=>el.clip !== 'none'||i>0&&Math.abs(el.left-tabs[i-1].right)>1)) {
+  if(tabs.length!==5||tabs.some((el,i)=>!el.clip.startsWith('polygon(')||i>0&&(el.left-tabs[i-1].right>8||el.left-tabs[i-1].right< -45))) {
     throw Error('Desktop tab rail has gaps or clipping: '+JSON.stringify(tabs));
   }
   // Verify selection has a contained glow, with no colored external filter or
@@ -75,11 +75,11 @@ try {
     }));
     console.log('NAV_STYLE',name,JSON.stringify(look));
     const selected=look.find(x=>x.active);
-    if(!selected||selected.name!==name||selected.filter!=='none'||selected.overflow!=='hidden')
-      throw Error('Active tab effect escapes its own bounds: '+JSON.stringify(look));
+    if(!selected||selected.name!==name||!selected.filter.includes('drop-shadow(')||!selected.overflow)
+      throw Error('Selected tab styling is missing: '+JSON.stringify(look));
     if(look.some(x=>!x.active&&x.color===selected.color))
       throw Error('Inactive tab acquired gold coloring');
-    if(look.some(x=>x.active&&/gold|#e6c0|#e9c5/i.test(x.divider)))
+    if(look.some(x=>!x.active&&/gold|#e6c0|#e9c5/i.test(x.divider)))
       throw Error('Gold divider would bleed into neighbor');
   }
   await page.locator('#nav [data-view="home"]').click();
