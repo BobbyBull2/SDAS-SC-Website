@@ -18,6 +18,20 @@ try {
     navParent:document.querySelector('#nav')?.parentElement?.tagName
   }));
   console.log('INITIAL_DOM',JSON.stringify(await snapshot()));
+  await page.evaluate(() => {
+    const originalRemove = Element.prototype.remove;
+    Element.prototype.remove = function(...args) {
+      if(this.id === 'app' || this.contains?.(document.getElementById('app'))) {
+        console.log('REMOVAL_STACK', this.tagName, this.id, new Error().stack?.slice(0,1300));
+      }
+      return originalRemove.apply(this,args);
+    };
+    const originalRemoveChild = Node.prototype.removeChild;
+    Node.prototype.removeChild = function(child) {
+      if(child?.id === 'app') console.log('REMOVE_CHILD_STACK', new Error().stack?.slice(0,1300));
+      return originalRemoveChild.call(this,child);
+    };
+  });
   for (const tab of ['data','hangar','registry','pilots','home','data']) {
     await page.locator('#nav [data-view="' + tab + '"]').click();
     await page.waitForTimeout(400);
