@@ -61,6 +61,27 @@ try {
   if(tabs.length!==5||tabs.some((el,i)=>el.clip !== 'none'||i>0&&Math.abs(el.left-tabs[i-1].right)>1)) {
     throw Error('Desktop tab rail has gaps or clipping: '+JSON.stringify(tabs));
   }
+  // Verify selection has a contained glow, with no colored external filter or
+  // gold divider spilling into the next tab. Test every active state.
+  for (const name of ['home','hangar','registry','pilots','data']) {
+    await page.locator('#nav [data-view="' + name + '"]').click();
+    const look=await page.locator('#nav [data-view]').evaluateAll(buttons=>buttons.map(b=>{
+      const c=getComputedStyle(b),divider=getComputedStyle(b,'::after');
+      return {name:b.dataset.view,active:b.classList.contains('active'),
+        color:c.color,filter:c.filter,overflow:c.overflow,
+        shadow:c.boxShadow,divider:divider.backgroundImage,
+        separatorWidth:divider.width};
+    }));
+    console.log('NAV_STYLE',name,JSON.stringify(look));
+    const selected=look.find(x=>x.active);
+    if(!selected||selected.name!==name||selected.filter!=='none'||selected.overflow!=='hidden')
+      throw Error('Active tab effect escapes its own bounds: '+JSON.stringify(look));
+    if(look.some(x=>!x.active&&/rgb\\(2(?:2[0-9]|3[0-9]|4[0-9]), (?:1[5-9][0-9]|2[0-5][0-9]),/i.test(x.color)))
+      throw Error('Inactive tab acquired gold coloring');
+    if(look.some(x=>x.active&&/gold|#e6c0|#e9c5/i.test(x.divider)))
+      throw Error('Gold divider would bleed into neighbor');
+  }
+  await page.locator('#nav [data-view="home"]').click();
   await page.locator('#nav').screenshot({path:'/tmp/fleet-tabs-desktop.png'});
   await page.screenshot({path:'/tmp/fleet-page-desktop.png',fullPage:false});
   await page.setViewportSize({width:390,height:844});
