@@ -780,3 +780,61 @@ h1,h2,h3,.page-head h2,#sdas-golden-live h2,#sdas-golden-live h3{
     flex-wrap:wrap!important;justify-content:center!important;
   }
 }
+
+
+/* MK IX — centered preview canvas + SDAS emblem safely inside the masthead.
+   No application markup, authentication, data or navigation changes. */
+html,body{max-width:100%!important;overflow-x:hidden!important}
+body{margin:0!important}
+body>.shell,.shell{
+  position:relative!important;
+  width:min(1600px, calc(100% - 32px))!important;
+  max-width:1600px!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  margin-left:auto!important;margin-right:auto!important;
+  padding:0 0 44px!important;
+}
+#sdas-fleet-masthead{
+  position:relative!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  min-height:clamp(265px,21vw,310px)!important;
+  margin:0!important;
+  overflow:visible!important;
+}
+#sdas-fleet-masthead .fleet-emblem{
+  top:calc(50% + 34px)!important;
+  left:clamp(14px,2.8vw,42px)!important;
+  transform:translateY(-50%)!important;
+  height:clamp(112px,11vw,160px)!important;
+  max-height:calc(100% - 30px)!important;
+  margin:0!important;
+  overflow:visible!important;
+}
+#nav.nav,#app,#sdas-golden-live,.shell>footer{
+  box-sizing:border-box!important;
+  max-width:100%!important;
+  margin-left:0!important;margin-right:0!important;
+}
+@media(max-width:970px){
+  body>.shell,.shell{
+    width:calc(100% - 20px)!important;
+    margin-left:auto!important;margin-right:auto!important;
+    padding:0 0 28px!important;
+  }
+  #sdas-fleet-masthead{
+    min-height:0!important;
+    padding:18px 12px 22px!important;
+  }
+  #sdas-fleet-masthead .fleet-emblem{
+    position:relative!important;
+    top:auto!important;left:auto!important;
+    transform:none!important;
+    width:min(420px,90%)!important;
+    height:clamp(95px,15vw,125px)!important;
+    max-height:none!important;
+    margin:12px auto 12px!important;
+  }
+}
