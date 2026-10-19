@@ -59,79 +59,20 @@
 })();
 
 
- // Keep the approved import page three-column layout separate from login and data handlers.
+ // Import cards are styled without moving/removing legacy app nodes.
+ // The previous MutationObserver repeatedly reparented form panels and could
+ // invalidate the SPA's event handlers after selecting Data / Import.
  (function(){
-  const css=document.createElement("style");
-  css.id="sdas-data-import-layout";
-  css.textContent=`
-   .sdas-import-three{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important;gap:16px!important;width:100%!important;max-width:none!important;margin:22px 0!important}
-   .sdas-import-three>.sdas-import-card{min-width:0!important;width:100%!important;max-width:none!important;margin:0!important;box-sizing:border-box!important;background:linear-gradient(180deg,#0b2634 0%,#061924 100%)!important;border:1px solid #48cce5!important;border-radius:12px!important;padding:18px!important;box-shadow:0 12px 25px #0003!important;float:none!important}
-   .sdas-import-three>.sdas-import-card input,.sdas-import-three>.sdas-import-card textarea{max-width:100%;box-sizing:border-box}
-   .sdas-import-three>.sdas-import-card button{max-width:100%}
-   .sdas-import-three>.sdas-import-card h2,.sdas-import-three>.sdas-import-card h3{color:#90e7f8;letter-spacing:.08em}
-   @media(max-width:1050px){.sdas-import-three{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-   @media(max-width:700px){.sdas-import-three{grid-template-columns:1fr!important}}
+  if(document.getElementById("sdas-data-import-layout"))return;
+  const style=document.createElement("style");
+  style.id="sdas-data-import-layout";
+  style.textContent=`
+   #app .layout {gap:16px}
+   #app .layout > .panel {min-width:0}
+   #app .panel {overflow-wrap:anywhere}
+   #app input,#app textarea,#app select {max-width:100%;box-sizing:border-box}
   `;
-  document.head.append(css);
-  const names=[/RSI PLEDGED SHIPS\s*\/\/\s*IMPORT/i,/BACKUP\s*\/\s*RESTORE/i,/MANUAL PLEDGED SHIP CSV IMPORT/i];
-  function normalize(s){return(s||"").replace(/\s+/g," ").trim()}
-  function panelOf(heading){
-   let p=heading;
-   for(let i=0;i<6&&p?.parentElement;i++){
-    p=p.parentElement;
-    const cls=String(p.className||"");
-    if(/^(SECTION|ARTICLE)$/.test(p.tagName)||/card|panel|box|import-/i.test(cls)){
-      if(p.querySelectorAll("h1,h2,h3,h4").length<=2)return p;
-    }
-   }
-   return heading.parentElement;
-  }
-  function activate(){
-   // Remove only demo-pilot selections; never remove real user profiles.
-   for(const el of document.querySelectorAll("select option")){
-    if(/demo pilot|sample pilot|test pilot/i.test(normalize(el.textContent)))el.remove();
-   }
-   for(const el of document.querySelectorAll("button,a")){
-    if(/^(add|create|use|select|switch to|load)\s+(a\s+)?demo\s+pilot$/i.test(normalize(el.textContent)))el.style.display="none";
-   }
-   // Remove the complete simulated member-profile editor, not just its buttons.
-   // It is unrelated to authenticated Discord membership and can mislead users.
-   const demoHeadings=[...document.querySelectorAll("h1,h2,h3,h4,h5,h6,legend,strong,div,span,p")].filter(el=>{
-     const label=normalize(el.textContent);
-     return label.length<100&&/^(member profiles\s*\(demo\)|local demo configuration|demo pilot profiles)$/i.test(label);
-   });
-   for(const heading of demoHeadings){
-     let p=heading;
-     for(let i=0;i<7&&p?.parentElement;i++){
-       if(p.querySelector('input[placeholder*="demo" i],button')&&p.querySelectorAll('input').length<=3&&p.querySelectorAll('button').length<=4)break;
-       p=p.parentElement;
-     }
-     if(p&&p!==document.body&&!p.contains(document.querySelector('#sdas-auth-preview'))){
-       p.remove();
-     }
-   }
-   for(const el of document.querySelectorAll('input[placeholder*="demo pilot" i],button')){
-     if(el.matches('input[placeholder*="demo pilot" i]')||(/demo pilot|reset demo data/i.test(normalize(el.textContent))&&el.matches('button'))){
-       const wrap=el.closest('section,.card,.panel,.form-row')||el;
-       if(wrap!==document.body&&!wrap.contains(document.querySelector('#sdas-auth-preview')))wrap.remove();
-     }
-   }
-   const headings=[...document.querySelectorAll("h2,h3,h4,legend,strong")];
-   const panels=names.map(rx=>{const h=headings.find(el=>rx.test(normalize(el.textContent))&&normalize(el.textContent).length<90);return h?panelOf(h):null;});
-   if(panels.some(p=>!p)||new Set(panels).size!==3)return;
-   const [first,second,third]=panels;
-   if(first.closest(".sdas-import-three"))return;
-   const parent=first.parentElement;
-   const grid=document.createElement("div");grid.className="sdas-import-three";
-   parent.insertBefore(grid,first);
-   for(const p of panels){p.classList.add("sdas-import-card");grid.append(p);}
-  }
-  const go=()=>{if(document.getElementById("sdas-data-import-layout"))activate()};
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go,{once:true});else go();
-  document.addEventListener("click",()=>setTimeout(activate,30),true);
-  // The legacy single-page app swaps panels dynamically; reapply when the Import tab is rendered.
-  let scheduled=false;
-  new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(()=>{scheduled=false;activate()})}}).observe(document.body,{childList:true,subtree:true});
+  document.head.append(style);
  })();
 
  // Golden-ratio visual redesign: purely presentational, preserving legacy fleet handlers.
