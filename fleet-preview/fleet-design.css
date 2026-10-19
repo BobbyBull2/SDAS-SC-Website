@@ -728,3 +728,55 @@ h1,h2,h3,.page-head h2,#sdas-golden-live h2,#sdas-golden-live h3{
     flex:1 1 100%!important;border-radius:5px!important;border-left:1px solid #3d7b8b!important}
   #nav.nav>button[data-view="home"]::before{width:23px!important;height:23px!important}
 }
+
+
+/* MK VIII — screenshot-adjusted logo and upper-right command rail */
+#sdas-fleet-masthead .fleet-emblem{
+  top:calc(56% + 38px)!important;
+  transform:translateY(-50%)!important;
+}
+.header{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  flex-wrap:nowrap!important;
+  top:clamp(8px,1.2vw,17px)!important;
+  right:clamp(12px,2vw,32px)!important;
+  width:max-content!important;
+  max-width:calc(100% - 24px)!important;
+  min-width:0!important;
+  gap:8px!important;
+}
+.header>.row,#sdas-auth-preview,#sdas-auth-actions{
+  display:flex!important;flex-wrap:nowrap!important;
+  align-items:center!important;justify-content:flex-end!important;
+  gap:8px!important;min-width:0!important;
+  margin:0!important;
+}
+#sdas-auth-state{display:inline-flex!important;align-items:center!important;white-space:nowrap!important;
+  max-width:none!important;font-size:clamp(10px,.78vw,12px)!important}
+#sdas-auth-actions button,.header .pill{
+  margin:0!important;padding:8px 12px!important;
+  min-height:34px!important;white-space:nowrap!important;
+  font-size:clamp(9px,.76vw,12px)!important;
+}
+.sdas-top-action-group{justify-content:flex-start!important}
+.sdas-top-action-group>.sdas-top-action{padding:8px 16px!important}
+.sdas-top-action-group>.sdas-top-action:first-of-type{border-radius:5px 0 0 5px!important}
+@media(max-width:1200px){
+  .header{max-width:calc(100% - 24px)!important}
+  #sdas-auth-actions button,.header .pill{padding:7px 9px!important;letter-spacing:.025em!important}
+  #sdas-auth-state{letter-spacing:.015em!important}
+}
+@media(max-width:970px){
+  #sdas-fleet-masthead .fleet-emblem{top:auto!important;transform:none!important;margin-top:18px!important}
+  .header{position:relative!important;top:auto!important;right:auto!important;
+    width:100%!important;max-width:100%!important;justify-content:center!important;
+    padding:8px 0!important;gap:6px!important}
+  .header>.row,#sdas-auth-preview,#sdas-auth-actions{gap:6px!important}
+}
+@media(max-width:650px){
+  .header,.header>.row,#sdas-auth-preview,#sdas-auth-actions{
+    flex-wrap:wrap!important;justify-content:center!important;
+  }
+}
