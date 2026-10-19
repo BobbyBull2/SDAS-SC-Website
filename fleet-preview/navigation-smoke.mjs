@@ -39,14 +39,14 @@ try {
       const el = document.querySelector('#app');
       if (!el) return { missing: true };
       const cs = getComputedStyle(el);
-      return { text: el.innerText.slice(0, 280), markup: el.innerHTML.length, display: cs.display, visible: el.getBoundingClientRect().height, active: document.querySelector('#nav .active')?.getAttribute('data-view') };
+      return { text: el.innerText.slice(0, 280), hasBackup:el.innerText.includes('BACKUP / RESTORE'), hasRSI:el.innerText.includes('RSI PLEDGED SHIPS'), markup: el.innerHTML.length, display: cs.display, visible: el.getBoundingClientRect().height, active: document.querySelector('#nav .active')?.getAttribute('data-view') };
     });
     console.log('NAV_TEST', tab, JSON.stringify(state));
     if (state.missing) console.log('MISSING_APP_DOM', JSON.stringify(await snapshot()));
     if (state.missing || state.active !== tab || !state.visible || state.markup < 50) {
       throw new Error('Navigation failed on ' + tab + ': ' + JSON.stringify(state));
     }
-    if (tab === 'data' && !state.text.includes('BACKUP / RESTORE')) {
+    if (tab === 'data' && (!state.hasBackup || !state.hasRSI)) {
       throw new Error('Data Import view missing BACKUP / RESTORE: ' + JSON.stringify(state));
     }
   }
