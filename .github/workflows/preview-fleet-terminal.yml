@@ -94,6 +94,12 @@ jobs:
           for file in /tmp/fleet-script-*.js; do node --check "$file"; done
           node --check dist/auth-preview.js
           node --check dist/rsi-import.js
+      - name: Browser navigation smoke test
+        run: |
+          npm ci --ignore-scripts
+          npx playwright install --with-deps chromium
+          python3 -m http.server 4173 --directory dist >/tmp/fleet-preview-http.log 2>&1 &
+          node fleet-preview/navigation-smoke.mjs
       - name: Deploy non-production Fleet Terminal review
         uses: cloudflare/wrangler-action@v4
         with:
