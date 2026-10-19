@@ -61,10 +61,12 @@ jobs:
           cloud_marker='/* Cloud bridge: inserted into the legacy script for access to its existing UI functions. */'
           legacy_start=s.find(cloud_marker)
           assert legacy_start>=0, 'Expected original cloud bridge missing; inspect build before deployment'
-          legacy_end_pattern=r'\\.catch\\(e=>status\\("Connection module unavailable: "\\+e\\.message\\)\\);\\s*\\}\\)\\(\\);?'
-          legacy_ending=re.search(legacy_end_pattern,s[legacy_start:])
-          assert legacy_ending, 'Original cloud bridge terminator missing'
-          legacy_end=legacy_start+legacy_ending.end()
+          legacy_end_token='.catch(e=>status("Connection module unavailable: "+e.message));'
+          legacy_ending=s.find(legacy_end_token,legacy_start)
+          assert legacy_ending>=0, 'Original cloud bridge terminator missing'
+          bridge_close=s.find('})()',legacy_ending+len(legacy_end_token))
+          assert 0<=bridge_close-(legacy_ending+len(legacy_end_token))<20, 'Unexpected cloud bridge end'
+          legacy_end=bridge_close+len('})()')
           assert legacy_end-legacy_start < 27000, 'Bridge removal span unexpected; refusing to rewrite'
           assert 's.nickname||s.name' in s[legacy_start:legacy_end], 'Wrong bridge selected'
           s=s[:legacy_start]+s[legacy_end:]
