@@ -963,3 +963,20 @@ body>.shell,.shell{
 @media(max-width:970px){
   #sdas-fleet-masthead .fleet-emblem{position:relative!important;top:auto!important;transform:none!important;margin:24px auto 12px!important}
 }
+
+/* MK XIII — balanced hero composition, matching the October 19 markup */
+@media(min-width:971px){
+  #sdas-fleet-masthead .fleet-emblem{
+    top:calc(50% - 20px)!important;
+    transform:translateY(-50%)!important;
+  }
+  #sdas-fleet-masthead .fleet-kicker,
+  #sdas-fleet-masthead .fleet-title.fleet-gold{
+    position:relative!important;
+    top:40px!important;
+  }
+}
+@media(max-width:970px){
+  #sdas-fleet-masthead .fleet-kicker,
+  #sdas-fleet-masthead .fleet-title.fleet-gold{top:0!important}
+}
