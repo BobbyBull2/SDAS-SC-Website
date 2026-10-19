@@ -42,6 +42,20 @@ try {
       return { text: el.innerText.slice(0, 280), hasBackup:el.innerText.includes('BACKUP / RESTORE'), hasRSI:el.innerText.includes('RSI PLEDGED SHIPS'), markup: el.innerHTML.length, display: cs.display, visible: el.getBoundingClientRect().height, active: document.querySelector('#nav .active')?.getAttribute('data-view') };
     });
     console.log('NAV_TEST', tab, JSON.stringify(state));
+    const geometry = await page.evaluate(() => {
+      const get = (el) => { if(!el)return null; const r=el.getBoundingClientRect(), cs=getComputedStyle(el);
+        return {tag:el.tagName,id:el.id,class:String(el.className||'').slice(0,95),
+          w:Math.round(r.width),left:Math.round(r.left),height:Math.round(r.height),
+          display:cs.display,maxWidth:cs.maxWidth,grid:cs.gridTemplateColumns};
+      };
+      const app=document.querySelector('#app');
+      return {viewport:innerWidth,root:get(document.querySelector('.shell')),
+        nav:get(document.querySelector('#nav')),app:get(app),first:get(app?.firstElementChild),
+        children:[...(app?.children||[])].slice(0,6).map(get),
+        layout:get(app?.querySelector('.layout')),dash:get(document.querySelector('#sdas-golden-live')),
+        panel:get(app?.querySelector('.panel'))};
+    });
+    console.log('VIEW_GEOMETRY', tab, JSON.stringify(geometry));
     if (state.missing) console.log('MISSING_APP_DOM', JSON.stringify(await snapshot()));
     if (state.missing || state.active !== tab || !state.visible || state.markup < 50) {
       throw new Error('Navigation failed on ' + tab + ': ' + JSON.stringify(state));
