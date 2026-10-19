@@ -48,6 +48,20 @@
     }
     if (rail.nextElementSibling !== auth) auth.insertAdjacentElement("beforebegin", rail);
 
+    // Direct return route to the official SDAS site, before the fleet controls.
+    let siteLink = document.getElementById("sdas-site-header-link");
+    if (!siteLink) {
+      siteLink = document.createElement("a");
+      siteLink.id = "sdas-site-header-link";
+      siteLink.className = "sdas-header-action";
+      siteLink.href = "https://sdas.space/";
+      siteLink.target = "_blank";
+      siteLink.rel = "noopener noreferrer";
+      siteLink.textContent = "SDAS.SPACE";
+      siteLink.setAttribute("aria-label", "Open SDAS.space website in a new tab");
+    }
+    if (rail.firstElementChild !== siteLink) rail.prepend(siteLink);
+
     const refresh = commands.find(button => normalized(button.textContent) === "REFRESH ORG FLEET");
     const edit = commands.find(button => normalized(button.textContent) === "EDIT PILOT NAME");
     for (const button of [refresh, edit]) {
