@@ -65,10 +65,11 @@ try {
   // gold divider spilling into the next tab. Test every active state.
   for (const name of ['home','hangar','registry','pilots','data']) {
     await page.locator('#nav [data-view="' + name + '"]').click();
+    await page.waitForTimeout(260); // Test the settled visual state after any browser style recalc.
     const look=await page.locator('#nav [data-view]').evaluateAll(buttons=>buttons.map(b=>{
       const c=getComputedStyle(b),divider=getComputedStyle(b,'::after');
       return {name:b.dataset.view,active:b.classList.contains('active'),
-        color:c.color,filter:c.filter,overflow:c.overflow,
+        color:c.color,filter:c.filter,overflow:c.overflow,transition:c.transition,
         shadow:c.boxShadow,divider:divider.backgroundImage,
         separatorWidth:divider.width};
     }));
