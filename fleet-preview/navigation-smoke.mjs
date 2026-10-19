@@ -50,6 +50,30 @@ try {
       throw new Error('Data Import view missing BACKUP / RESTORE: ' + JSON.stringify(state));
     }
   }
+  // Visual inspection artifacts and objective connected-tab geometry checks.
+  await page.locator('#nav [data-view="home"]').click();
+  await page.waitForTimeout(350);
+  const tabs = await page.locator('#nav [data-view]').evaluateAll(elements => elements.map(el => {
+    const r=el.getBoundingClientRect(),cs=getComputedStyle(el),line=getComputedStyle(el,'::after');
+    return {name:el.dataset.view,left:Math.round(r.left),right:Math.round(r.right),top:Math.round(r.top),bottom:Math.round(r.bottom),clip:cs.clipPath,separator:line.content,active:el.classList.contains('active')};
+  }));
+  console.log('NAV_GEOMETRY_DESKTOP',JSON.stringify(tabs));
+  if(tabs.length!==5||tabs.some((el,i)=>el.clip !== 'none'||i>0&&Math.abs(el.left-tabs[i-1].right)>1)) {
+    throw Error('Desktop tab rail has gaps or clipping: '+JSON.stringify(tabs));
+  }
+  await page.locator('#nav').screenshot({path:'/tmp/fleet-tabs-desktop.png'});
+  await page.screenshot({path:'/tmp/fleet-page-desktop.png',fullPage:false});
+  await page.setViewportSize({width:390,height:844});
+  await page.waitForTimeout(350);
+  const mobile=await page.locator('#nav [data-view]').evaluateAll(elements => elements.map(el=>{
+    const r=el.getBoundingClientRect();
+    return {name:el.dataset.view,left:Math.round(r.left),right:Math.round(r.right),top:Math.round(r.top),bottom:Math.round(r.bottom)};
+  }));
+  console.log('NAV_GEOMETRY_MOBILE',JSON.stringify(mobile));
+  if(mobile.length!==5||mobile.some(x=>x.right>392||x.left<0))throw Error('Mobile tabs overflow viewport');
+  await page.locator('#nav').screenshot({path:'/tmp/fleet-tabs-mobile.png'});
+  await page.locator('#nav [data-view="data"]').click();
+  if(!await page.locator('#app').innerText().then(t=>t.includes('BACKUP / RESTORE')))throw Error('Mobile import tab does not render');
   console.log('BROWSER_ERRORS', JSON.stringify(errors.slice(0, 8)));
 } catch(error) {
   console.log('BROWSER_ERRORS', JSON.stringify(errors.slice(0, 12)));
