@@ -54,6 +54,21 @@ jobs:
           s=s[:legacy_begin]+s[legacy_end:]
           assert 'if(p&&p!==document.body' not in s, 'Unsafe panel removal logic remains in staged HTML'
           print('Removed obsolete inline Data / Import controller, keeping live importer and tab handlers')
+          # fleet-preview/index.html still embeds an obsolete 2026-era cloud bridge.
+          # The current bridge is appended below from fleet-cloud-inline.js. Running both
+          # produces duplicate listeners and the old nickname/photo overview after refresh.
+          import re
+          cloud_marker='/* Cloud bridge: inserted into the legacy script for access to its existing UI functions. */'
+          legacy_start=s.find(cloud_marker)
+          assert legacy_start>=0, 'Expected original cloud bridge missing; inspect build before deployment'
+          legacy_end_pattern=r'\\.catch\\(e=>status\\("Connection module unavailable: "\\+e\\.message\\)\\);\\s*\\}\\)\\(\\);?'
+          legacy_ending=re.search(legacy_end_pattern,s[legacy_start:])
+          assert legacy_ending, 'Original cloud bridge terminator missing'
+          legacy_end=legacy_start+legacy_ending.end()
+          assert legacy_end-legacy_start < 27000, 'Bridge removal span unexpected; refusing to rewrite'
+          assert 's.nickname||s.name' in s[legacy_start:legacy_end], 'Wrong bridge selected'
+          s=s[:legacy_start]+s[legacy_end:]
+          print('Eliminated obsolete embedded cloud bridge, including nickname/photo dashboard')
           # Branding for the isolated Fleet Manager preview.
           s=s.replace('FLEET OPERATIONS TERMINAL','SOME DUDES FLEET MANAGER')
           s=s.replace('Fleet Operations Terminal','Some Dudes Fleet Manager')
@@ -84,6 +99,9 @@ jobs:
             hits=[m.start() for m in re.finditer(re.escape(needle),s)]
             print("LEGACY_CHECK",needle,"HITS",hits)
             for index in hits[:4]: print("LEGACY_CONTEXT",needle,"AT",index,repr(s[max(0,index-400):min(len(s),index+400)]))
+          assert s.count(cloud_marker)==1, 'Cloud bridge included more than once'
+          assert 's.nickname||s.name||"Unnamed ship"' not in s, 'Legacy nickname-first dashboard still present'
+          assert s.count('const legacy=clone(db)')==1, 'Duplicate Supabase bridge detected'
           p.write_text(s)
           PY
       - name: Validate deployed JavaScript syntax
