@@ -19,14 +19,14 @@
     const nav = document.getElementById("nav");
     if (!header || !nav) return;
 
-    // Remove only the standalone badge whose complete text matches.
-    // It may be a <div>, not a .pill/span, so inspect leaf elements too.
-    const badges = [...header.querySelectorAll("*")].filter(el =>
-      !el.closest("#sdas-auth-preview") &&
-      /(?:^|\\s)PRIVATE FUNCTIONAL PREVIEW\\s*$/.test(normalized(el.textContent)) &&
-      ![...el.children].some(child => /PRIVATE FUNCTIONAL PREVIEW/.test(normalized(child.textContent)))
-    );
-    for (const badge of badges) badge.remove();
+    // Remove only the exact preview-indicator pill, including its status dot.
+    // Do not remove its parent toolbar or any unrelated member/auth controls.
+    const previewBadge = [...header.querySelectorAll(".pill, .badge, [role='status'], span, div, button")]
+      .filter(el => !el.closest("#sdas-auth-preview"))
+      .find(el => el.textContent?.toUpperCase().includes("PRIVATE FUNCTIONAL PREVIEW") &&
+        (!el.querySelector("*") ||
+          ![...el.children].some(child => child.textContent?.toUpperCase().includes("PRIVATE FUNCTIONAL PREVIEW"))));
+    if (previewBadge) previewBadge.remove();
 
     const commands = [...document.querySelectorAll("button")].filter(
       button => !button.closest("#app, #nav, #sdas-golden-live, #sdas-auth-preview")
