@@ -76,7 +76,7 @@ try {
     const selected=look.find(x=>x.active);
     if(!selected||selected.name!==name||selected.filter!=='none'||selected.overflow!=='hidden')
       throw Error('Active tab effect escapes its own bounds: '+JSON.stringify(look));
-    if(look.some(x=>!x.active&&/rgb\\(2(?:2[0-9]|3[0-9]|4[0-9]), (?:1[5-9][0-9]|2[0-5][0-9]),/i.test(x.color)))
+    if(look.some(x=>!x.active&&x.color===selected.color))
       throw Error('Inactive tab acquired gold coloring');
     if(look.some(x=>x.active&&/gold|#e6c0|#e9c5/i.test(x.divider)))
       throw Error('Gold divider would bleed into neighbor');
