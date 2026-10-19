@@ -656,3 +656,10 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
   transition:none!important;
   animation:none!important;
 }
+
+/* Highest-priority inactive selection state; no gold on neighboring tabs. */
+#nav.nav > button[data-view]:not(.active),
+#nav.nav > button[data-view]:not(.active):hover {
+  color:#b8e1ec!important;
+  text-shadow:0 1px 2px #000c!important;
+}
