@@ -601,3 +601,130 @@ body{
   #nav.nav > button[data-view="data"]{flex-basis:100%!important}
 }
 @media(prefers-reduced-motion:reduce){#nav.nav > button[data-view]{transition:none!important}}
+
+
+/* MK VII — full SDAS branding and cockpit alignment, preview-only */
+:root{--fleet-nasa:"Nasalization","Orbitron","Audiowide",sans-serif}
+body,button,input,select,textarea,table,th,td,p,span,small,a,label,li,
+.btn,.gbtn,.pill,.entry,.member,.eyebrow,.fleet-kicker,
+#nav.nav>button[data-view],#sdas-auth-actions button,#sdas-auth-state,
+#sdas-golden-live,#sdas-golden-live *,#app,#app *{
+  font-family:var(--fleet-nasa)!important;
+}
+body,button,input,select,textarea{font-variant-ligatures:none}
+#app p,#app td,#app label,#app input,#sdas-golden-live p,
+#sdas-golden-live td{letter-spacing:.025em!important;line-height:1.55}
+h1,h2,h3,.page-head h2,#sdas-golden-live h2,#sdas-golden-live h3{
+  font-family:var(--fleet-nasa)!important;
+  letter-spacing:.075em!important;
+  text-shadow:0 2px 1px #02080d,0 4px 2px #02080c,0 8px 17px #000a,0 0 13px #53d8ea1a!important;
+}
+#sdas-fleet-masthead{
+  min-height:clamp(185px,16vw,245px)!important;
+  box-sizing:border-box!important;
+  padding:65px clamp(16px,2.5vw,35px) 20px
+    calc(clamp(14px,2.8vw,42px) + clamp(265px,34vw,470px))!important;
+  display:flex!important;align-content:center!important;justify-content:flex-start!important;
+  flex-direction:row!important;flex-wrap:wrap!important;
+  overflow:visible!important;
+}
+#sdas-fleet-masthead .fleet-emblem{
+  position:absolute!important;top:56%!important;
+  left:clamp(14px,2.8vw,42px)!important;
+  transform:translateY(-50%)!important;
+  width:clamp(265px,34vw,470px)!important;
+  height:clamp(116px,13vw,175px)!important;
+  max-width:calc(100% - 32px)!important;
+  display:flex!important;align-items:center!important;
+  justify-content:center!important;
+  overflow:visible!important;
+  -webkit-mask-image:none!important;mask-image:none!important;
+  filter:drop-shadow(0 8px 10px #000b) drop-shadow(0 0 9px #3ddcf233)!important;
+}
+#sdas-fleet-masthead .fleet-kicker{
+  flex:0 0 100%!important;order:1!important;
+  margin:0 0 10px!important;text-align:left!important;
+  letter-spacing:.2em!important;
+  font:500 clamp(10px,.92vw,13px)/1.25 var(--fleet-nasa)!important;
+  color:#a9dce2!important;
+}
+#sdas-fleet-masthead .fleet-title:not(.fleet-gold),
+#sdas-fleet-masthead .fleet-and{display:none!important}
+#sdas-fleet-masthead .fleet-title.fleet-gold{
+  display:block!important;order:2!important;flex:0 0 100%!important;
+  font:700 clamp(23px,2.55vw,42px)/1.16 var(--fleet-nasa)!important;
+  letter-spacing:clamp(.01em,.12vw,.075em)!important;
+  white-space:normal!important;overflow-wrap:normal!important;
+  color:#f1d390!important;
+  background:linear-gradient(180deg,#fff1c0 0%,#f3d791 37%,#cb9948 100%)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  text-shadow:none!important;
+  filter:drop-shadow(0 3px 1px #07121b) drop-shadow(0 5px 5px #000a)
+    drop-shadow(0 0 10px #e6b8613d)!important;
+  max-width:100%!important;
+}
+#sdas-golden-gutter{height:0!important;margin:0!important}
+#nav.nav{margin-top:0!important;margin-bottom:9px!important;padding-top:0!important;padding-bottom:0!important}
+#nav.nav>button[data-view]{
+  align-items:center!important;justify-content:center!important;
+  font-family:var(--fleet-nasa)!important;letter-spacing:.04em!important;
+  text-shadow:0 2px 2px #000c,0 0 8px #55d4dd15!important;
+}
+#nav.nav>button[data-view="home"]::before{
+  content:""!important;display:inline-block!important;flex:none!important;
+  width:clamp(24px,2vw,31px)!important;height:clamp(24px,2vw,31px)!important;
+  background:currentColor!important;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2' y='3' width='20' height='18' rx='2' fill='black'/%3E%3Cpath d='M6 8l4 4-4 4' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M12 16h6' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat!important;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2' y='3' width='20' height='18' rx='2' fill='black'/%3E%3Cpath d='M6 8l4 4-4 4' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M12 16h6' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat!important;
+}
+#nav.nav>button[data-view]:not([data-view="home"])::before{
+  width:clamp(20px,1.7vw,27px)!important;height:clamp(20px,1.7vw,27px)!important;
+}
+.sdas-top-action-group{display:flex!important;align-items:stretch!important;
+  justify-content:flex-start!important;gap:0!important;
+  flex-wrap:wrap!important;margin:0!important;padding:0!important}
+.sdas-top-action-group>.sdas-top-action{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  margin:0!important;min-height:43px!important;border-radius:0!important;
+  white-space:nowrap!important;
+  font-family:var(--fleet-nasa)!important;
+}
+.sdas-top-action-group>.sdas-top-action:first-of-type{border-radius:5px 0 0 5px!important}
+.sdas-top-action-group>.sdas-top-action:last-of-type{border-radius:0 5px 5px 0!important}
+.sdas-top-action-group>.sdas-top-action+.sdas-top-action{border-left:0!important}
+@media(max-width:1180px){
+  #sdas-fleet-masthead{
+    padding-left:calc(clamp(205px,30vw,350px) + 25px)!important;
+  }
+  #sdas-fleet-masthead .fleet-emblem{width:clamp(205px,30vw,350px)!important}
+  #sdas-fleet-masthead .fleet-title.fleet-gold{
+    font-size:clamp(21px,2.7vw,34px)!important;
+    letter-spacing:.012em!important;
+  }
+}
+@media(max-width:970px){
+  #sdas-fleet-masthead{
+    padding:18px 12px 21px!important;
+    text-align:center!important;justify-content:center!important;align-content:center!important;
+  }
+  #sdas-fleet-masthead .fleet-emblem{
+    position:relative!important;top:auto!important;left:auto!important;
+    width:min(420px,90vw)!important;max-width:90vw!important;height:120px!important;
+    transform:none!important;margin:8px auto 10px!important;
+    order:0!important;flex:0 0 100%!important;
+  }
+  #sdas-fleet-masthead .fleet-kicker{text-align:center!important;margin-top:7px!important}
+  #sdas-fleet-masthead .fleet-title.fleet-gold{
+    font-size:clamp(21px,4.2vw,36px)!important;
+    text-align:center!important;letter-spacing:.012em!important;
+  }
+}
+@media(max-width:600px){
+  #sdas-fleet-masthead .fleet-emblem{height:96px!important}
+  #sdas-fleet-masthead .fleet-title.fleet-gold{font-size:clamp(17px,5vw,28px)!important}
+  .sdas-top-action-group{width:100%!important}
+  .sdas-top-action-group>.sdas-top-action{
+    flex:1 1 100%!important;border-radius:5px!important;border-left:1px solid #3d7b8b!important}
+  #nav.nav>button[data-view="home"]::before{width:23px!important;height:23px!important}
+}
