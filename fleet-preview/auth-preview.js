@@ -82,8 +82,8 @@
   style.textContent=`
   :root{--sdas-gold:#e3c489;--sdas-cyan:#55d8ed;--sdas-ink:#04131d}
   body{background:linear-gradient(180deg,#071722,#041019 75%)!important;color:#e9f4fa}
-  #sdas-fleet-masthead{min-height:238px!important;margin:0 0 0!important;padding:29px 30px 35px 41%!important;align-items:flex-start!important;text-align:left!important;background:linear-gradient(90deg,#041019d4,#04101997 42%,#0410194d 75%),url("https://raw.githubusercontent.com/BobbyBull2/SDAS-SC-Website/preview/fleet-terminal-v2/public/images/preview-hangar.png") center 50%/cover no-repeat,#05141d!important;-webkit-mask-image:none!important;mask-image:none!important;border-bottom:0!important}
-  #sdas-fleet-masthead .fleet-emblem{left:3%!important;top:24px!important;width:35%!important;height:163px!important}
+  #sdas-fleet-masthead{min-height:310px!important;margin:0 0 0!important;padding:29px 30px 35px 41%!important;align-items:flex-start!important;text-align:left!important;background:linear-gradient(90deg,#041019d4,#04101997 42%,#0410194d 75%),url("https://raw.githubusercontent.com/BobbyBull2/SDAS-SC-Website/preview/fleet-terminal-v2/public/images/preview-hangar.png") center 50%/cover no-repeat,#05141d!important;-webkit-mask-image:none!important;mask-image:none!important;border-bottom:0!important}
+  #sdas-fleet-masthead .fleet-emblem{left:3%!important;top:calc(50% + 35px)!important;transform:translateY(-50%)!important;width:35%!important;height:160px!important;max-height:calc(100% - 28px)!important}
   #sdas-fleet-masthead .fleet-kicker{margin:0 0 5px!important;letter-spacing:.3em!important;font-size:12px!important}
   #sdas-fleet-masthead .fleet-kicker:before{display:none!important}
   #sdas-fleet-masthead .fleet-title{font-size:clamp(32px,3.55vw,65px)!important;line-height:1.13!important;letter-spacing:.01em!important}
@@ -99,7 +99,7 @@
   button{transition:box-shadow .2s ease,border-color .2s ease}
   button:hover{box-shadow:0 0 12px #44d9f02b}
   #sdas-golden-gutter{height:1px;background:linear-gradient(90deg,transparent,#67d7e66f,transparent);margin:0 2% 12px}
-  @media(max-width:950px){#sdas-fleet-masthead{padding:180px 20px 30px!important;align-items:center!important;text-align:center!important}#sdas-fleet-masthead .fleet-emblem{top:12px!important;left:calc(50% - 165px)!important;width:330px!important;height:135px!important}#sdas-fleet-masthead .fleet-gold{font-size:clamp(26px,5vw,45px)!important}#sdas-fleet-masthead:after{letter-spacing:.18em!important}}
+  @media(max-width:950px){#sdas-fleet-masthead{min-height:0!important;padding:180px 20px 30px!important;align-items:center!important;text-align:center!important}#sdas-fleet-masthead .fleet-emblem{top:12px!important;left:calc(50% - 165px)!important;width:330px!important;height:135px!important}#sdas-fleet-masthead .fleet-gold{font-size:clamp(26px,5vw,45px)!important}#sdas-fleet-masthead:after{letter-spacing:.18em!important}}
   @media(max-width:530px){#sdas-fleet-masthead{padding-top:130px!important}#sdas-fleet-masthead .fleet-emblem{height:104px!important;width:260px!important;left:calc(50% - 130px)!important}#sdas-fleet-masthead:after{font-size:9px!important;letter-spacing:.1em!important}}
   `;
   document.head.append(style);
