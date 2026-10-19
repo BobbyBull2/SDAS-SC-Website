@@ -294,10 +294,10 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
 
 
 /*
- * SDAS FLEET MANAGER — MK IV FLIGHT DECK NAVIGATION
+ * SDAS FLEET MANAGER — MK V CLEAN ANGLED TAB SEAMS
  * One uninterrupted deck; individually raised 3D cyan controls with a
- * machined diagonal bulkhead INSIDE each cell. Selected gold highlights
- * terminate before the bulkhead, with no overlap into adjacent controls.
+ * narrow illuminated slashes like the reference, not opaque triangles.
+ * Selected gold accents end INSIDE the current cell, never the next.
  * Presentation only: native buttons, data-view and handlers unchanged.
  */
 #nav.nav {
@@ -375,7 +375,7 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
   right:0!important;
   bottom:auto!important;
   left:auto!important;
-  width:29px!important;
+  width:36px!important;
   height:100%!important;
   padding:0!important;
   border:0!important;
@@ -384,11 +384,10 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
   filter:none!important;
   -webkit-mask:none!important;
   mask:none!important;
-  /* The opaque wedge hides the triangular sliver that formerly made the
-     selected gold background appear on the other side of a diagonal. */
-  clip-path:polygon(0 0,100% 0,100% 100%)!important;
-  background:
-    linear-gradient(115deg,#91e8f2 0%,#3d97b0 9%,#0b2c3b 20%,#051725 31%,#071b28 100%)!important;
+  /* A 3px diagonal BEAM, not a filled triangular wedge. Top begins 36px
+     before the junction and bottom ends at the junction, like the reference. */
+  clip-path:polygon(0 0,3px 0,100% 100%,calc(100% - 3px) 100%)!important;
+  background:linear-gradient(90deg,#245c74 0%,#b2f3ff 42%,#358da8 100%)!important;
   box-shadow:none!important;
 }
 #nav.nav > button[data-view]:last-child::after {display:none!important}
@@ -407,23 +406,23 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
 #nav.nav > button[data-view].active:hover {
   color:#f9d993!important;
   text-shadow:0 0 7px #ddaa4b77,0 1px 1px #03080b!important;
-  /* Only the middle of the button warms to gold; the final 29px are opaque
-     cyan/blue divider metal. The gold accent stripe ends BEFORE the wedge. */
+  /* Gold top and bottom edge lines stop before the cyan diagonal slash.
+     The remaining surface keeps its subtle bronze-to-steel shading. */
   background:
-    linear-gradient(90deg,transparent 0%,#ffd887 9%,#e4bb67 90%,transparent 100%) 0 100% / calc(100% - 31px) 3px no-repeat,
+    linear-gradient(90deg,transparent 0%,#ffd887 9%,#e4bb67 90%,transparent 100%) 0 100% / calc(100% - 38px) 3px no-repeat,
+    linear-gradient(90deg,#c6a563 0%,#f0d59c 32%,#e6c06c 85%,transparent 100%) 0 0 / calc(100% - 38px) 2px no-repeat,
     radial-gradient(ellipse 55% 85% at 39% 30%,#d9ad5240 0%,transparent 83%) 0 0 / 100% 100% no-repeat,
     linear-gradient(150deg,#ffe6aa11 0%,transparent 38%) 0 0 / 100% 100% no-repeat,
     linear-gradient(180deg,#364b4b 0%,#1c3842 19%,#122d36 59%,#091f29 100%)!important;
   box-shadow:
-    inset 0 2px 0 #f0cf8b9c,
     inset 0 9px 15px #e5b96210,
     inset 0 -4px 8px #000b,
     inset 0 0 0 1px #c99b4d4d!important;
   filter:none!important;
 }
 #nav.nav > button[data-view].active::after {
-  /* The diagonal boundary stays cool cyan even when the left tab is gold. */
-  background:linear-gradient(115deg,#b4f5ff 0%,#4da1b8 9%,#103949 20%,#051b28 31%,#071b28 100%)!important;
+  /* Selected tab still uses the exact same cyan seam as every neighbor. */
+  background:linear-gradient(90deg,#245c74 0%,#b2f3ff 42%,#358da8 100%)!important;
 }
 #nav.nav > button[data-view]:focus-visible {
   outline:2px solid #f2d68b!important;
@@ -486,8 +485,8 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
 }
 @media(max-width:400px) {
   #nav.nav > button[data-view]{font-size:10.5px!important;letter-spacing:.025em!important;gap:5px!important;}
-  #nav.nav > button[data-view]::after{width:23px!important}
-  #nav.nav > button[data-view].active {background-size:calc(100% - 26px) 3px,100% 100%,100% 100%,100% 100%!important}
+  #nav.nav > button[data-view]::after{width:27px!important}
+  #nav.nav > button[data-view].active {background-size:calc(100% - 30px) 3px,calc(100% - 30px) 2px,100% 100%,100% 100%,100% 100%!important}
 }
 @media(prefers-reduced-motion:reduce){
   #nav.nav > button[data-view]{transition:none!important}
