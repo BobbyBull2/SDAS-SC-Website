@@ -491,3 +491,22 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
 @media(prefers-reduced-motion:reduce){
   #nav.nav > button[data-view]{transition:none!important}
 }
+
+
+/* v0 golden-spiral refinement — preview branch only.
+   Additive styling: retain existing DOM hooks, login, data and UI event handlers. */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&display=swap');
+:root{--fleet-v0-gold:#e6be72;--fleet-v0-cyan:#42dfd8;--fleet-v0-panel:#06151d;--fleet-v0-edge:#4f8589}
+#sdas-fleet-masthead{background:linear-gradient(90deg,#030c13f2 0%,#030c13d9 42%,#030c13a0 100%),url('../public/images/preview-hangar.png') center 44%/cover no-repeat,#030c13!important;box-shadow:inset 0 -65px 100px #020b12b7!important}
+#sdas-fleet-masthead .fleet-title{font-family:Orbitron,Audiowide,sans-serif!important;text-shadow:4px 5px #03070a!important}
+#nav.nav{isolation:isolate;overflow:visible!important;filter:drop-shadow(0 7px 12px #0009)}
+#nav.nav > button[data-view]{position:relative!important;box-shadow:inset 0 1px #ffffff19,inset 0 -3px 0 #071c23,0 2px 5px #0008!important;transition:background .2s ease,filter .2s ease!important}
+#nav.nav > button[data-view]:hover{filter:brightness(1.15)}
+#nav.nav > button[data-view].active{color:#f3d49a!important;box-shadow:inset 0 2px #edcb83,inset 0 -3px #b17d36,0 0 17px #dcb66925!important}
+#nav.nav > button[data-view]:nth-child(1){z-index:5!important}
+#nav.nav > button[data-view]:nth-child(2){z-index:4!important}
+#nav.nav > button[data-view]:nth-child(3){z-index:3!important}
+#nav.nav > button[data-view]:nth-child(4){z-index:2!important}
+#nav.nav > button[data-view]:nth-child(5){z-index:1!important}
+#nav.nav > button[data-view].active{z-index:6!important}
+@media(prefers-reduced-motion:reduce){#nav.nav > button[data-view]{transition:none!important}}
