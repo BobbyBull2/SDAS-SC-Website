@@ -69,6 +69,8 @@ jobs:
             print('DIAG_SELECTOR',needle,'index',index)
             if index>=0:
               print('DIAG_EXCERPT',s[max(0,index-350):min(len(s),index+1800)].replace('\\n',' ')[:2150])
+          for needle in ["demoHeadings","if(p&&p!==document.body","p.remove()","sdas-data-import-layout","sdas-golden-live-css","cloudBanner","sdas-golden-ratio-redesign"]:
+            print("DIAG_LEGACY",needle,"count",s.count(needle))
           p.write_text(s)
           PY
       - name: Validate deployed JavaScript syntax
