@@ -12,14 +12,20 @@
       if (heading && heading.textContent.trim() !== LABEL) heading.textContent = LABEL;
     }
 
-    // Style only the three top-of-page controls; do not reparent buttons or alter handlers.
+    // Limit changes to top-of-page controls; do not reparent buttons or alter remaining handlers.
     const nav = document.querySelector("#nav");
     if (!nav) return;
     const topButtons = [...document.querySelectorAll("button")].filter(
       button => Boolean(button.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING)
     );
+    // Remove only the redundant hero import shortcut. The Data / Import
+    // page and its real import handlers remain intact.
+    const redundantImport = topButtons.find(button =>
+      /import.*(existing|local).*ships?/.test(normalized(button))
+    );
+    if (redundantImport) redundantImport.remove();
+
     const actionPatterns = [
-      /import.*(existing|local).*ships?/,
       /refresh.*org.*fleet/,
       /edit.*pilot.*name/
     ];
