@@ -1,64 +1,77 @@
-/* SDAS Fleet Manager — preview-only branding polish.
-   Presentation only: no authentication, fleet records or event handlers are replaced. */
+/* SDAS Fleet Manager preview — one cohesive branded header.
+   Preserve all original button nodes and onclick listeners (Supabase/Discord remain unchanged).
+   Only the obsolete local-import shortcut and preview-label pill are removed. */
 (() => {
   "use strict";
   const LABEL = "SOME DUDES FLEET MANAGER";
-  const normalized = button => (button.textContent || "").replace(/\s+/g, "").toLowerCase();
+  const normalized = text => String(text || "").replace(/\s+/g, " ").trim().toUpperCase();
 
   const apply = () => {
-    const masthead = document.querySelector("#sdas-fleet-masthead");
-    if (masthead) {
-      const heading = masthead.querySelector(".fleet-title.fleet-gold");
-      if (heading && heading.textContent.trim() !== LABEL) heading.textContent = LABEL;
+    const masthead = document.getElementById("sdas-fleet-masthead");
+    const title = masthead?.querySelector(".fleet-title.fleet-gold");
+    if (title && title.textContent.trim() !== LABEL) title.textContent = LABEL;
+
+    // The old code gave .shell the top-action-group class, turning the entire
+    // application into an action row. Never style or remove the shell as a button group.
+    document.querySelector(".shell")?.classList.remove("sdas-top-action-group");
+
+    const header = document.querySelector(".header");
+    const nav = document.getElementById("nav");
+    if (!header || !nav) return;
+
+    // Remove ONLY the standalone header badge with this exact wording.
+    for (const el of header.querySelectorAll(".pill, button, span")) {
+      if (el.closest("#sdas-auth-preview")) continue;
+      if (normalized(el.textContent) !== "PRIVATE FUNCTIONAL PREVIEW") continue;
+      const badge = el.closest(".pill") || el;
+      if (header.contains(badge)) badge.remove();
+      break;
     }
 
-    // Limit changes to top-of-page controls; do not reparent buttons or alter remaining handlers.
-    const nav = document.querySelector("#nav");
-    if (!nav) return;
-    const topButtons = [...document.querySelectorAll("button")].filter(
-      button => Boolean(button.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING)
+    const commands = [...document.querySelectorAll("button")].filter(
+      button => !button.closest("#app, #nav, #sdas-golden-live, #sdas-auth-preview")
     );
-    // Remove only the redundant hero import shortcut. The Data / Import
-    // page and its real import handlers remain intact.
-    const redundantImport = topButtons.find(button =>
-      /import.*(existing|local).*ships?/.test(normalized(button))
-    );
-    if (redundantImport) redundantImport.remove();
+    // The Data / Import tab and its controls are NOT removed.
+    const oldImport = commands.find(button => normalized(button.textContent) === "IMPORT MY EXISTING LOCAL SHIPS");
+    oldImport?.remove();
 
-    const actionPatterns = [
-      /refresh.*org.*fleet/,
-      /edit.*pilot.*name/
-    ];
-    const actions = actionPatterns.map(pattern => topButtons.find(
-      button => pattern.test(normalized(button))
-    ));
-    if (actions.some(button => !button)) return;
-    for (const button of actions) button.classList.add("sdas-top-action");
+    const auth = document.getElementById("sdas-auth-preview");
+    if (!auth || !header.contains(auth)) return;
 
-    // The original container retains its children and delegated event handlers.
-    const parent = actions[0].parentElement;
-    if (parent && actions.every(button => button.parentElement === parent)) {
-      parent.classList.add("sdas-top-action-group");
+    // Do not put these into #sdas-auth-actions: the auth script calls
+    // replaceChildren() whenever roles/session refresh, deleting those nodes.
+    let rail = document.getElementById("sdas-fleet-header-actions");
+    if (!rail) {
+      rail = document.createElement("div");
+      rail.id = "sdas-fleet-header-actions";
+      rail.setAttribute("aria-label", "Fleet quick controls");
+    }
+    if (rail.nextElementSibling !== auth) auth.insertAdjacentElement("beforebegin", rail);
+
+    const refresh = commands.find(button => normalized(button.textContent) === "REFRESH ORG FLEET");
+    const edit = commands.find(button => normalized(button.textContent) === "EDIT PILOT NAME");
+    for (const button of [refresh, edit]) {
+      if (!button) continue;
+      button.classList.add("sdas-header-action");
+      button.classList.remove("sdas-top-action");
+      if (!rail.contains(button)) rail.append(button); // preserves attached onclick
     }
   };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", apply, { once: true });
-  } else {
-    apply();
-  }
-  let pending = false;
+  } else apply();
+
+  let queued = false;
   const observer = new MutationObserver(() => {
-    if (pending) return;
-    pending = true;
-    requestAnimationFrame(() => { pending = false; apply(); });
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; apply(); });
   });
-  const start = () => {
+  const watch = () => {
     if (document.body) observer.observe(document.body, { childList: true, subtree: true });
   };
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", start, { once: true });
-  } else {
-    start();
-  }
+    document.addEventListener("DOMContentLoaded", watch, { once: true });
+  } else watch();
 })();
