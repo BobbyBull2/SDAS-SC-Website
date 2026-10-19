@@ -431,3 +431,81 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
   #nav.nav > button[data-view] {font-size:9.25px!important;letter-spacing:.03em!important;gap:4px!important}
   #nav.nav > button[data-view]:not([data-view="home"])::before {width:16px;height:16px}
 }
+
+
+/* Connected-flight-deck refinement: continuous strip with diagonal separators, no clipped gaps.
+   Matches the reference's contiguous five trapezoidal tab faces. */
+#nav.nav {
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:0!important;
+  padding:0!important;
+  min-height:65px!important;
+  margin:0 0 18px!important;
+  border:1px solid #3d8796!important;
+  border-bottom:1px solid #67afbb!important;
+  border-radius:0!important;
+  background:linear-gradient(180deg,#0c2e3cd9,#071c2ae8 68%,#071720f8)!important;
+  overflow:hidden!important;
+  box-shadow:inset 0 1px #8bd7e547,0 5px 15px #0009!important;
+}
+#nav.nav > button[data-view],
+#nav.nav > button[data-view]:first-child,
+#nav.nav > button[data-view]:last-child {
+  clip-path:none!important;
+  position:relative!important;
+  z-index:1!important;
+  isolation:auto!important;
+  min-height:64px!important;
+  background:linear-gradient(180deg,#0b2d3cdd,#071b29ee)!important;
+  border:0!important;
+  border-radius:0!important;
+  padding:10px clamp(7px,1vw,17px)!important;
+  box-shadow:inset 0 1px #66bad031,inset 0 -1px #43859c82!important;
+}
+#nav.nav > button[data-view]:last-child {border-right:0!important}
+#nav.nav > button[data-view]::after,
+#nav.nav > button[data-view]:first-child::after,
+#nav.nav > button[data-view]:last-child::after {
+  content:"";
+  display:block;
+  position:absolute;
+  pointer-events:none;
+  z-index:4;
+  width:1px;
+  height:94px;
+  inset:auto 0 auto auto;
+  top:-15px;
+  right:0;
+  padding:0;
+  clip-path:none!important;
+  background:#56bdd3!important;
+  box-shadow:0 0 8px #5bc7e8bb;
+  transform:rotate(-39deg);
+  transform-origin:center;
+  -webkit-mask:none!important;
+  mask:none!important;
+}
+#nav.nav > button[data-view]:last-child::after{display:none!important}
+#nav.nav > button[data-view].active{
+  z-index:2!important;
+  background:linear-gradient(180deg,#332f20bc,#222922cc 62%,#322e20ee)!important;
+  color:#f2cb73!important;
+  box-shadow:inset 0 -3px #e8c56e,inset 0 1px #f5d27e55,0 0 22px #daa84c30!important;
+}
+#nav.nav > button[data-view].active::after{
+  background:#e9c56f!important;
+  box-shadow:0 0 10px #f0d17f88;
+}
+#nav.nav > button[data-view]:hover:not(.active) {
+  background:linear-gradient(180deg,#124155e8,#0b2837ee)!important;
+}
+#nav.nav > button[data-view]:focus-visible{outline:2px solid #f4d684!important;outline-offset:-4px!important}
+@media(max-width:760px) {
+  #nav.nav {grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:0!important;overflow:hidden!important}
+  #nav.nav > button[data-view] {min-height:52px!important}
+  #nav.nav > button[data-view]::after {height:72px!important;top:-10px!important}
+  #nav.nav > button[data-view]:nth-child(2n)::after {display:none!important}
+  #nav.nav > button[data-view="data"]{grid-column:1/-1}
+  #nav.nav > button[data-view="data"]::after {display:none!important}
+}
