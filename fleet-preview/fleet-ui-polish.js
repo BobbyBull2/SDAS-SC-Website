@@ -23,8 +23,8 @@
     // It may be a <div>, not a .pill/span, so inspect leaf elements too.
     const badges = [...header.querySelectorAll("*")].filter(el =>
       !el.closest("#sdas-auth-preview") &&
-      normalized(el.textContent) === "PRIVATE FUNCTIONAL PREVIEW" &&
-      ![...el.children].some(child => normalized(child.textContent) === "PRIVATE FUNCTIONAL PREVIEW")
+      /(?:^|\\s)PRIVATE FUNCTIONAL PREVIEW\\s*$/.test(normalized(el.textContent)) &&
+      ![...el.children].some(child => /PRIVATE FUNCTIONAL PREVIEW/.test(normalized(child.textContent)))
     );
     for (const badge of badges) badge.remove();
 
