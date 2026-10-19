@@ -65,6 +65,29 @@ jobs:
           s=s.replace('</script></body>', '\n'+bridge+'\n</script><script defer src="/rsi-import.js"></script><script type="module" src="/auth-preview.js"></script></body>',1)
           p.write_text(s)
           PY
+      - name: Validate deployed JavaScript syntax
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class Scripts(HTMLParser):
+            def __init__(self): super().__init__(); self.scripts=[]; self.active=False; self.text=""
+            def handle_starttag(self,tag,attrs):
+              if tag=='script':
+                self.active=not dict(attrs).get('src'); self.text=""
+            def handle_data(self,data):
+              if self.active: self.text+=data
+            def handle_endtag(self,tag):
+              if tag=='script' and self.active:
+                self.scripts.append(self.text); self.active=False
+          p=Scripts(); p.feed(Path("dist/index.html").read_text())
+          for i,script in enumerate(p.scripts):
+            if script.strip(): Path(f"/tmp/fleet-script-{i}.js").write_text(script)
+          print("Found",len(p.scripts),"inline scripts")
+          PY
+          for file in /tmp/fleet-script-*.js; do node --check "$file"; done
+          node --check dist/auth-preview.js
+          node --check dist/rsi-import.js
       - name: Deploy non-production Fleet Terminal review
         uses: cloudflare/wrangler-action@v4
         with:
