@@ -46,6 +46,14 @@ jobs:
           assert 'BACKUP / RESTORE' in s, 'Data / Import view missing from source'
           assert 'PLEDGED SHIP CSV IMPORT' in s, 'CSV import controls missing from source'
           print('Data / Import source templates present; retaining original app rendering')
+          # Older inline preview code reparents panels and removes #app on Data / Import.
+          # Remove that obsolete importer-layout controller; the new stylesheet handles layout.
+          legacy_begin=s.find('// Keep the approved import page three-column layout separate from login and data handlers.')
+          legacy_end=s.find('// Golden-ratio visual redesign: purely presentational, preserving legacy fleet handlers.',legacy_begin)
+          assert legacy_begin>=0 and legacy_end>legacy_begin, 'Legacy destructive import controller not found; inspect before deploy'
+          s=s[:legacy_begin]+s[legacy_end:]
+          assert 'if(p&&p!==document.body' not in s, 'Unsafe panel removal logic remains in staged HTML'
+          print('Removed obsolete inline Data / Import controller, keeping live importer and tab handlers')
           # Branding for the isolated Fleet Manager preview.
           s=s.replace('FLEET OPERATIONS TERMINAL','SOME DUDES FLEET MANAGER')
           s=s.replace('Fleet Operations Terminal','Some Dudes Fleet Manager')
