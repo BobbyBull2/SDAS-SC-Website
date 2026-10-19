@@ -886,3 +886,53 @@ body>.shell,.shell{
   }
   #sdas-golden-live{grid-template-columns:1fr!important}
 }
+
+
+/* MK XI — one-row header rail / aligned emblem; no broad selectors that hide auth. */
+#sdas-fleet-masthead .fleet-emblem{
+  top:calc(50% + 48px)!important;
+  transform:translateY(-50%)!important;
+  max-height:calc(100% - 28px)!important;
+}
+.header{
+  display:flex!important;flex-flow:row nowrap!important;
+  align-items:center!important;justify-content:flex-end!important;
+  gap:8px!important;width:max-content!important;max-width:calc(100% - 24px)!important;
+  padding:0!important;margin:0!important;
+}
+#sdas-fleet-header-actions,#sdas-auth-preview,#sdas-auth-actions{
+  display:inline-flex!important;flex-flow:row nowrap!important;
+  align-items:center!important;justify-content:flex-end!important;
+  gap:7px!important;min-width:0!important;
+}
+#sdas-fleet-header-actions>.sdas-header-action{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  margin:0!important;min-height:34px!important;
+  padding:7px 10px!important;border-radius:999px!important;
+  background:#06171fcc!important;border:1px solid #2d6878!important;
+  font:600 clamp(9px,.7vw,11px)/1.2 var(--fleet-nasa)!important;
+  color:#e6eef0!important;white-space:nowrap!important;
+}
+#sdas-fleet-header-actions>.sdas-header-action:hover{border-color:#5bcae0!important}
+#sdas-auth-preview{margin:0!important;max-width:none!important}
+#sdas-auth-state{white-space:nowrap!important}
+.sdas-top-action-group:not(.shell){display:contents!important}
+@media(max-width:1250px){
+  .header{right:12px!important;gap:5px!important}
+  #sdas-fleet-header-actions,#sdas-auth-preview,#sdas-auth-actions{gap:4px!important}
+  #sdas-fleet-header-actions>.sdas-header-action,#sdas-auth-actions>button{
+    padding:6px 7px!important;font-size:9px!important;letter-spacing:0!important;
+  }
+}
+@media(max-width:970px){
+  #sdas-fleet-masthead .fleet-emblem{
+    position:relative!important;top:auto!important;left:auto!important;
+    transform:none!important;margin:20px auto 10px!important;
+  }
+  .header{position:relative!important;top:auto!important;right:auto!important;
+    width:100%!important;max-width:100%!important;
+    justify-content:center!important;flex-wrap:wrap!important;padding:8px 0!important}
+}
+@media(max-width:680px){
+  #sdas-fleet-header-actions,#sdas-auth-preview,#sdas-auth-actions{flex-wrap:wrap!important;justify-content:center!important}
+}
