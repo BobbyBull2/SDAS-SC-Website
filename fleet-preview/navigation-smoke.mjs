@@ -56,6 +56,12 @@ try {
         panel:get(app?.querySelector('.panel'))};
     });
     console.log('VIEW_GEOMETRY', tab, JSON.stringify(geometry));
+    if (geometry.app && geometry.root && Math.abs(geometry.app.w-geometry.root.w)>3) {
+      throw Error('Fleet view does not fill shell width on '+tab+': '+JSON.stringify(geometry));
+    }
+    if (tab==='home' && geometry.dash && geometry.root && Math.abs(geometry.dash.w-geometry.root.w)>3) {
+      throw Error('Terminal dashboard width differs from other views: '+JSON.stringify(geometry));
+    }
     if (state.missing) console.log('MISSING_APP_DOM', JSON.stringify(await snapshot()));
     if (state.missing || state.active !== tab || !state.visible || state.markup < 50) {
       throw new Error('Navigation failed on ' + tab + ': ' + JSON.stringify(state));
