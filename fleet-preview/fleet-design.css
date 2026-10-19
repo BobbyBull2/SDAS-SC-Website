@@ -491,3 +491,113 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
 @media(prefers-reduced-motion:reduce){
   #nav.nav > button[data-view]{transition:none!important}
 }
+
+
+/* MK VI — v0 golden-spiral visual integration, 2026-10-19.
+   CSS-only: existing Supabase, Discord OAuth, ship data and JS view hooks remain intact.
+   No sample-data markup from the visual test harness is used. */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&display=swap');
+:root{--gs-display:'Nasalization','Orbitron','Audiowide',sans-serif;--gs-gold:#e9c481;--gs-cyan:#43e7df;--gs-slate:#2f6f7e;--gs-slant:22px}
+body{
+  background:radial-gradient(ellipse 60% 45% at 78% 8%,#1b6c8a2e,transparent 70%),
+    linear-gradient(90deg,#02080d99 0%,transparent 45%),
+    linear-gradient(180deg,#02080d66 0%,#030b1240 26%,#030b1299 62%,#02070cd9 100%),
+    url('../public/images/preview-hangar.png') center top/cover fixed no-repeat,#03090f!important;
+}
+.shell{position:relative!important;isolation:auto!important;box-sizing:border-box!important}
+#sdas-fleet-masthead{
+  display:flex!important;flex-flow:row wrap!important;align-content:center!important;
+  align-items:baseline!important;justify-content:flex-start!important;column-gap:.55em!important;
+  min-height:clamp(150px,11.5vw,196px)!important;margin:0!important;
+  padding:clamp(28px,2.6vw,44px) clamp(16px,3vw,48px) clamp(10px,1.2vw,20px) calc(clamp(16px,2.8vw,44px) + clamp(220px,26vw,430px) + clamp(12px,1.4vw,24px))!important;
+  text-align:left!important;isolation:auto!important;background:transparent!important;border-bottom:0!important;box-shadow:none!important;
+}
+#sdas-fleet-masthead::before,#sdas-fleet-masthead::after{display:none!important}
+#sdas-fleet-masthead .fleet-emblem{
+  position:absolute!important;top:50%!important;left:clamp(16px,2.8vw,44px)!important;
+  transform:translateY(-50%)!important;width:clamp(220px,26vw,430px)!important;
+  height:clamp(86px,8.4vw,140px)!important;filter:none!important;mix-blend-mode:lighten;
+  -webkit-mask-image:radial-gradient(ellipse 58% 62% at 50% 50%,#000 62%,transparent 100%);
+  mask-image:radial-gradient(ellipse 58% 62% at 50% 50%,#000 62%,transparent 100%);
+}
+#sdas-fleet-masthead .fleet-kicker{order:1;flex:0 0 100%;margin:0 0 6px!important;
+  font:600 clamp(10px,.85vw,13px) var(--sdas-condensed)!important;letter-spacing:.32em!important;
+  text-transform:uppercase;color:#b9d8de!important}
+#sdas-fleet-masthead .fleet-kicker::before{display:none!important}
+#sdas-fleet-masthead .fleet-title.fleet-gold{order:4;flex:0 0 100%;margin:0!important;
+  font:600 clamp(26px,2.5vw,42px)/1.08 var(--gs-display)!important;letter-spacing:.16em!important;
+  text-transform:uppercase;white-space:nowrap!important;color:var(--gs-gold)!important;
+  text-shadow:0 0 18px #e9c48133,0 3px 14px #000d!important}
+#sdas-fleet-masthead .fleet-title:not(.fleet-gold),#sdas-fleet-masthead .fleet-and{
+  order:2;flex:none;margin:0 0 10px!important;font:600 clamp(22px,2vw,30px)/1.1 var(--sdas-condensed)!important;
+  letter-spacing:.5em!important;text-transform:uppercase;white-space:nowrap!important;
+  color:var(--gs-cyan)!important;text-shadow:0 0 10px #43e7df40!important}
+#sdas-fleet-masthead .fleet-and{order:3}
+#sdas-golden-gutter{visibility:hidden!important;height:0!important;margin:0!important}
+.header{position:absolute!important;z-index:7;top:clamp(10px,1.3vw,20px);right:clamp(12px,2.4vw,40px);
+  max-width:min(620px,46%);min-height:0!important;padding:0!important;margin:0!important;
+  justify-content:flex-end!important;background:transparent!important;border:0!important}
+.header .pill,#sdas-auth-actions button,#pilotSelect{background:#06171fcc!important;border:1px solid #2d6878!important;
+  border-radius:999px!important;color:#e6eef0!important;backdrop-filter:blur(6px)}
+#nav.nav{display:flex!important;flex-wrap:nowrap!important;align-items:flex-end!important;gap:0!important;
+  width:100%!important;margin:0 0 -1px!important;padding:0 clamp(4px,1vw,14px)!important;
+  border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;
+  overflow:visible!important;position:relative;z-index:3}
+#nav.nav > button[data-view]{
+  flex:1 1 0!important;width:auto!important;min-width:0!important;min-height:clamp(48px,4vw,58px)!important;
+  margin:0 0 0 calc(var(--gs-slant) * -1 + 4px)!important;
+  padding:10px calc(var(--gs-slant) + 6px)!important;
+  clip-path:polygon(0 0,calc(100% - var(--gs-slant)) 0,100% 100%,var(--gs-slant) 100%)!important;
+  background:linear-gradient(180deg,#7fdcea 0%,#2f7586 38%,#1a4552 100%)!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  font:600 clamp(10.5px,.9vw,13.5px)/1.1 var(--sdas-condensed)!important;
+  letter-spacing:.12em!important;color:#c3e4ea!important;
+  filter:drop-shadow(0 6px 10px #0009)!important;isolation:isolate}
+#nav.nav > button[data-view]:first-child{margin-left:0!important;
+  clip-path:polygon(var(--gs-slant) 0,calc(100% - var(--gs-slant)) 0,100% 100%,0 100%)!important}
+#nav.nav > button[data-view]::after{
+  content:""!important;display:block!important;position:absolute!important;
+  inset:1.5px 2px 0 2px!important;width:auto!important;height:auto!important;z-index:-1!important;
+  clip-path:polygon(0 0,calc(100% - var(--gs-slant)) 0,100% 100%,var(--gs-slant) 100%)!important;
+  background:linear-gradient(160deg,#a6ecf71f 0%,transparent 34%),linear-gradient(180deg,#15404f,#0c2a37 42%,#061823)!important;
+  box-shadow:none!important;pointer-events:none}
+#nav.nav > button[data-view]:first-child::after{
+  clip-path:polygon(var(--gs-slant) 0,calc(100% - var(--gs-slant)) 0,100% 100%,0 100%)!important}
+#nav.nav > button[data-view]:last-child::after{display:block!important}
+#nav.nav > button[data-view]:hover:not(.active){color:#f2fdff!important;
+  background:linear-gradient(180deg,#b3f3fc,#4aa5b7 40%,#24606f)!important}
+#nav.nav > button[data-view].active,#nav.nav > button[data-view].active:hover{
+  color:#ffe0a0!important;text-shadow:0 0 10px #e9b45a80,0 1px 1px #000!important;
+  background:linear-gradient(180deg,#ffe3a3,#d3a85a 45%,#8a6a35)!important}
+#nav.nav > button[data-view].active::after{
+  background:radial-gradient(ellipse 70% 120% at 50% 120%,#e9b4573d,transparent 70%),
+    linear-gradient(160deg,#ffe8b01a,transparent 36%),linear-gradient(180deg,#2a3b3a,#132a31 45%,#081d27)!important}
+#nav.nav > button[data-view]:focus-visible{outline:2px solid #ffe0a0!important;outline-offset:-8px!important}
+.panel{background:linear-gradient(160deg,#0b2633e6,#061a25eb 55%,#04121af2)!important;
+  border:1px solid var(--gs-slate)!important;border-radius:18px!important;
+  box-shadow:inset 0 1px #d8fbff1c,inset 0 0 40px #43e7df08,0 18px 44px #000a!important;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.fleet-ship-table .ship-mark{width:84px!important;height:40px!important;border-radius:6px!important;
+  border:1px solid #2f6573!important;overflow:hidden}
+.fleet-ship-table .ship-mark img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:1180px){:root{--gs-slant:16px}#nav.nav > button[data-view]{letter-spacing:.07em!important;gap:7px!important}}
+@media(max-width:970px){
+  body{background-attachment:scroll!important}
+  .header{position:static!important;max-width:none!important;justify-content:flex-end!important;padding:12px 0 0!important}
+  #sdas-fleet-masthead{justify-content:center!important;text-align:center!important;min-height:0!important;padding:18px 12px 20px!important;row-gap:4px}
+  #sdas-fleet-masthead .fleet-emblem{position:relative!important;top:auto!important;left:auto!important;
+    transform:none!important;order:0;flex:0 0 100%;width:auto!important;max-width:330px;
+    height:clamp(84px,18vw,124px)!important;margin:0 auto 10px!important;justify-content:center!important}
+}
+@media(max-width:760px){
+  #nav.nav{flex-wrap:wrap!important;gap:6px!important;padding:0!important;margin:0 0 12px!important}
+  #nav.nav > button[data-view],#nav.nav > button[data-view]:first-child{
+    flex:1 1 calc(50% - 3px)!important;margin:0!important;min-height:52px!important;padding:10px 14px!important;
+    clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)!important}
+  #nav.nav > button[data-view]::after,#nav.nav > button[data-view]:first-child::after,
+  #nav.nav > button[data-view]:nth-child(2n)::after,#nav.nav > button[data-view="data"]::after{
+    display:block!important;inset:1px!important;
+    clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)!important}
+  #nav.nav > button[data-view="data"]{flex-basis:100%!important}
+}
+@media(prefers-reduced-motion:reduce){#nav.nav > button[data-view]{transition:none!important}}
