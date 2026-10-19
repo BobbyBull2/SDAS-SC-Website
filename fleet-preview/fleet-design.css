@@ -517,3 +517,129 @@ body {background:radial-gradient(ellipse 75% 60% at 55% -6%,#12536a45,transparen
 #nav.nav > button[data-view]:nth-child(4){z-index:2!important}
 #nav.nav > button[data-view]:nth-child(5){z-index:1!important}
 #nav.nav > button[data-view].active{z-index:6!important}
+
+
+/* SDAS Mk III navigation — connected, beveled deck controls with contained active gold.
+   Each diagonal divider is clipped to its OWN button (no overlap, no gold bleed). */
+#nav.nav{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:0!important;
+  padding:0!important;
+  margin:3px 0 19px!important;
+  min-height:66px!important;
+  border:1px solid #397f99!important;
+  border-top-color:#70bfd2!important;
+  border-bottom:2px solid #204c65!important;
+  border-radius:10px!important;
+  background:#061925!important;
+  overflow:hidden!important;
+  box-shadow:
+    inset 0 1px 0 #c8f7ff3e,
+    inset 0 -2px 0 #06101a,
+    0 12px 24px #0009!important;
+}
+#nav.nav > button[data-view],
+#nav.nav > button[data-view]:first-child,
+#nav.nav > button[data-view]:last-child,
+#nav.nav > button[data-view]:nth-child(n),
+#nav.nav > button[data-view].active{
+  position:relative!important;
+  isolation:isolate!important;
+  z-index:0!important;
+  clip-path:none!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  border:0!important;
+  border-radius:0!important;
+  min-height:65px!important;
+  margin:0!important;
+  padding:11px clamp(10px,1.5vw,23px)!important;
+  filter:none!important;
+  background:
+    linear-gradient(165deg,#b9f2ff12 0%,transparent 33%),
+    radial-gradient(ellipse 70% 75% at 50% -13%,#38b9e025,transparent 88%),
+    linear-gradient(180deg,#12384a 0%,#0a2937 24%,#071f2c 63%,#04131e 100%)!important;
+  box-shadow:
+    inset 0 2px 0 #86d8e546,
+    inset 0 9px 12px #419bba0c,
+    inset 0 -5px 7px #0008,
+    inset 0 -1px 0 #205266!important;
+  color:#b8e1ec!important;
+  text-shadow:0 1px 2px #000c!important;
+  transition:background .16s ease,color .16s ease!important;
+}
+#nav.nav > button[data-view]::after,
+#nav.nav > button[data-view]:first-child::after,
+#nav.nav > button[data-view]:last-child::after,
+#nav.nav > button[data-view].active::after {
+  content:"";
+  position:absolute!important;
+  display:block!important;
+  top:0!important;
+  right:0!important;
+  bottom:auto!important;
+  left:auto!important;
+  z-index:2!important;
+  width:24px!important;
+  height:100%!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  transform:none!important;
+  filter:none!important;
+  pointer-events:none!important;
+  -webkit-mask:none!important;
+  mask:none!important;
+  clip-path:polygon(0 0,9px 0,100% 100%,15px 100%)!important;
+  background:linear-gradient(90deg,#030c14 0%,#061b27 19%,#25748c 42%,#a0efff 61%,#328fa7 79%,#051925 100%)!important;
+  box-shadow:none!important;
+}
+#nav.nav > button[data-view]:last-child::after {display:none!important}
+#nav.nav > button[data-view]:hover:not(.active){
+  color:#edfcff!important;
+  background:
+    linear-gradient(165deg,#b1f6ff20,transparent 32%),
+    radial-gradient(ellipse 70% 100% at 50% -15%,#56daf04a,transparent 88%),
+    linear-gradient(180deg,#19475a,#0d3447 44%,#071b29 100%)!important;
+  box-shadow:inset 0 2px #b6efff66,inset 0 -3px #37798b,inset 0 -5px 9px #0008!important;
+  filter:none!important;
+}
+#nav.nav > button[data-view].active,
+#nav.nav > button[data-view].active:hover {
+  color:#f6d88e!important;
+  background:
+    linear-gradient(145deg,#e4ba6230 0%,transparent 38%),
+    radial-gradient(ellipse 90% 100% at 50% -25%,#ffdf8548 0%,transparent 80%),
+    linear-gradient(180deg,#3b3d35 0%,#242e31 38%,#18242a 77%,#252924 100%)!important;
+  box-shadow:
+    inset 0 2px 0 #ffd98e9e,
+    inset 0 8px 16px #eabf4014,
+    inset 0 -3px 0 #f0c96e,
+    inset 0 -6px 9px #b17d2833,
+    inset 0 0 0 1px #d0a85746!important;
+  text-shadow:0 0 7px #eac06b70!important;
+  filter:none!important;
+}
+#nav.nav > button[data-view].active::after {
+  /* Separators stay cyan even beside selected gold; no shared external highlight. */
+  background:linear-gradient(90deg,#030d14 0%,#092633 20%,#3d93a4 45%,#c1f3ff 62%,#3d94a5 81%,#051927 100%)!important;
+}
+#nav.nav > button[data-view]:focus-visible {
+  outline:2px solid #eacb88!important;
+  outline-offset:-5px!important;
+}
+@media(max-width:760px){
+  #nav.nav {grid-template-columns:repeat(2,minmax(0,1fr))!important;border-radius:8px!important}
+  #nav.nav > button[data-view]{min-height:54px!important;padding:10px 6px!important}
+  #nav.nav > button[data-view]::after{width:20px!important}
+  #nav.nav > button[data-view]:nth-child(2n)::after{display:none!important}
+  #nav.nav > button[data-view="data"]{grid-column:1/-1!important}
+  #nav.nav > button[data-view="data"]::after{display:none!important}
+  #nav.nav > button[data-view]:nth-child(-n+4) {
+    border-bottom:1px solid #3480969c!important;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  #nav.nav > button[data-view]{transition:none!important}
+}
