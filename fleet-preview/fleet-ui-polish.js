@@ -19,14 +19,14 @@
     const nav = document.getElementById("nav");
     if (!header || !nav) return;
 
-    // Remove ONLY the standalone header badge with this exact wording.
-    for (const el of header.querySelectorAll(".pill, button, span")) {
-      if (el.closest("#sdas-auth-preview")) continue;
-      if (normalized(el.textContent) !== "PRIVATE FUNCTIONAL PREVIEW") continue;
-      const badge = el.closest(".pill") || el;
-      if (header.contains(badge)) badge.remove();
-      break;
-    }
+    // Remove only the standalone badge whose complete text matches.
+    // It may be a <div>, not a .pill/span, so inspect leaf elements too.
+    const badges = [...header.querySelectorAll("*")].filter(el =>
+      !el.closest("#sdas-auth-preview") &&
+      normalized(el.textContent) === "PRIVATE FUNCTIONAL PREVIEW" &&
+      ![...el.children].some(child => normalized(child.textContent) === "PRIVATE FUNCTIONAL PREVIEW")
+    );
+    for (const badge of badges) badge.remove();
 
     const commands = [...document.querySelectorAll("button")].filter(
       button => !button.closest("#app, #nav, #sdas-golden-live, #sdas-auth-preview")
