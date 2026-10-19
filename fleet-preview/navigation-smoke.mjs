@@ -22,13 +22,13 @@ try {
     const originalRemove = Element.prototype.remove;
     Element.prototype.remove = function(...args) {
       if(this.id === 'app' || this.contains?.(document.getElementById('app'))) {
-        console.log('REMOVAL_STACK', this.tagName, this.id, new Error().stack?.slice(0,1300));
+        console.error('REMOVAL_STACK', this.tagName, this.id, new Error().stack?.slice(0,1300));
       }
       return originalRemove.apply(this,args);
     };
     const originalRemoveChild = Node.prototype.removeChild;
     Node.prototype.removeChild = function(child) {
-      if(child?.id === 'app') console.log('REMOVE_CHILD_STACK', new Error().stack?.slice(0,1300));
+      if(child?.id === 'app') console.error('REMOVE_CHILD_STACK', new Error().stack?.slice(0,1300));
       return originalRemoveChild.call(this,child);
     };
   });
