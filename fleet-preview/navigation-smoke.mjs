@@ -75,7 +75,7 @@ try {
     }));
     console.log('NAV_STYLE',name,JSON.stringify(look));
     const selected=look.find(x=>x.active);
-    if(!selected||selected.name!==name||!selected.filter.includes('drop-shadow(')||!selected.overflow)
+    if(!selected||selected.name!==name||selected.filter!=='none'||selected.overflow!=='hidden')
       throw Error('Selected tab styling is missing: '+JSON.stringify(look));
     if(look.some(x=>!x.active&&x.color===selected.color))
       throw Error('Inactive tab acquired gold coloring');
