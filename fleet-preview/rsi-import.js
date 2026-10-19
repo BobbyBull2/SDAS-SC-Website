@@ -39,7 +39,19 @@ function translate(raw){
 }
 let pending=[];
 function ensure(){
- const host=document.getElementById("sdas-rsi-import-host");
+ let host=document.getElementById("sdas-rsi-import-host");
+ if(!host){
+   const active=[...document.querySelectorAll("#nav button")].find(b=>b.classList.contains("active"));
+   const isImport=/DATA\s*\/\s*IMPORT/i.test(active?.textContent||"");
+   const app=document.getElementById("app");
+   // Mount the importer only on the real import screen; never rewrite the SPA template.
+   if(isImport&&app&&/BACKUP\s*\/\s*RESTORE/i.test(app.textContent||"")){
+     host=document.createElement("div");host.id="sdas-rsi-import-host";
+     host.style.cssText="margin:18px 0;border-top:2px solid #57baca;padding-top:8px";
+     const layout=app.querySelector(".layout");
+     if(layout)layout.before(host);else app.append(host);
+   }
+ }
  if(!host||host.querySelector("#sdas-rsi-import"))return;
  const panel=document.createElement("section");panel.id="sdas-rsi-import";
  panel.style.cssText="background:linear-gradient(135deg,#091d2a,#102b39);border:1px solid #57baca;border-radius:12px;padding:18px;margin:18px 0;color:#d5f5ff;max-width:920px";
