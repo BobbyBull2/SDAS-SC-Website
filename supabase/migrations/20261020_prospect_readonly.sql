@@ -40,7 +40,7 @@ CREATE POLICY "prospects read shared photo objects" ON storage.objects FOR SELEC
 -- Discord role check. Old transitional "member" rows cannot bypass Prospect.
 CREATE OR REPLACE FUNCTION public.is_sdas_member(p_user uuid DEFAULT auth.uid())
  RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=''
- AS $
+ AS $$
    SELECT p_user IS NOT NULL AND p_user=(SELECT auth.uid())
    AND EXISTS(
      SELECT 1 FROM public.sdas_memberships m
@@ -50,10 +50,10 @@ CREATE OR REPLACE FUNCTION public.is_sdas_member(p_user uuid DEFAULT auth.uid())
          OR (m.role='member' AND m.discord_rank='patch'))
        AND m.last_role_checked_at>now()-interval '12 hours'
    );
- $;
+ $$;
 CREATE OR REPLACE FUNCTION public.can_admin_sdas(p_user uuid DEFAULT auth.uid())
  RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=''
- AS $
+ AS $$
    SELECT p_user IS NOT NULL AND p_user=(SELECT auth.uid())
    AND EXISTS(
      SELECT 1 FROM public.sdas_memberships m
@@ -61,7 +61,7 @@ CREATE OR REPLACE FUNCTION public.can_admin_sdas(p_user uuid DEFAULT auth.uid())
        AND m.discord_rank='super_admin'
        AND m.last_role_checked_at>now()-interval '12 hours'
    );
- $;
+ $$;
 UPDATE public.sdas_role_config SET enforce_roles=true,updated_at=now() WHERE singleton=true;
 
 -- Prospects cannot update their own pilot profile (or write fleet data).
