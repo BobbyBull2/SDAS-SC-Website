@@ -36,6 +36,34 @@ CREATE POLICY "prospects read shared photo objects" ON storage.objects FOR SELEC
    SELECT 1 FROM public.ship_photos p JOIN public.fleet_ships s ON s.id=p.ship_id
    WHERE p.object_path=objects.name AND s.org_visible
  ));
+-- Existing Member/Officer/Admin access now also requires an authoritative
+-- Discord role check. Old transitional "member" rows cannot bypass Prospect.
+CREATE OR REPLACE FUNCTION public.is_sdas_member(p_user uuid DEFAULT auth.uid())
+ RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=''
+ AS $
+   SELECT p_user IS NOT NULL AND p_user=(SELECT auth.uid())
+   AND EXISTS(
+     SELECT 1 FROM public.sdas_memberships m
+     WHERE m.user_id=p_user
+       AND ((m.role='admin' AND m.discord_rank='super_admin')
+         OR (m.role='officer' AND m.discord_rank='board_member')
+         OR (m.role='member' AND m.discord_rank='patch'))
+       AND m.last_role_checked_at>now()-interval '12 hours'
+   );
+ $;
+CREATE OR REPLACE FUNCTION public.can_admin_sdas(p_user uuid DEFAULT auth.uid())
+ RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=''
+ AS $
+   SELECT p_user IS NOT NULL AND p_user=(SELECT auth.uid())
+   AND EXISTS(
+     SELECT 1 FROM public.sdas_memberships m
+     WHERE m.user_id=p_user AND m.role='admin'
+       AND m.discord_rank='super_admin'
+       AND m.last_role_checked_at>now()-interval '12 hours'
+   );
+ $;
+UPDATE public.sdas_role_config SET enforce_roles=true,updated_at=now() WHERE singleton=true;
+
 -- Prospects cannot update their own pilot profile (or write fleet data).
 DROP POLICY IF EXISTS "pilot profile update own" ON public.pilot_profiles;
 CREATE POLICY "pilot profile update own" ON public.pilot_profiles FOR UPDATE TO authenticated
