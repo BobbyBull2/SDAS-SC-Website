@@ -29,8 +29,14 @@ jobs:
           auth=Path('dist/SDFM/auth-preview.js').read_text()
           cloud=html
           assert 'sdfm-production-login.js' in html
-          assert 'sdasFleetAuthStorage' in auth and 'sdasFleetAuthStorage' in cloud
+          login=Path('dist/SDFM/sdfm-production-login.js').read_text()
+          assert 'sdasFleetAuthStorage' in login
+          assert 'sdasFleetSharedClientPromise' in login
+          assert 'sdasFleetSharedClientPromise' in auth and 'sdasFleetSharedClientPromise' in cloud
           assert 'sdasFleetStartDiscordLogin' in auth
+          assert 'RECONNECT DISCORD' in auth
+          assert 'auth-preview.js?v=20261020-auth-recovery' in html
+          assert 'Cache-Control: no-cache' in Path('dist/_headers').read_text()
           assert 'sdas-live-signin-card' in Path('dist/SDFM/sdfm-production-login.js').read_text()
           assert 'sdas-production-access' in html
           assert '<div id="root">' in Path('dist/index.html').read_text()

@@ -36,6 +36,15 @@
   // already selected from a previous visit.
   if (!pref()) clearPersistentFleetSessions();
 
+  // A single client owns the OAuth callback, session, and Discord provider token.
+  // Avoid racing two Supabase instances against one authentication redirect.
+  window.sdasFleetSharedClientPromise = import("https://esm.sh/@supabase/supabase-js@2")
+    .then(mod => mod.createClient(
+      "https://zfvfpbfkbvudaezichrh.supabase.co",
+      "sb_publishable_n10yR_G-0OOmFWjHdrb8Yw_8lJfs8io",
+      {auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true,storage:window.sdasFleetAuthStorage}}
+    ));
+
   const style = document.createElement("style");
   style.id = "sdas-live-signin-styles";
   style.textContent = `
