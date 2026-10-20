@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   preview:
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'preview/fleet-terminal-v2'
+    if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/preview/fleet-terminal-v2') || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'preview/fleet-terminal-v2')
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
