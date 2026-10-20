@@ -106,6 +106,19 @@
   if(added){render();await sync();}
   return added;
  };
+ window.sdasImportAsopShips=async records=>{
+  if(!ready||!user||busy)throw Error("Cloud hangar must be connected and idle.");
+  const existing=new Set(db.ships.filter(s=>s.owner===user.id&&s.origin==="aUEC").map(s=>String(s.name||"").trim().toLowerCase()));
+  let added=0;
+  for(const row of records){
+    const name=String(row.name||"").trim().slice(0,150);
+    if(name.length<3||existing.has(name.toLowerCase()))continue;
+    db.ships.push({id:crypto.randomUUID(),owner:user.id,name,nickname:"",origin:"aUEC",role:"Other",visibility:"private",paint:"",notes:"ASOP screenshot import (owner-confirmed aUEC)",image:"",loadout:{}});
+    existing.add(name.toLowerCase());added++;
+  }
+  if(added){render();await sync();}
+  return added;
+ };
  // Remove duplicate legacy cloud commands only when they share the same command strip.
  // Retain the first actual control and its listener; don't touch controls in other views.
  const commandLabels=new Set(["IMPORT MY EXISTING LOCAL SHIPS","REFRESH ORG FLEET","EDIT PILOT NAME"]);
