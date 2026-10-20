@@ -1299,3 +1299,76 @@ body>.shell,.shell{
   #app .sdas-pilot-ships-mobile tbody tr{gap:12px!important;padding:12px!important}
   #sdas-golden-live .gside .gbox:nth-child(2) .gactions>.gbtn{font-size:13px!important}
 }
+
+
+/* MK XXII — three equal vertical Data / Import cards with readable controls */
+#app .sdas-import-columns{
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:18px!important;align-items:stretch!important;width:100%!important;
+ max-width:100%!important;margin:20px 0 28px!important;
+}
+#app .sdas-import-columns>.sdas-import-card-host,
+#app .sdas-import-columns>.sdas-import-card{
+ display:flex!important;flex-direction:column!important;
+ min-width:0!important;width:100%!important;max-width:100%!important;
+ height:100%!important;box-sizing:border-box!important;
+ margin:0!important;padding:20px!important;
+ border-radius:12px!important;border:1px solid #3c879a!important;
+ background:linear-gradient(155deg,#0c2937,#061823)!important;
+ box-shadow:inset 0 1px #b3f1fb17,0 8px 22px #0005!important;
+}
+#app .sdas-import-columns>.sdas-import-card-host{
+ border-top:3px solid #71d6e8!important;
+}
+#app .sdas-import-columns>.sdas-import-card:nth-child(2){
+ border-top:3px solid #d1b06b!important;
+}
+#app .sdas-import-columns>.sdas-import-card:nth-child(3){
+ border-top:3px solid #65abb7!important;
+}
+#app .sdas-import-card-host>#sdas-rsi-import{
+ width:100%!important;max-width:none!important;
+ height:100%!important;box-sizing:border-box!important;
+ padding:0!important;margin:0!important;border:0!important;
+ border-radius:0!important;background:transparent!important;
+}
+#app .sdas-import-columns h3{
+ font-size:clamp(18px,1.28vw,22px)!important;line-height:1.35!important;
+ letter-spacing:.035em!important;margin:0 0 13px!important;
+}
+#app .sdas-import-columns p,
+#app .sdas-import-columns li,
+#app .sdas-import-columns label,
+#app .sdas-import-columns a,
+#app .sdas-import-columns .sub,
+#app .sdas-import-columns .small,
+#app .sdas-import-columns strong{
+ font-size:clamp(14px,1vw,16px)!important;
+ line-height:1.55!important;letter-spacing:.015em!important;
+ overflow-wrap:normal!important;word-break:normal!important;
+}
+#app .sdas-import-columns input,
+#app .sdas-import-columns textarea,
+#app .sdas-import-columns button,
+#app .sdas-import-columns select{
+ box-sizing:border-box!important;max-width:100%!important;
+ font-size:clamp(13px,.96vw,15px)!important;
+ line-height:1.4!important;letter-spacing:.015em!important;
+}
+#app .sdas-import-columns button{
+ min-height:44px!important;padding:10px 12px!important;
+ white-space:normal!important;overflow-wrap:break-word!important;
+}
+#app .sdas-import-columns textarea{min-height:95px!important}
+#app .sdas-import-columns input[type="file"]{width:100%!important}
+#app .sdas-import-columns ol{padding-left:22px!important}
+@media(max-width:1100px){
+ #app .sdas-import-columns{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #app .sdas-import-card-host{grid-column:1/-1!important}
+}
+@media(max-width:700px){
+ #app .sdas-import-columns{grid-template-columns:minmax(0,1fr)!important;gap:14px!important}
+ #app .sdas-import-card-host{grid-column:auto!important}
+ #app .sdas-import-columns>.sdas-import-card-host,
+ #app .sdas-import-columns>.sdas-import-card{padding:16px!important}
+}
