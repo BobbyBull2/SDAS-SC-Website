@@ -92,6 +92,16 @@ try {
       headerCheck.handlers.some(x=>x!=="function"))throw Error("Fleet header actions missing or detached: "+JSON.stringify(headerCheck));
   if(headerCheck.logoTop<headerCheck.mastTop+3||headerCheck.logoBottom>headerCheck.mastBottom+3)
       throw Error("SDAS emblem extends beyond masthead: "+JSON.stringify(headerCheck));
+  const homeIconDebug = await page.evaluate(() => {
+    const button = document.querySelector('#nav button[data-view="home"]');
+    if (!button) return null;
+    return {html:button.innerHTML.slice(0,1300),
+      childNodes:[...button.childNodes].map(n=>({type:n.nodeType,name:n.nodeName,text:n.textContent?.slice(0,150),html:n.outerHTML?.slice(0,280)})),
+      before:getComputedStyle(button,'::before').content,
+      after:getComputedStyle(button,'::after').content,
+      text:button.textContent};
+  });
+  console.log('HOME_ICON_DEBUG',JSON.stringify(homeIconDebug));
   // Visual inspection artifacts and objective connected-tab geometry checks.
   await page.locator('#nav [data-view="home"]').click();
   await page.waitForTimeout(350);
