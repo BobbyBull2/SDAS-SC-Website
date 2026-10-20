@@ -132,6 +132,17 @@ try {
     return {kickerLeft:kicker?.getBoundingClientRect().left,wordLeft:word?.getBoundingClientRect().left};
   });
   console.log("KICKER_ALIGNMENT",JSON.stringify(kickerAlignment));
+  const layoutDebug=await page.evaluate(()=>{
+    const mast=document.getElementById("sdas-fleet-masthead"),k=mast?.querySelector(".fleet-kicker"),
+      w=mast?.querySelector(".fleet-title.fleet-gold"),part=w?.querySelector(".fleet-title-part");
+    const rect=x=>{const r=x?.getBoundingClientRect();return r&&{left:r.left,right:r.right,top:r.top,width:r.width}};
+    const style=x=>{const s=getComputedStyle(x);return {left:s.left,right:s.right,top:s.top,bottom:s.bottom,position:s.position,
+      transform:s.transform,fontSize:s.fontSize,display:s.display}};
+    return {mast:rect(mast),k:rect(k),w:rect(w),part:rect(part),ks:style(k),ws:style(w),
+      varValue:mast?.style.getPropertyValue("--fleet-wordmark-left"),kParent:k?.parentElement?.id,
+      viewport:innerWidth};
+  });
+  console.log("KICKER_DEBUG",JSON.stringify(layoutDebug));
   if(Math.abs(kickerAlignment.kickerLeft-kickerAlignment.wordLeft)>5)
     throw Error("Community kicker does not align with SOME: "+JSON.stringify(kickerAlignment));
 
