@@ -12,6 +12,7 @@ const tools = [
   {title:'SC Craft Tools',description:'Crafting & Blueprints',url:'https://sc-craft.tools/',image:'https://media.starcitizen.tools/thumb/6/63/Item_fabricator_keyshot.webp/1280px-Item_fabricator_keyshot.webp',imageAlt:'Star Citizen item fabricator in a workshop',scene:true,Icon:Boxes},
   {title:'SC Trade Tools',description:'Routes & Commodities',url:'https://sc-trade.tools/',image:'https://media.starcitizen.tools/thumb/e/ed/Constellation_Taurus_-_Inside_hangar_transferring_cargo.jpg/1280px-Constellation_Taurus_-_Inside_hangar_transferring_cargo.jpg.webp',imageAlt:'Star Citizen Constellation Taurus transferring cargo inside a hangar',scene:true,Icon:Compass},
   {title:'Star Citizen Wiki',description:'Guides & Reference',url:'https://starcitizen.tools/',image:'https://media.starcitizen.tools/thumb/9/99/Sc-patch-4102-delivery.webp/1200px-Sc-patch-4102-delivery.webp?2y3c2',imageAlt:'Star Citizen Wiki website artwork',scene:false,Icon:BookOpen},
+  {title:'SDAS Fleet Manager',description:'SDAS Shared Fleet & Pilot Registry',url:'/SDFM/',image:'/SDFM/public/images/preview-hangar.png',imageAlt:'SDAS Fleet Manager cinematic spacecraft hangar',scene:true,Icon:Boxes},
   {title:'Bobby’s Wikelo Tracker',description:'Wikelo Contracts & Rewards',url:'https://wikelotracker.com/',image:'https://raw.githubusercontent.com/BobbyBull2/Wikelo_Tracker/root/content.png',imageAlt:'Wikelo lounging in his chair',scene:true,Icon:BookOpen},
   {title:'StarStrings',description:'Community Text Project',url:'https://github.com/MrKraken/StarStrings',image:'https://media.starcitizen.tools/thumb/f/ff/07_mobiglas_components.jpg/1280px-07_mobiglas_components.jpg.webp',imageAlt:'Star Citizen mobiGlas holographic interface component illustration',scene:true,Icon:Languages},
 ];
@@ -37,7 +38,7 @@ export function PilotsToolkit(){
   const rail=useRef<HTMLDivElement>(null);
   return <section className="section pilots-toolkit" id="toolkit" aria-labelledby="toolkit-heading">
     <div className="section-heading">
-      <div><p className="eyebrow">QUICK ACCESS / RESOURCES</p><h2 id="toolkit-heading">PILOT’S TOOLKIT</h2><p className="toolkit-subtitle">Trusted community tools for the ’verse. One stop, six shortcuts.</p></div>
+      <div><p className="eyebrow">QUICK ACCESS / RESOURCES</p><h2 id="toolkit-heading">PILOT’S TOOLKIT</h2><p className="toolkit-subtitle">Trusted community tools for the ’verse. One stop for your pilot tools.</p></div>
       <RailArrows rail={rail} title="Pilot's Toolkit"/>
     </div>
     <div className="toolkit-grid preview-scroll-rail" ref={rail} role="region" tabIndex={0} aria-label="Pilot's Toolkit links, scroll horizontally">

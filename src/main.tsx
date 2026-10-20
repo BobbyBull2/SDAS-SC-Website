@@ -15,7 +15,7 @@ import { visibleEvent, completedToday, eventState, dateRange } from './lib/event
 import { fetchLiveCalendar } from './lib/live-calendar.mjs';
 import { PilotsToolkit, OrgNewsWire } from './CommunityPreview';
 const asset = (path: string) => path.startsWith('https://bobbybull2.github.io/SDAS-SC-Calendar/screenshot-gallery/') ? path : `${import.meta.env.BASE_URL}${path}`;
-const nav = [['About','#about'],['Calendar','#calendar'],['Screenshots','#screenshots'],['Toolkit','#toolkit'],['News','#news'],['New Members','new-members/'],['Join',config.org]];
+const nav = [['Fleet','/SDFM/'],['Calendar','#calendar'],['Screenshots','#screenshots'],['Toolkit','#toolkit'],['News','#news'],['New Members','new-members/'],['Join',config.org]];
 function Brand({header=false}:{header?:boolean}){ return <a href="#home" className="brand" aria-label="SDAS home">{header&&<img className="brand-logo-full" src={asset('images/sdas-fox-approved-logo.webp')} width="320" height="77" alt="SDAS – Some Dudes and a Spaceship" />}<span className="brand-emblem"><img src={asset('images/sdas-spaceman.png')} width="48" height="48" alt="SDAS astronaut emblem"/></span><span><strong>SDAS</strong><small>SOME DUDES AND A SPACESHIP</small></span></a> }
 function Button({href,children,className=''}: {href:string,children:React.ReactNode,className?:string}) {return <a className={`button ${className}`} href={href}>{children}</a>}
 function Heading({eyebrow,title,children}:{eyebrow:string,title:string,children?:React.ReactNode}) {return <div className="section-heading"><div><p className="eyebrow">{eyebrow}</p><h2>{title}</h2></div>{children}</div>}
