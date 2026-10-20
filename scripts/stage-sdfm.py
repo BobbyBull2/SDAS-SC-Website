@@ -36,6 +36,11 @@ auth=auth.replace(
 )
 assert 'storage:window.sdasFleetAuthStorage' in auth
 assert 'window.sdasFleetStartDiscordLogin=async' in auth
+# Every new Discord login should verify SDAS membership before displaying the fleet.
+assert 'autoRoleChecks.add(user.id)' in auth
+assert 'void verifyRoles();' in auth
+assert 'RETRY ROLE CHECK' in auth
+assert 'Discord login succeeded, but SDFM needs a fresh Discord authorization' in auth
 auth_path.write_text(auth)
 html=html.replace("PREVIEW BUILD","LIVE FLEET MANAGER")
 html=html.replace("LOCAL DEMO CONFIGURATION","FLEET CONFIGURATION")
