@@ -1372,3 +1372,12 @@ body>.shell,.shell{
  #app .sdas-import-columns>.sdas-import-card-host,
  #app .sdas-import-columns>.sdas-import-card{padding:16px!important}
 }
+
+/* LIVE SDFM mobile SDAS logo optical offset, 2026-10-20.
+   Image-only correction; leaves masthead layout, buttons and desktop intact. */
+@media (max-width: 760px) {
+  #sdas-fleet-masthead .fleet-emblem img {
+    transform: translateX(-5%) !important;
+    transform-origin: center center !important;
+  }
+}
