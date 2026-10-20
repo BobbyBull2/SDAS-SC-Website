@@ -38,6 +38,29 @@ jobs:
       - name: Build website
         run: npm run build
 
+      - name: Stage live Fleet Manager at /SDFM/
+        run: |
+          python3 scripts/stage-sdfm.py
+          test -s dist/index.html
+          test -s dist/SDFM/index.html
+          test -s dist/SDFM/auth-preview.js
+          test -s dist/SDFM/fleet-design.css
+          test -s dist/SDFM/public/images/preview-hangar.png
+          node --check dist/SDFM/auth-preview.js
+          node --check dist/SDFM/fleet-ui-polish.js
+          node --check dist/SDFM/rsi-import.js
+          python3 - <<'PY'
+          from pathlib import Path
+          home=Path("dist/index.html").read_text()
+          fleet=Path("dist/SDFM/index.html").read_text()
+          assert '<div id="root">' in home
+          assert '/SDFM/auth-preview.js' in fleet
+          assert 'sdas-production-access' in fleet
+          assert 'sdas-cloud-verified' in fleet
+          assert 'PREVIEW BUILD' not in fleet
+          print("Production home intact and Fleet Manager safely isolated.")
+          PY
+
       - name: Check Cloudflare credentials
         env:
           CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
