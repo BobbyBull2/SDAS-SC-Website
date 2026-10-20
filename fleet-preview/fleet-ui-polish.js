@@ -29,7 +29,7 @@
     // Only set the variable when it changes, avoiding observer churn.
     const kicker = masthead?.querySelector(".fleet-kicker");
     if (masthead && title && kicker && window.innerWidth > 970) {
-      const left = Math.round(title.getBoundingClientRect().left - masthead.getBoundingClientRect().left);
+      const left = Math.round((title.querySelector(".fleet-title-part") || title).getBoundingClientRect().left - masthead.getBoundingClientRect().left);
       const value = left + "px";
       if (masthead.style.getPropertyValue("--fleet-wordmark-left") !== value)
         masthead.style.setProperty("--fleet-wordmark-left", value);
