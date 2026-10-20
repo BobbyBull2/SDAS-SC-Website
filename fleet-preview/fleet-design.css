@@ -1063,8 +1063,11 @@ body>.shell,.shell{
    Transform moves the visible wordmark while preserving its vertical alignment
    and the masthead's layout; scale shift down on narrower desktop widths. */
 @media(min-width:971px){
-  #sdas-fleet-masthead .fleet-kicker,
+  #sdas-fleet-masthead .fleet-kicker{
+    transform:translateX(clamp(0px,calc((100vw - 970px)*.235),120px))!important;
+  }
   #sdas-fleet-masthead .fleet-title.fleet-gold{
-    transform:translateX(clamp(0px,calc((100vw - 970px)*.28),145px))!important;
+    transform:translateX(clamp(0px,calc((100vw - 970px)*.235),120px)) scale(.86)!important;
+    transform-origin:left center!important;
   }
 }
