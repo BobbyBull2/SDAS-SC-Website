@@ -115,7 +115,13 @@
     button.addEventListener("click", async () => {
       status.textContent = "";
       if (typeof window.sdasFleetStartDiscordLogin !== "function") {
-        status.textContent = "Discord sign-in is still loading. Please try again in a moment.";
+        const topLogin = [...document.querySelectorAll("#sdas-auth-actions button")]
+          .find(item => /LOGIN WITH DISCORD/i.test(item.textContent || ""));
+        if (topLogin) {
+          topLogin.click();
+          return;
+        }
+        status.textContent = "Discord login is unavailable. Please refresh the page and try again.";
         return;
       }
       button.disabled = true;
