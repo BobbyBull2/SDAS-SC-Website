@@ -102,6 +102,22 @@ try {
       text:button.textContent};
   });
   console.log('HOME_ICON_DEBUG',JSON.stringify(homeIconDebug));
+  if(homeIconDebug?.text?.includes('⌂')) throw Error('Legacy home glyph still visible: '+JSON.stringify(homeIconDebug));
+  if(headerCheck.logoTop > headerCheck.mastTop + 95) throw Error('SDAS emblem still too low: '+JSON.stringify(headerCheck));
+  const titlePosition = await page.evaluate(() => {
+    const mast=document.getElementById('sdas-fleet-masthead');
+    const title=mast?.querySelector('.fleet-title.fleet-gold');
+    const kicker=mast?.querySelector('.fleet-kicker');
+    const logo=mast?.querySelector('.fleet-emblem');
+    return {titleTop:title?.getBoundingClientRect().top,
+      kickerTop:kicker?.getBoundingClientRect().top,
+      logoTop:logo?.getBoundingClientRect().top,
+      logoBottom:logo?.getBoundingClientRect().bottom};
+  });
+  console.log('HERO_POSITION',JSON.stringify(titlePosition));
+  if(titlePosition.titleTop < titlePosition.logoTop + 45)
+    throw Error('Title was not lowered as requested: '+JSON.stringify(titlePosition));
+
   // Visual inspection artifacts and objective connected-tab geometry checks.
   await page.locator('#nav [data-view="home"]').click();
   await page.waitForTimeout(350);
