@@ -25,6 +25,32 @@
       title.replaceChildren(left, " ", middle, " ", right);
     }
 
+    // Keep the community label aligned to the actual left edge of SOME.
+    // Only set the variable when it changes, avoiding observer churn.
+    const kicker = masthead?.querySelector(".fleet-kicker");
+    if (masthead && title && kicker && window.innerWidth > 970) {
+      const left = Math.round(title.getBoundingClientRect().left - masthead.getBoundingClientRect().left);
+      const value = left + "px";
+      if (masthead.style.getPropertyValue("--fleet-wordmark-left") !== value)
+        masthead.style.setProperty("--fleet-wordmark-left", value);
+    }
+
+    // Progressive enhancement for narrow Org Fleet Registry: add accessible
+    // column labels without altering the table or its click handlers.
+    const registryActive = document.querySelector('#nav [data-view="registry"].active');
+    if (registryActive) {
+      for (const table of document.querySelectorAll("#app table")) {
+        if (table.classList.contains("sdas-registry-mobile")) continue;
+        const labels = [...table.querySelectorAll("thead th")].map(th => th.textContent.trim());
+        if (labels.length < 3) continue;
+        table.classList.add("sdas-registry-mobile");
+        for (const row of table.querySelectorAll("tbody tr"))
+          [...row.children].forEach((cell, i) => {
+            if (cell.tagName === "TD") cell.setAttribute("data-label", labels[i] || "DETAIL");
+          });
+      }
+    }
+
     // The old code gave .shell the top-action-group class, turning the entire
     // application into an action row. Never style or remove the shell as a button group.
     document.querySelector(".shell")?.classList.remove("sdas-top-action-group");
