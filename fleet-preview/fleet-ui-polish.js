@@ -19,6 +19,15 @@
     const nav = document.getElementById("nav");
     if (!header || !nav) return;
 
+    // Terminal already has a monitor-shaped CSS glyph. Remove only the
+    // obsolete leading home character in its text node, leaving events intact.
+    const terminal = nav.querySelector('button[data-view="home"]');
+    const firstNode = terminal?.firstChild;
+    if (firstNode?.nodeType === Node.TEXT_NODE && /^\\s*⌂\\s*/.test(firstNode.textContent)) {
+      firstNode.textContent = firstNode.textContent.replace(/^\\s*⌂\\s*/, "");
+    }
+
+
     // Remove only the exact preview-indicator pill, including its status dot.
     // Do not remove its parent toolbar or any unrelated member/auth controls.
     const previewBadge = [...header.querySelectorAll(".pill, .badge, [role='status'], span, div, button")]
