@@ -69,9 +69,9 @@ html=html.replace("<head>",'<head><script src="/SDFM/sdfm-production-login.js"><
 assert 'src="/SDFM/sdfm-production-login.js"' in html
 # The cloud bridge and login area must not separately consume the OAuth callback.
 cloud_before='''import("https://esm.sh/@supabase/supabase-js@2").then(async mod=>{
-    client=mod.createClient(SUPA,PUB,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});'''
+   client=mod.createClient(SUPA,PUB,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});'''
 cloud_after='''window.sdasFleetSharedClientPromise.then(async sharedClient=>{
-    client=sharedClient;'''
+   client=sharedClient;'''
 assert html.count(cloud_before)==1, "Cloud bridge initializer changed"
 html=html.replace(cloud_before,cloud_after)
 assert 'window.sdasFleetSharedClientPromise.then(async sharedClient=>' in html
