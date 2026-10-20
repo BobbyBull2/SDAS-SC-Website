@@ -18,10 +18,12 @@ function ensure(){
  if(!app||!/DATA\s*\/\s*IMPORT/i.test(active?.textContent||"")||!/BACKUP\s*\/\s*RESTORE/i.test(app.textContent||""))return;
  if(document.getElementById("sdas-asop-import"))return;
  const host=document.createElement("section");host.id="sdas-asop-import";
- host.style.cssText="background:linear-gradient(135deg,#091e29,#102633);border:1px solid #cba85c;border-radius:12px;padding:18px;margin:18px 0;color:#e8f5f5;max-width:920px";
+ host.style.cssText="background:linear-gradient(135deg,#091e29,#102633);border:1px solid #cba85c;border-radius:12px;padding:18px;margin:24px auto 18px;color:#e8f5f5;width:100%;max-width:920px;box-sizing:border-box;clear:both";
  host.innerHTML='<h3 style="font-size:18px;color:#f0d394;margin:0 0 8px">ASOP SCREENSHOT IMPORT <span style="font-size:11px;border:1px solid #cba85c;border-radius:5px;padding:3px 6px">TEST PREVIEW</span></h3><p style="font-size:13px;line-height:1.6">Upload screenshots of your in-game ASOP ship list. Text recognition happens in this browser; screenshots are not sent to SDFM storage. Review every name before importing. An ASOP list can include pledged, loaner or rented ships, so only select ships you actually purchased with aUEC.</p><label style="display:block;margin:12px 0 6px">ASOP screenshots (PNG, JPEG, WEBP; up to 6 images)</label><input id="asop-files" type="file" accept="image/png,image/jpeg,image/webp" multiple><div id="asop-status" role="status" style="margin:12px 0;font-size:13px" aria-live="polite">Nothing uploaded yet.</div><div id="asop-preview"></div><button type="button" id="asop-import" disabled style="margin:12px 0;padding:10px 16px;background:#70582a;color:#fff;border:1px solid #d4b66d;border-radius:8px">IMPORT CONFIRMED aUEC SHIPS</button><p style="font-size:12px;opacity:.8">Uncheck pledged, rented, temporary and loaner ships. Names are editable. Nothing is saved until you confirm.</p>';
+ // Keep the existing three-card Data / Import layout above this full-width panel.
+ // Appending after the layout avoids changing the original card grid or its handlers.
  const layout=app.querySelector(".layout");
- if(layout)layout.before(host);else app.append(host);
+ if(layout)layout.after(host);else app.append(host);
  const picker=host.querySelector("#asop-files"),status=host.querySelector("#asop-status"),review=host.querySelector("#asop-preview"),save=host.querySelector("#asop-import");
  const refresh=()=>{
    review.replaceChildren();
