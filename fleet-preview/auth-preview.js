@@ -87,6 +87,20 @@
   #sdas-fleet-masthead .fleet-kicker{margin:0 0 5px!important;letter-spacing:.3em!important;font-size:12px!important}
   /* Shift the caption and main Fleet Manager title down together, leaving the login rail clear. */
   #sdas-fleet-masthead .fleet-kicker,#sdas-fleet-masthead .fleet-title.fleet-gold{position:relative!important;top:109px!important}
+  /* Override relative offset: align subtitle with visible SOME, not its original slot. */
+  @media(min-width:971px){
+    #sdas-fleet-masthead .fleet-kicker{
+      position:absolute!important;
+      top:auto!important;
+      left:var(--fleet-wordmark-left,42%)!important;
+      right:auto!important;
+      bottom:clamp(73px,5.8vw,91px)!important;
+      margin:0!important;
+      transform:none!important;
+      width:max-content!important;
+      max-width:calc(100% - var(--fleet-wordmark-left,42%) - 18px)!important;
+    }
+  }
   #sdas-fleet-masthead .fleet-kicker:before{display:none!important}
   #sdas-fleet-masthead .fleet-title{font-size:clamp(32px,3.55vw,65px)!important;line-height:1.13!important;letter-spacing:.01em!important}
   #sdas-fleet-masthead .fleet-title:not(.fleet-gold){display:none!important}
