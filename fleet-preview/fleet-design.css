@@ -1022,3 +1022,39 @@ body>.shell,.shell{
   #sdas-fleet-masthead .fleet-kicker,
   #sdas-fleet-masthead .fleet-title.fleet-gold{top:80px!important}
 }
+
+/* MK XVI — proportional SDAS mark and full mixed-weight title */
+@media(min-width:971px){
+  #sdas-fleet-masthead .fleet-emblem{
+    width:26.25%!important;height:120px!important;top:calc(50% - 78px)!important;
+  }
+  #sdas-fleet-masthead .fleet-kicker,
+  #sdas-fleet-masthead .fleet-title.fleet-gold{top:109px!important}
+  #sdas-fleet-masthead .fleet-title.fleet-gold{
+    display:flex!important;align-items:baseline!important;justify-content:flex-start!important;
+    flex-wrap:nowrap!important;gap:clamp(3px,.4vw,7px)!important;white-space:nowrap!important;
+    font-size:clamp(16px,2.15vw,35px)!important;letter-spacing:.015em!important;
+  }
+}
+#sdas-fleet-masthead .fleet-title.fleet-gold .fleet-title-part{
+  color:#f1d390!important;
+  background:linear-gradient(180deg,#fff1c0 0%,#f3d791 37%,#cb9948 100%)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  white-space:nowrap!important;
+}
+#sdas-fleet-masthead .fleet-title.fleet-gold .fleet-and-inline{
+  display:inline-block!important;flex:none!important;font-size:.5em!important;
+  font-weight:500!important;line-height:1!important;letter-spacing:.015em!important;
+  text-transform:none!important;color:#fff!important;background:none!important;
+  -webkit-background-clip:initial!important;background-clip:initial!important;
+  -webkit-text-fill-color:#fff!important;text-shadow:0 2px 3px #0009!important;
+}
+@media(max-width:970px){
+  #sdas-fleet-masthead .fleet-title.fleet-gold{
+    display:flex!important;justify-content:center!important;align-items:baseline!important;
+    flex-wrap:wrap!important;gap:4px 7px!important;white-space:normal!important;
+  }
+  #sdas-fleet-masthead .fleet-title.fleet-gold .fleet-title-part{white-space:normal!important}
+  #sdas-fleet-masthead .fleet-title.fleet-gold .fleet-and-inline{font-size:.5em!important}
+}
