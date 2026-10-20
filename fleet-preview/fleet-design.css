@@ -1015,3 +1015,10 @@ body>.shell,.shell{
 @media(max-width:970px){
   #sdas-fleet-masthead .fleet-kicker,#sdas-fleet-masthead .fleet-title.fleet-gold{top:0!important}
 }
+
+/* MK XV — final small directional correction per annotated screenshot */
+@media(min-width:971px){
+  #sdas-fleet-masthead .fleet-emblem{top:calc(50% - 60px)!important}
+  #sdas-fleet-masthead .fleet-kicker,
+  #sdas-fleet-masthead .fleet-title.fleet-gold{top:80px!important}
+}
