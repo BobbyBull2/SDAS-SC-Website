@@ -1192,3 +1192,18 @@ body>.shell,.shell{
     overflow:visible!important;width:100%!important;min-width:0!important;
   }
 }
+
+/* MK XX — align kicker precisely to the visible SOME word */
+@media(min-width:971px){
+  #sdas-fleet-masthead .fleet-kicker{
+    position:absolute!important;
+    left:var(--fleet-wordmark-left,42%)!important;
+    right:auto!important;
+    width:max-content!important;
+    max-width:calc(100% - var(--fleet-wordmark-left,42%) - 18px)!important;
+    text-align:left!important;
+    transform:none!important;
+    margin:0!important;
+    bottom:clamp(73px,5.8vw,91px)!important;
+  }
+}
