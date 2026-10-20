@@ -1131,3 +1131,64 @@ body>.shell,.shell{
 @media(max-width:650px){
   #sdas-golden-live .gside .gbox:nth-child(2) .gactions{gap:8px!important}
 }
+
+/* MK XIX — anchor community line to SOME; readable registry cards on phones */
+@media(min-width:971px){
+  #sdas-fleet-masthead .fleet-kicker{
+    left:var(--fleet-wordmark-left, 42%)!important;
+    right:auto!important;
+    width:max-content!important;
+    max-width:calc(100% - var(--fleet-wordmark-left, 42%) - 18px)!important;
+    text-align:left!important;
+    transform:none!important;
+  }
+}
+@media(max-width:760px){
+  #app .sdas-registry-mobile{
+    display:block!important;width:100%!important;
+    table-layout:auto!important;min-width:0!important;
+  }
+  #app .sdas-registry-mobile thead{display:none!important}
+  #app .sdas-registry-mobile tbody{display:grid!important;gap:12px!important}
+  #app .sdas-registry-mobile tbody tr{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:11px 14px!important;
+    border:1px solid #346777!important;
+    border-radius:10px!important;
+    padding:15px!important;
+    background:#071b28!important;
+    width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+  #app .sdas-registry-mobile tbody td{
+    display:flex!important;flex-direction:column!important;
+    align-items:flex-start!important;justify-content:flex-start!important;
+    gap:5px!important;padding:0!important;
+    min-width:0!important;width:auto!important;max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:break-word!important;word-break:normal!important;
+    line-height:1.45!important;
+    font-size:clamp(12px,3.3vw,15px)!important;
+    border:0!important;
+  }
+  #app .sdas-registry-mobile tbody td::before{
+    content:attr(data-label)!important;
+    display:block!important;
+    color:#81dce9!important;
+    font-size:10px!important;
+    font-weight:700!important;
+    letter-spacing:.08em!important;
+    text-transform:uppercase!important;
+  }
+  #app .sdas-registry-mobile tbody td:first-child{grid-column:1/-1!important}
+  #app .sdas-registry-mobile tbody td:last-child img{
+    max-width:100%!important;height:auto!important;object-fit:contain!important;
+  }
+  #app .sdas-registry-mobile tbody td .ship-identity,
+  #app .sdas-registry-mobile tbody td strong{min-width:0!important;max-width:100%!important}
+  #app .table-wrap:has(.sdas-registry-mobile){
+    overflow:visible!important;width:100%!important;min-width:0!important;
+  }
+}
