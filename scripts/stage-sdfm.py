@@ -53,4 +53,16 @@ setInterval(check,600);
 html=html.replace("</head>",gate+"</head>",1)
 assert "sdas-production-access" in html
 target.joinpath("index.html").write_text(html)
+# Cloudflare Pages evaluates _redirects before its SPA fallback.
+# Route common user-typed lowercase URLs to the canonical capitalized folder.
+redirects = Path("dist/_redirects")
+existing = redirects.read_text() if redirects.exists() else ""
+rules = [
+    "/sdfm /SDFM/ 301",
+    "/sdfm/ /SDFM/ 301",
+    "/sdfm/index.html /SDFM/ 301",
+    "/SDFM /SDFM/ 301",
+]
+redirects.write_text(existing.rstrip() + ("\\n" if existing.strip() else "") + "\\n".join(rules) + "\\n")
+print("Lowercase Fleet Manager redirects staged at dist/_redirects")
 print("SDFM isolated; homepage preserved")
