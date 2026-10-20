@@ -21,7 +21,6 @@ jobs:
                 body=response.read()
                 text=body[:3000].decode("utf-8","replace")
                 print("URL",url,"STATUS",response.status,"CONTENT_TYPE",response.headers.get("content-type"),"LEN",len(body),"FINAL_URL",response.url)
-                print("HAS_REACT_ROOT",'<div id="root">' in text,"HAS_FLEET",("sdas-production-access" in text or "SOME DUDES" in text),"LINKS",re.findall(r'(?:src|href)=[\\"\\']([^\\"\\']+)',text)[:12])
                 print("HEAD",text[:450].replace("\n"," "))
             except Exception as e:print("URL",url,"ERROR",repr(e))
           PY
