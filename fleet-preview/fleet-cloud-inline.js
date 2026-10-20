@@ -31,6 +31,13 @@
    const photoMap={};
    for(const p of photos.data||[]){const {data:sign}=await client.storage.from("fleet-photos").createSignedUrl(p.object_path,3600);if(sign?.signedUrl)photoMap[p.ship_id]=sign.signedUrl;}
    db={members:(profiles.data||[]).map(p=>({id:p.user_id,name:p.display_name,handle:p.rsi_handle||"",role:"Member"})),ships:(ships.data||[]).map(s=>fromRow(s,photoMap))};
+   // Other ship owners may not have a visible pilot_profiles row due to missing
+   // profile setup or read permissions. Keep their ships visible and show a
+   // truthful, readable fallback instead of the legacy 'Unknown member' label.
+   for(const ownerId of new Set(db.ships.map(s=>s.owner).filter(Boolean))){
+     if(!db.members.some(m=>String(m.id)===String(ownerId)))
+       db.members.push({id:ownerId,name:"Pilot profile unavailable",handle:"",role:"Member"});
+   }
    if(!db.members.find(m=>m.id===u.id))db.members.push({id:u.id,name:u.user_metadata?.full_name||"Pilot",handle:"",role:"Member"});
    for(const l of loadouts.data||[]){const ship=db.ships.find(s=>s.id===l.ship_id);if(ship)ship.loadout=l.components||{};}
    current=u.id;known=new Set(db.ships.filter(s=>s.owner===current).map(s=>s.id));ready=true;
