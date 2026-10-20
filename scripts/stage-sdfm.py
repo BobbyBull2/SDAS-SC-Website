@@ -53,6 +53,11 @@ setInterval(check,600);
 html=html.replace("</head>",gate+"</head>",1)
 assert "sdas-production-access" in html
 target.joinpath("index.html").write_text(html)
+# Pages serves case-sensitive folders; support user-typed lowercase URLs directly.
+lowercase = Path("dist/sdfm")
+lowercase.mkdir(parents=True,exist_ok=True)
+(lowercase/"index.html").write_text(html)
+
 # Cloudflare Pages evaluates _redirects before its SPA fallback.
 # Route common user-typed lowercase URLs to the canonical capitalized folder.
 redirects = Path("dist/_redirects")
