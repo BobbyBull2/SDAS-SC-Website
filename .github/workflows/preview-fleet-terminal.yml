@@ -1,0 +1,146 @@
+name: Fleet Terminal v2.5 Preview
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: fleet-terminal-v25-review-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'preview/fleet-terminal-v2'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage Fleet Terminal and Discord login test
+        run: |
+          test -s fleet-preview/index.html
+          test -s fleet-preview/auth-preview.js
+          mkdir -p dist
+          cp fleet-preview/index.html dist/index.html
+          cp fleet-preview/auth-preview.js dist/auth-preview.js
+          cp fleet-preview/fleet-design.css dist/fleet-design.css
+          mkdir -p dist/public/images
+          cp public/images/preview-hangar.png dist/public/images/preview-hangar.png
+          test -s fleet-preview/fleet-cloud-inline.js
+          test -s fleet-preview/rsi-import.js
+          cp fleet-preview/rsi-import.js dist/rsi-import.js
+          cp fleet-preview/fleet-ui-polish.js dist/fleet-ui-polish.js
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('dist/index.html')
+          s=p.read_text()
+          assert '</body>' in s
+          bridge=Path('fleet-preview/fleet-cloud-inline.js').read_text()
+          if 'function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}' not in s:
+            print('NOTICE: legacy save hook not matched; preserving current save function')
+          s=s.replace('function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}', 'function save(){try{localStorage.setItem(KEY,JSON.stringify(db));window.sdasCloudQueueSave?.();return true}',1)
+          if "const uid=()=> 'ship_'+Date.now()" not in s:
+            print('NOTICE: legacy ID generator not matched; preserving current generator')
+          s=s.replace("const uid=()=> 'ship_'+Date.now()", "const uid=()=> window.sdasCloudActive?crypto.randomUUID():'ship_'+Date.now()",1)
+          # Preserve the existing application templates verbatim. The previous
+          # string substitutions were too brittle and could corrupt the Data view.
+          assert 'BACKUP / RESTORE' in s, 'Data / Import view missing from source'
+          assert 'PLEDGED SHIP CSV IMPORT' in s, 'CSV import controls missing from source'
+          print('Data / Import source templates present; retaining original app rendering')
+          # Older inline preview code reparents panels and removes #app on Data / Import.
+          # Remove that obsolete importer-layout controller; the new stylesheet handles layout.
+          legacy_begin=s.find('// Keep the approved import page three-column layout separate from login and data handlers.')
+          legacy_end=s.find('// Golden-ratio visual redesign: purely presentational, preserving legacy fleet handlers.',legacy_begin)
+          assert legacy_begin>=0 and legacy_end>legacy_begin, 'Legacy destructive import controller not found; inspect before deploy'
+          s=s[:legacy_begin]+s[legacy_end:]
+          assert 'if(p&&p!==document.body' not in s, 'Unsafe panel removal logic remains in staged HTML'
+          print('Removed obsolete inline Data / Import controller, keeping live importer and tab handlers')
+          # fleet-preview/index.html still embeds an obsolete 2026-era cloud bridge.
+          # The current bridge is appended below from fleet-cloud-inline.js. Running both
+          # produces duplicate listeners and the old nickname/photo overview after refresh.
+          import re
+          cloud_marker='/* Cloud bridge: inserted into the legacy script for access to its existing UI functions. */'
+          legacy_start=s.find(cloud_marker)
+          assert legacy_start>=0, 'Expected original cloud bridge missing; inspect build before deployment'
+          legacy_end_token='.catch(e=>status("Connection module unavailable: "+e.message));'
+          legacy_ending=s.find(legacy_end_token,legacy_start)
+          assert legacy_ending>=0, 'Original cloud bridge terminator missing'
+          bridge_close=s.find('})()',legacy_ending+len(legacy_end_token))
+          assert 0<=bridge_close-(legacy_ending+len(legacy_end_token))<20, 'Unexpected cloud bridge end'
+          legacy_end=bridge_close+len('})()')
+          assert legacy_end-legacy_start < 27000, 'Bridge removal span unexpected; refusing to rewrite'
+          assert 's.nickname||s.name' in s[legacy_start:legacy_end], 'Wrong bridge selected'
+          s=s[:legacy_start]+s[legacy_end:]
+          print('Eliminated obsolete embedded cloud bridge, including nickname/photo dashboard')
+          # Branding for the isolated Fleet Manager preview.
+          s=s.replace('FLEET OPERATIONS TERMINAL','SOME DUDES FLEET MANAGER')
+          s=s.replace('Fleet Operations Terminal','Some Dudes Fleet Manager')
+          s=s.replace('<title>SDAS Fleet Terminal','<title>Some Dudes Fleet Manager')
+          # Preserve the original site font for small controls and copy.
+          # Large titles use the NASA-inspired display face with a readable fallback.
+          font_css='''<style id="sdas-nasa-heading-font">
+          @font-face{font-family:SDASNASA;src:local("Nasalization"),local("Nasalization Rg"),local("Eurostile Extended");font-display:swap}
+          .sdas-large-heading{font-family:SDASNASA,"Arial Black",sans-serif!important;letter-spacing:.085em!important;text-transform:uppercase}
+          </style>'''
+          s=s.replace('</head>',font_css+'<link rel="stylesheet" href="/fleet-design.css"></head>',1)
+          s=s.replace('</head>', '<script defer src="/fleet-ui-polish.js"></script></head>', 1)
+          nasa_script='''<script>
+          (()=>{const tag=()=>{document.querySelectorAll("h1,h2,h3,h4,h5,h6,.title,.brand").forEach(el=>{const n=parseFloat(getComputedStyle(el).fontSize)||0;if(n>20)el.classList.add("sdas-large-heading");else el.classList.remove("sdas-large-heading")})};new MutationObserver(()=>requestAnimationFrame(tag)).observe(document.body,{childList:true,subtree:true});tag()})();
+          </script>'''
+          s=s.replace('</body>',nasa_script+'</body>',1)
+          assert '</script></body>' in s
+          s=s.replace('</script></body>', '\n'+bridge+'\n</script><script defer src="/rsi-import.js"></script><script type="module" src="/auth-preview.js"></script></body>',1)
+          # Diagnostic: inspect only short code fragments around relevant app selectors.
+          for needle in ['const app=', 'id="app"', 'id="view"', 'id="viewRoot"', 'function dataPage(', 'function navTo(', 'function render(', 'BACKUP / RESTORE', 'PLEDGED SHIP CSV IMPORT']:
+            index=s.find(needle)
+            print('DIAG_SELECTOR',needle,'index',index)
+            if index>=0:
+              print('DIAG_EXCERPT',s[max(0,index-350):min(len(s),index+1800)].replace('\\n',' ')[:2150])
+          for needle in ["demoHeadings","if(p&&p!==document.body","p.remove()","sdas-data-import-layout","sdas-golden-live-css","cloudBanner","sdas-golden-ratio-redesign"]:
+            print("DIAG_LEGACY",needle,"count",s.count(needle))
+          import re
+          for needle in ['const legacy=clone(db)', 'sdas-golden-live-css', 's.nickname||s.name', 's.image&&', 'function draw()', 'window.sdasGoldenRefresh=refresh', '__sdasFleetCloudBridgeInstalled']:
+            hits=[m.start() for m in re.finditer(re.escape(needle),s)]
+            print("LEGACY_CHECK",needle,"HITS",hits)
+            for index in hits[:4]: print("LEGACY_CONTEXT",needle,"AT",index,repr(s[max(0,index-400):min(len(s),index+400)]))
+          assert s.count(cloud_marker)==1, 'Cloud bridge included more than once'
+          assert 's.nickname||s.name||"Unnamed ship"' not in s, 'Legacy nickname-first dashboard still present'
+          assert s.count('const legacy=clone(db)')==1, 'Duplicate Supabase bridge detected'
+          p.write_text(s)
+          PY
+      - name: Validate deployed JavaScript syntax
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class Scripts(HTMLParser):
+            def __init__(self): super().__init__(); self.scripts=[]; self.active=False; self.text=""
+            def handle_starttag(self,tag,attrs):
+              if tag=='script':
+                self.active=not dict(attrs).get('src'); self.text=""
+            def handle_data(self,data):
+              if self.active: self.text+=data
+            def handle_endtag(self,tag):
+              if tag=='script' and self.active:
+                self.scripts.append(self.text); self.active=False
+          p=Scripts(); p.feed(Path("dist/index.html").read_text())
+          for i,script in enumerate(p.scripts):
+            if script.strip(): Path(f"/tmp/fleet-script-{i}.js").write_text(script)
+          print("Found",len(p.scripts),"inline scripts")
+          PY
+          for file in /tmp/fleet-script-*.js; do node --check "$file"; done
+          node --check dist/auth-preview.js
+          node --check dist/rsi-import.js
+          node --check dist/fleet-ui-polish.js
+      - name: Browser navigation smoke test
+        run: |
+          npm ci --ignore-scripts
+          npx playwright install --with-deps chromium
+          python3 -m http.server 4173 --directory dist >/tmp/fleet-preview-http.log 2>&1 &
+          node fleet-preview/navigation-smoke.mjs
+      - name: Deploy non-production Fleet Terminal review
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=sdas-sc-website --branch=fleet-terminal-review
