@@ -160,8 +160,17 @@
  try{
  const lib=await import("https://esm.sh/@supabase/supabase-js@2");
  const sb=lib.createClient(url,key,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});
+ // The OAuth launcher must exist even for an authenticated-but-unverified pilot.
+ // Otherwise the prominent login card cannot recover a stale Discord session.
+ const startDiscordLogin=async()=>{
+   const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify guilds guilds.members.read"}});
+   if(r.error){state.textContent="Discord reconnect failed: "+r.error.message;throw r.error;}
+ };
+ window.sdasFleetStartDiscordLogin=startDiscordLogin;
  let renderNumber=0;
  const autoRoleChecks=new Set();
+ const roleFailures=new Map();
+ const verifyingUsers=new Set();
  const render=async()=>{
   const current=++renderNumber;
   const {data:{user},error}=await sb.auth.getUser();
@@ -169,7 +178,7 @@
   actions.replaceChildren();
   if(error||!user){
    state.textContent="";
-   button("LOGIN WITH DISCORD",async()=>{const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify guilds guilds.members.read"}});if(r.error)state.textContent=r.error.message;});
+   button("LOGIN WITH DISCORD",startDiscordLogin);
    return;
   }
   const name=user.user_metadata?.full_name||user.user_metadata?.name||user.email||"Discord pilot";
@@ -177,15 +186,17 @@
   if(current!==renderNumber)return;
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
   else if(membership){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch"}[membership.role]||"Restricted")+" access";}
-  else{state.textContent="PILOT: "+name+" • Verifying SDAS membership…";}
+  else{state.textContent=roleFailures.get(user.id)||(verifyingUsers.has(user.id)?"PILOT: "+name+" • Checking SDAS membership…":"PILOT: "+name+" • SDAS membership needs verification");}
   const verifyRoles=async()=>{
-    actions.replaceChildren();state.textContent="Checking SDAS Discord roles…";
+    actions.replaceChildren();verifyingUsers.add(user.id);roleFailures.delete(user.id);state.textContent="Checking SDAS Discord roles…";
     try{
       const {data:{session},error:sessionError}=await sb.auth.getSession();
       if(sessionError)throw Error("Your login session could not be loaded. Sign out and sign in again.");
       if(!session?.provider_token){
-        state.textContent="Discord login succeeded, but SDFM needs a fresh Discord authorization. Sign out and sign in again here. You can approve security prompts on a second device, but finish the login in this browser.";
-        button("SIGN OUT / RECONNECT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
+        const notice="Discord login succeeded, but its role permission expired or is missing. Select RECONNECT DISCORD to authorize SDFM again in this browser.";
+        roleFailures.set(user.id,notice);state.textContent=notice;
+        button("RECONNECT DISCORD",startDiscordLogin);
+        button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
         return;
       }
       const res=await fetch(url+"/functions/v1/verify-sdas-discord",{method:"POST",
@@ -194,14 +205,17 @@
       const json=await res.json().catch(()=>({}));
       if(!res.ok)throw Error(json.error||"The role verification service returned an error.");
       if(!json.verified)throw Error("Your Discord membership could not be verified.");
+      roleFailures.delete(user.id);
       await render();
       window.dispatchEvent(new Event("sdas-auth-ready"));
     }catch(e){
       const message=e?.message||String(e);
-      state.textContent="SDAS verification could not finish: "+message+". Please retry or reconnect Discord.";
+      const notice="SDAS verification could not finish: "+message+". Please retry or reconnect Discord.";
+      roleFailures.set(user.id,notice);state.textContent=notice;
       button("RETRY ROLE CHECK",verifyRoles);
-      button("SIGN OUT / RECONNECT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
-    }
+      button("RECONNECT DISCORD",startDiscordLogin);
+      button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
+    }finally{verifyingUsers.delete(user.id);}
   };
   button(membership?"REFRESH SDAS ROLES":"VERIFY SDAS ROLES",verifyRoles);
   button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
