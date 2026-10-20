@@ -56,8 +56,12 @@ jobs:
           fleet=Path("dist/SDFM/index.html").read_text()
           assert '<div id="root">' in home
           assert '/SDFM/auth-preview.js' in fleet
-          assert 'auth-preview.js?v=20261020-auth-recovery' in fleet
+          assert 'auth-preview.js?v=20261020-cloud-handoff' in fleet
           assert 'sdasFleetSharedClientPromise' in fleet
+          assert 'sdasFleetRetryCloudLoad' in fleet
+          assert 'sdas-cloud-status' in fleet
+          assert 'Retry Fleet Connection' in Path('dist/SDFM/sdfm-production-login.js').read_text()
+          assert 'sdfm-production-login.js?v=20261020-cloud-handoff' in fleet
           assert 'RECONNECT DISCORD' in Path('dist/SDFM/auth-preview.js').read_text()
           assert 'Cache-Control: no-cache' in Path('dist/_headers').read_text()
           assert 'sdas-production-access' in fleet
