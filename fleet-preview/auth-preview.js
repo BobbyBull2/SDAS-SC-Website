@@ -187,11 +187,12 @@
    return;
   }
   const name=user.user_metadata?.full_name||user.user_metadata?.name||user.email||"Discord pilot";
-  const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role").eq("user_id",user.id).maybeSingle();
+  const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role,discord_rank,last_role_checked_at").eq("user_id",user.id).maybeSingle();
   if(current!==renderNumber)return;
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
-  else if(membership){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch"}[membership.role]||"Restricted")+" access";}
+  else if(membership){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch",prospect:"Prospect — Read Only"}[membership.role]||"Restricted")+" access";}
   else{state.textContent=roleFailures.get(user.id)||(verifyingUsers.has(user.id)?"PILOT: "+name+" • Checking SDAS membership…":"PILOT: "+name+" • SDAS membership needs verification");}
+  window.sdasFleetAccessRole=membership?.role||null;
   announceLoginState(true,!!membership&&!membershipError);
   if(membership&&!window.sdasCloudActive)window.dispatchEvent(new Event("sdas-auth-ready"));
   const verifyRoles=async()=>{
@@ -226,7 +227,10 @@
   };
   button(membership?"REFRESH SDAS ROLES":"VERIFY SDAS ROLES",verifyRoles);
   button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
-  if(!membership&&!membershipError&&!autoRoleChecks.has(user.id)){
+  const expectedRank=({admin:"super_admin",officer:"board_member",member:"patch",prospect:"prospect"})[membership?.role];
+  const freshRoleCheck=membership?.last_role_checked_at&&Date.now()-new Date(membership.last_role_checked_at).getTime()<12*60*60*1000;
+  const needsRoleCheck=!membership||membership.discord_rank!==expectedRank||!freshRoleCheck;
+  if(!membershipError&&needsRoleCheck&&!autoRoleChecks.has(user.id)){
    autoRoleChecks.add(user.id);
    void verifyRoles();
   }

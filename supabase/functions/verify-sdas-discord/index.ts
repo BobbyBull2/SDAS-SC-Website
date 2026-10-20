@@ -39,12 +39,13 @@ Deno.serve(async(req:Request)=>{
    return reply(403,{error:"Discord identity does not match the logged-in pilot"},origin);
 
   const {data:config,error:configError}=await db.from("sdas_role_config")
-    .select("super_admin_role_id,board_member_role_id,patch_role_id,enforce_roles")
+    .select("super_admin_role_id,board_member_role_id,patch_role_id,prospect_role_id,enforce_roles")
     .eq("singleton",true).single();
   if(configError||!config)return reply(503,{error:"Role configuration unavailable"},origin);
-  const mappingReady=Boolean(config.super_admin_role_id&&config.board_member_role_id&&config.patch_role_id);
+  const mappingReady=Boolean(config.super_admin_role_id&&config.board_member_role_id&&config.patch_role_id&&config.prospect_role_id);
   let discordMember=false;
-  let mappedRole:null|"admin"|"officer"|"member"=null;
+  let mappedRole:null|"admin"|"officer"|"member"|"prospect"=null;
+  let mappedRank:null|"super_admin"|"board_member"|"patch"|"prospect"=null;
   let roleCheckAvailable=false;
   // Request the server-scoped member object to read authoritative Discord role IDs.
   const memberRes=await fetch("https://discord.com/api/v10/users/@me/guilds/"+guildId+"/member",{headers});
@@ -52,47 +53,41 @@ Deno.serve(async(req:Request)=>{
    const member=await memberRes.json();
    const roles=Array.isArray(member?.roles)?member.roles.map(String):[];
    discordMember=true;roleCheckAvailable=true;
-   if(config.super_admin_role_id&&roles.includes(config.super_admin_role_id))mappedRole="admin";
-   else if(config.board_member_role_id&&roles.includes(config.board_member_role_id))mappedRole="officer";
-   else if(config.patch_role_id&&roles.includes(config.patch_role_id))mappedRole="member";
-  }else if(config.enforce_roles){
-   // 403 can mean missing OAuth scope; 404 means not in the guild.
+   if(config.super_admin_role_id&&roles.includes(config.super_admin_role_id)){mappedRole="admin";mappedRank="super_admin";}
+   else if(config.board_member_role_id&&roles.includes(config.board_member_role_id)){mappedRole="officer";mappedRank="board_member";}
+   else if(config.patch_role_id&&roles.includes(config.patch_role_id)){mappedRole="member";mappedRank="patch";}
+   else if(config.prospect_role_id&&roles.includes(config.prospect_role_id)){mappedRole="prospect";mappedRank="prospect";}
+  }else{
+   // Only the current authenticated Discord guild membership and exact role IDs
+   // can grant access. Never infer a full Member from a guild-list fallback.
    if(memberRes.status===404){
     await db.from("sdas_memberships").delete().eq("user_id",user.id);
     return reply(403,{verified:false,restricted:true,error:"This Discord account is not an SDAS server member"},origin);
    }
    return reply(403,{verified:false,restricted:true,
-    error:"Unable to read SDAS roles. Sign out and sign back in with the Discord role permission."},origin);
-  }else{
-   // Transitional fallback until Fox's role IDs are configured.
-   const guildsRes=await fetch("https://discord.com/api/v10/users/@me/guilds",{headers});
-   if(!guildsRes.ok)return reply(403,{error:"Discord server lookup failed. Please reconnect Discord."},origin);
-   const guilds=await guildsRes.json();
-   discordMember=Array.isArray(guilds)&&guilds.some(g=>String(g?.id)===guildId);
+    error:"Unable to read SDAS roles. Sign out and sign back in with Discord membership permission."},origin);
   }
   if(!discordMember){
    await db.from("sdas_memberships").delete().eq("user_id",user.id);
    return reply(403,{verified:false,restricted:true,error:"This Discord account is not an SDAS server member"},origin);
   }
-  if(config.enforce_roles&&!mappedRole){
+  if(!mappedRole||!mappedRank){
    await db.from("sdas_memberships").delete().eq("user_id",user.id);
-   return reply(403,{verified:false,restricted:true,error:"Fleet Terminal access is restricted to SDAS Patch, Board Member, or Super Admin roles."},origin);
+   return reply(403,{verified:false,restricted:true,error:"Fleet access requires SDAS Prospect, Patch, Board Member, or Super Admin. Visitors are restricted."},origin);
   }
   // Do not overwrite names chosen by pilots in the profile editor.
   const name=String(user.user_metadata?.full_name||user.user_metadata?.name||"Pilot").slice(0,80);
   const {error:profileError}=await db.from("pilot_profiles")
    .upsert({user_id:user.id,display_name:name},{onConflict:"user_id",ignoreDuplicates:true});
   if(profileError)return reply(503,{error:"Unable to ensure pilot profile"},origin);
-  const {data:existing,error:readError}=await db.from("sdas_memberships").select("role").eq("user_id",user.id).maybeSingle();
-  if(readError)return reply(503,{error:"Could not read membership"},origin);
-  const role=config.enforce_roles?mappedRole:(existing?.role||"member");
+  const role=mappedRole;
   const {error:saveError}=await db.from("sdas_memberships").upsert({
-   user_id:user.id,role,
+   user_id:user.id,role,discord_rank:mappedRank,
    verified_at:new Date().toISOString(),
    last_role_checked_at:roleCheckAvailable?new Date().toISOString():null
   },{onConflict:"user_id"});
   if(saveError)return reply(503,{error:"Could not save verified membership"},origin);
-  return reply(200,{verified:true,role,role_enforced:config.enforce_roles,
+  return reply(200,{verified:true,role,discord_rank:mappedRank,role_enforced:true,
    role_mapping_ready:mappingReady,roles_checked:roleCheckAvailable},origin);
  }catch(e){return reply(503,{error:"Discord role verification temporarily unavailable"},origin)}
 });
