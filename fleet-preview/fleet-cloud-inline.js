@@ -43,6 +43,9 @@
   const {data:m,error:membershipError}=await client.from("sdas_memberships").select("role").eq("user_id",u.id).maybeSingle();
   if(membershipError){status("Membership read failed: "+membershipError.message);return;}
   if(!m){status("Sign in and verify SDAS membership to load shared fleets.");return;}
+  const prospect=m.role==="prospect";
+  window.sdasFleetProspectReadOnly=prospect;
+  document.documentElement.classList.toggle("sdas-prospect-readonly",prospect);
   user=u;booting=true;
   try{
    const [profiles,ships,loadouts,photos]=await Promise.all([
@@ -96,7 +99,7 @@
    if(sign?.signedUrl)ship.image=sign.signedUrl;
  }
  async function sync(){
-  if(!ready||!user||booting)return;
+  if(!ready||!user||booting||window.sdasFleetProspectReadOnly)return;
   if(busy){again=true;return;}
   busy=true;status("Saving fleet…");
   try{
@@ -114,6 +117,7 @@
   finally{busy=false;if(again){again=false;sync();}}
  }
  window.sdasImportRsiHangar=async records=>{
+  if(window.sdasFleetProspectReadOnly)throw Error("Prospect access is read-only. Import is available after earning Patch.");
   if(!ready||!user||busy)throw Error("Cloud hangar must be connected and idle.");
   const existing=new Set(db.ships.filter(s=>s.owner===user.id).map(s=>String(s.name||"").trim().toLowerCase()+"|"+String(s.nickname||"").trim().toLowerCase()));
   let added=0;
@@ -149,6 +153,7 @@
  const nameButton=document.createElement("button");
  nameButton.type="button";nameButton.className="btn";nameButton.style.margin="8px";nameButton.textContent="EDIT PILOT NAME";label.after(nameButton);
  nameButton.onclick=async()=>{
+  if(window.sdasFleetProspectReadOnly)return alert("Prospect access is read-only.");
   if(!ready||!user)return alert("Sign in and verify SDAS membership first.");
   const me=db.members.find(m=>m.id===user.id);
   const next=prompt("Choose your SDAS pilot display name (3–40 characters):",me?.name||"");
@@ -160,7 +165,7 @@
   if(me)me.name=name;
   render();status("Pilot display name updated to "+name+". Discord sign-in is unchanged.");
  };
- window.sdasCloudQueueSave=()=>{if(ready)sync()};
+ window.sdasCloudQueueSave=()=>{if(ready&&!window.sdasFleetProspectReadOnly)sync()};
  // A successful membership check always wakes the fleet loader, including
  // returning users whose browser already held a valid Discord session.
  window.addEventListener("sdas-auth-ready",()=>{if(!ready)void loadCloud()});
@@ -170,6 +175,7 @@
  refresh.onclick=async()=>{if(!ready||busy)return;await loadCloud();};
  dedupeCloudCommands();
  back.onclick=async()=>{
+   if(window.sdasFleetProspectReadOnly)return alert("Prospect access is read-only.");
    if(!ready)return alert("Verify SDAS login first.");
    const records=legacy.ships.filter(s=>s.owner==="bobby");
    if(!records.length)return alert("No local Bobby demo ships to import.");
@@ -283,7 +289,7 @@
   const aside=e("aside","gside"),sync=e("section","gbox");
   add(sync,e("h3","","SYNC STATUS"),add(e("div","gsync"),e("div","gorb",ready?"☁":"↻"),add(e("div"),e("div","gtag","FLEET CLOUD"),e("div","gstate",ready?"CONNECTED":"OFFLINE"),e("div","gmuted",ready?owned.length+" personal vessels loaded":"Verify your Discord membership"))));
   const action=e("section","gbox");action.append(e("h3","","QUICK ACTIONS"));
-  add(action,add(e("div","gactions"),realButton("↓ IMPORT",/^DATA\s*\/\s*IMPORT$/i),realButton("↻ REFRESH FLEET",/^REFRESH ORG FLEET$/i),realButton("♙ REFRESH ROLES",/^(REFRESH|VERIFY) SDAS ROLES$/i),realButton("⇥ SIGN OUT",/^SIGN OUT$/i)));
+  add(action,add(e("div","gactions"),...(window.sdasFleetProspectReadOnly?[]:[realButton("↓ IMPORT",/^DATA\s*\/\s*IMPORT$/i)]),realButton("↻ REFRESH FLEET",/^REFRESH ORG FLEET$/i),realButton("♙ REFRESH ROLES",/^(REFRESH|VERIFY) SDAS ROLES$/i),realButton("⇥ SIGN OUT",/^SIGN OUT$/i)));
   const access=e("section","gbox");access.append(e("h3","","ROLE ACCESS"));
   access.append(add(e("div","grole"),e("div","gshield","♢"),e("div","",role)));
   add(aside,sync,action,access);add(root,main,aside);
