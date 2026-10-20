@@ -126,6 +126,15 @@ try {
       right:r?.right,mastRight:m?.right,bottom:r?.bottom,mastBottom:m?.bottom};
   });
   console.log('WORDMARK_CHECK',JSON.stringify(wordmark));
+  const kickerAlignment = await page.evaluate(() => {
+    const kicker=document.querySelector('#sdas-fleet-masthead .fleet-kicker');
+    const word=document.querySelector('#sdas-fleet-masthead .fleet-title.fleet-gold .fleet-title-part');
+    return {kickerLeft:kicker?.getBoundingClientRect().left,wordLeft:word?.getBoundingClientRect().left};
+  });
+  console.log("KICKER_ALIGNMENT",JSON.stringify(kickerAlignment));
+  if(Math.abs(kickerAlignment.kickerLeft-kickerAlignment.wordLeft)>5)
+    throw Error("Community kicker does not align with SOME: "+JSON.stringify(kickerAlignment));
+
   if(wordmark.text!=='SOME DUDES and a FLEET MANAGER'||wordmark.parts!==2||
     wordmark.ratio<.45||wordmark.ratio>.55||wordmark.right>wordmark.mastRight+2||
     wordmark.bottom>wordmark.mastBottom+3)throw Error('Wordmark not correctly sized or contained: '+JSON.stringify(wordmark));
