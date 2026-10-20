@@ -1372,3 +1372,92 @@ body>.shell,.shell{
  #app .sdas-import-columns>.sdas-import-card-host,
  #app .sdas-import-columns>.sdas-import-card{padding:16px!important}
 }
+
+/* MK XXIII — centered phone layout; preview-only, 2026-10-20.
+   Keep the desktop masthead, navigation, and application logic unchanged. */
+@media (max-width: 760px) {
+  /* Put the identity, tagline, and title on the same horizontal centerline. */
+  #sdas-fleet-masthead {
+    display:flex!important;
+    flex-direction:column!important;
+    flex-wrap:nowrap!important;
+    align-items:center!important;
+    justify-content:center!important;
+    align-content:center!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+    padding:18px 10px 22px!important;
+    text-align:center!important;
+  }
+  #sdas-fleet-masthead .fleet-emblem {
+    position:relative!important;
+    top:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    left:auto!important;
+    transform:none!important;
+    display:flex!important;
+    flex:0 1 auto!important;
+    align-self:center!important;
+    justify-content:center!important;
+    align-items:center!important;
+    width:min(100%,420px)!important;
+    max-width:100%!important;
+    min-width:0!important;
+    height:clamp(92px,27vw,120px)!important;
+    margin:0 auto 12px!important;
+  }
+  #sdas-fleet-masthead .fleet-emblem img {
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:100%!important;
+    object-fit:contain!important;
+    object-position:center center!important;
+  }
+  #sdas-fleet-masthead .fleet-kicker {
+    flex:0 0 auto!important;
+    align-self:stretch!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0 auto 9px!important;
+    text-align:center!important;
+  }
+  #sdas-fleet-masthead .fleet-title.fleet-gold {
+    position:relative!important;
+    top:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    left:auto!important;
+    transform:none!important;
+    flex:0 0 auto!important;
+    align-self:stretch!important;
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    margin:0 auto!important;
+    display:flex!important;
+    flex-wrap:wrap!important;
+    justify-content:center!important;
+    align-items:baseline!important;
+    align-content:center!important;
+    text-align:center!important;
+    white-space:normal!important;
+  }
+  /* Center both rows of pilot controls rather than left-biasing wrapped buttons. */
+  .header,
+  .header>.row,
+  #sdas-fleet-header-actions,
+  #sdas-auth-preview,
+  #sdas-auth-actions {
+    justify-content:center!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  #sdas-auth-state {
+    justify-content:center!important;
+    text-align:center!important;
+    max-width:100%!important;
+    white-space:normal!important;
+  }
+}
