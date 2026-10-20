@@ -61,13 +61,48 @@ window.addEventListener("sdas-auth-ready",check);
 setInterval(check,600);
 })();
 </script>"""
-html=html.replace("</head>",gate+"</head>",1)
+# Prospect UI is view-only. All database writes remain blocked by RLS as well.
+prospect_style="""<style id="sdas-prospect-readonly-style">
+html.sdas-prospect-readonly #nav button[data-view="mine"],
+html.sdas-prospect-readonly #nav button[data-view="data"],
+html.sdas-prospect-readonly #nav button[data-view="import"],
+html.sdas-prospect-readonly #nav button[data-view="hangar"],
+html.sdas-prospect-readonly #sdas-rsi-import,
+html.sdas-prospect-readonly #sdas-golden-live .gactions button:first-child,
+html.sdas-prospect-readonly #app button[id*="save"],
+html.sdas-prospect-readonly #app button[id*="add"],
+html.sdas-prospect-readonly #app button[id*="edit"],
+html.sdas-prospect-readonly #app button[id*="delete"],
+html.sdas-prospect-readonly #app button[id*="import"],
+html.sdas-prospect-readonly #sdas-top-action-edit{display:none!important}
+</style><script>
+(function(){
+  function readonly(){
+    if(!window.sdasFleetProspectReadOnly)return;
+    for(const b of document.querySelectorAll('button')){
+      if(b.closest('#sdas-auth-actions') || /REFRESH|SIGN OUT|SDAS\.SPACE|RECONNECT|VERIFY SDAS ROLES/i.test(b.textContent||''))continue;
+      if(/ADD|EDIT|DELETE|REMOVE|SAVE|UPLOAD|IMPORT|RESTORE|RESET|REGISTER|SHARE|MY HANGAR|BACKUP/i.test((b.textContent||'').trim())){
+        b.disabled=true;b.style.display='none';
+      }
+    }
+    for(const el of document.querySelectorAll('#nav button')){
+      if(/MY HANGAR|DATA\s*\/\s*IMPORT/i.test(el.textContent||'')){el.disabled=true;el.style.display='none'}
+    }
+    const active=[...document.querySelectorAll('#nav button')].find(b=>b.classList.contains('active'));
+    if(active&&/MY HANGAR|DATA\s*\/\s*IMPORT/i.test(active.textContent||''))document.querySelector('#nav button[data-view="home"]')?.click();
+  }
+  document.addEventListener('DOMContentLoaded',()=>{new MutationObserver(()=>{if(!window.__sdasProspectUiPending){window.__sdasProspectUiPending=true;requestAnimationFrame(()=>{window.__sdasProspectUiPending=false;readonly()})}}).observe(document.body,{childList:true,subtree:true});readonly()});
+  window.addEventListener('sdas-auth-ready',readonly);
+  window.addEventListener('sdas-cloud-status',readonly);
+})();
+</script>"""
+html=html.replace("</head>",gate+prospect_style+"</head>",1)
 assert "sdas-production-access" in html
 # Load storage selection before the bundled cloud bridge and Discord client.
 shutil.copy2("scripts/sdfm-production-login.js",target/"sdfm-production-login.js")
 html=html.replace("<head>",'<head><script src="/SDFM/sdfm-production-login.js"></script>',1)
 assert 'src="/SDFM/sdfm-production-login.js"' in html
-html=html.replace('src="/SDFM/sdfm-production-login.js"', 'src="/SDFM/sdfm-production-login.js?v=20261020-cloud-handoff"')
+html=html.replace('src="/SDFM/sdfm-production-login.js"', 'src="/SDFM/sdfm-production-login.js?v=20261020-prospect-readonly"')
 # The cloud bridge and login area must not separately consume the OAuth callback.
 cloud_before='''import("https://esm.sh/@supabase/supabase-js@2").then(async mod=>{
    client=mod.createClient(SUPA,PUB,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});'''
