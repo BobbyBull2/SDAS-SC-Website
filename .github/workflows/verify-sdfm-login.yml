@@ -1,0 +1,39 @@
+name: Verify SDFM login card
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/stage-sdfm.py'
+      - 'scripts/sdfm-production-login.js'
+      - '.github/workflows/verify-sdfm-login.yml'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Validate both sign-in entry points
+        run: |
+          python3 scripts/stage-sdfm.py
+          node --check dist/SDFM/auth-preview.js
+          node --check dist/SDFM/sdfm-production-login.js
+          python3 - <<'PY'
+          from pathlib import Path
+          html=Path('dist/SDFM/index.html').read_text()
+          auth=Path('dist/SDFM/auth-preview.js').read_text()
+          cloud=html
+          assert 'sdfm-production-login.js' in html
+          assert 'sdasFleetAuthStorage' in auth and 'sdasFleetAuthStorage' in cloud
+          assert 'sdasFleetStartDiscordLogin' in auth
+          assert 'sdas-live-signin-card' in Path('dist/SDFM/sdfm-production-login.js').read_text()
+          assert 'sdas-production-access' in html
+          assert '<div id="root">' in Path('dist/index.html').read_text()
+          assert Path('dist/sdfm/index.html').exists()
+          print('Live login and session preference packaging verified')
+          PY

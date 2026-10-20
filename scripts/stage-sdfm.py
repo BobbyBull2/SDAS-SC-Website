@@ -25,6 +25,17 @@ auth_path=target/"auth-preview.js"
 auth=auth_path.read_text()
 auth=auth.replace("await sb.auth.signOut();window.sdasCloudLogout?.();",
                   "await sb.auth.signOut();window.sdasCloudActive=false;location.reload();")
+# Production clients share one storage adapter and a single Discord OAuth launcher.
+auth=auth.replace(
+ 'persistSession:true,autoRefreshToken:true',
+ 'persistSession:true,autoRefreshToken:true,storage:window.sdasFleetAuthStorage'
+)
+auth=auth.replace(
+ 'button("LOGIN WITH DISCORD",async()=>{const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify guilds guilds.members.read"}});if(r.error)state.textContent=r.error.message;});',
+ 'window.sdasFleetStartDiscordLogin=async()=>{const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify guilds guilds.members.read"}});if(r.error){state.textContent=r.error.message;throw r.error;}};button("LOGIN WITH DISCORD",window.sdasFleetStartDiscordLogin);'
+)
+assert 'storage:window.sdasFleetAuthStorage' in auth
+assert 'window.sdasFleetStartDiscordLogin=async' in auth
 auth_path.write_text(auth)
 html=html.replace("PREVIEW BUILD","LIVE FLEET MANAGER")
 html=html.replace("LOCAL DEMO CONFIGURATION","FLEET CONFIGURATION")
@@ -52,6 +63,15 @@ setInterval(check,600);
 </script>"""
 html=html.replace("</head>",gate+"</head>",1)
 assert "sdas-production-access" in html
+# Load storage selection before the bundled cloud bridge and Discord client.
+shutil.copy2("scripts/sdfm-production-login.js",target/"sdfm-production-login.js")
+html=html.replace("<head>",'<head><script src="/SDFM/sdfm-production-login.js"></script>',1)
+assert 'src="/SDFM/sdfm-production-login.js"' in html
+# The legacy cloud bridge is embedded in the staged HTML, so it must use the same adapter.
+html=html.replace(
+ 'persistSession:true,autoRefreshToken:true',
+ 'persistSession:true,autoRefreshToken:true,storage:window.sdasFleetAuthStorage'
+)
 target.joinpath("index.html").write_text(html)
 # Pages serves case-sensitive folders; support user-typed lowercase URLs directly.
 lowercase = Path("dist/sdfm")
