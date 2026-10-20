@@ -236,6 +236,29 @@ try {
       size:getComputedStyle(e).fontSize,letterSpacing:getComputedStyle(e).letterSpacing}));
   });
   console.log('FONT_AUDIT',JSON.stringify(fontAudit));
+  await page.locator('#nav [data-view="pilots"]').click();
+  await page.waitForTimeout(400);
+  const pilotCards = await page.evaluate(() => {
+    const table=document.querySelector('#app .sdas-pilot-ships-mobile');
+    const row=table?.querySelector('tbody tr');
+    const cells=[...(row?.querySelectorAll('td')||[])];
+    return {found:!!table,display:row?getComputedStyle(row).display:null,
+      labels:cells.map(c=>c.getAttribute('data-label')),
+      widths:cells.map(c=>Math.round(c.getBoundingClientRect().width)),
+      wordBreak:cells.map(c=>getComputedStyle(c).wordBreak),
+      overflow:document.documentElement.scrollWidth>innerWidth+4};
+  });
+  console.log('PILOT_MOBILE_CARDS',JSON.stringify(pilotCards));
+  if(!pilotCards.found||pilotCards.display!=='grid'||pilotCards.labels[0]!=='SHIP'||
+    pilotCards.wordBreak.some(x=>x==='break-all')||pilotCards.overflow)
+    throw Error('Pilot Profile mobile layout is broken: '+JSON.stringify(pilotCards));
+  await page.locator('#nav [data-view="home"]').click();
+  await page.waitForTimeout(400);
+  const actionFonts=await page.locator('#sdas-golden-live .gactions .gbtn').evaluateAll(btns=>
+    btns.map(b=>parseFloat(getComputedStyle(b).fontSize)));
+  console.log('QUICK_ACTION_FONTS',JSON.stringify(actionFonts));
+  if(actionFonts.length!==4||actionFonts.some(x=>x<13))
+    throw Error('Quick Action labels remain too small: '+JSON.stringify(actionFonts));
   await page.locator('#nav [data-view="data"]').click();
   if(!await page.locator('#app').innerText().then(t=>t.includes('BACKUP / RESTORE')))throw Error('Mobile import tab does not render');
   console.log('BROWSER_ERRORS', JSON.stringify(errors.slice(0, 8)));
