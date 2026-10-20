@@ -87,7 +87,7 @@
         const demoPanel = [...app.children].find(el =>
           el.tagName === "SECTION" &&
           el.classList.contains("panel") &&
-          /MEMBER PROFILES\\s*\\(DEMO\\)/i.test(el.textContent || ""));
+          (el.querySelector("h3")?.textContent || el.textContent || "").toUpperCase().includes("MEMBER PROFILES (DEMO)"));
         demoPanel?.remove(); // UI only; does not alter records or login state.
         const kicker = app.querySelector(".page-head .eyebrow");
         if (kicker && kicker.textContent.trim() === "LOCAL DEMO CONFIGURATION") {
