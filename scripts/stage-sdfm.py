@@ -25,22 +25,17 @@ auth_path=target/"auth-preview.js"
 auth=auth_path.read_text()
 auth=auth.replace("await sb.auth.signOut();window.sdasCloudLogout?.();",
                   "await sb.auth.signOut();window.sdasCloudActive=false;location.reload();")
-# Production clients share one storage adapter and a single Discord OAuth launcher.
-auth=auth.replace(
- 'persistSession:true,autoRefreshToken:true',
- 'persistSession:true,autoRefreshToken:true,storage:window.sdasFleetAuthStorage'
-)
-auth=auth.replace(
- 'button("LOGIN WITH DISCORD",async()=>{const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify guilds guilds.members.read"}});if(r.error)state.textContent=r.error.message;});',
- 'window.sdasFleetStartDiscordLogin=async()=>{const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify guilds guilds.members.read"}});if(r.error){state.textContent=r.error.message;throw r.error;}};button("LOGIN WITH DISCORD",window.sdasFleetStartDiscordLogin);'
-)
-assert 'storage:window.sdasFleetAuthStorage' in auth
-assert 'window.sdasFleetStartDiscordLogin=async' in auth
-# Every new Discord login should verify SDAS membership before displaying the fleet.
-assert 'autoRoleChecks.add(user.id)' in auth
-assert 'void verifyRoles();' in auth
-assert 'RETRY ROLE CHECK' in auth
-assert 'Discord login succeeded, but SDFM needs a fresh Discord authorization' in auth
+# A single Supabase client owns the Discord redirect, session and provider token.
+# The custom stay-signed-in storage adapter is installed by the first script in <head>.
+auth_before=''' const lib=await import("https://esm.sh/@supabase/supabase-js@2");
+ const sb=lib.createClient(url,key,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});'''
+auth_after=''' const sb=await window.sdasFleetSharedClientPromise;'''
+assert auth.count(auth_before)==1, "Auth initializer changed"
+auth=auth.replace(auth_before,auth_after)
+assert 'window.sdasFleetSharedClientPromise' in auth
+assert 'window.sdasFleetStartDiscordLogin=startDiscordLogin' in auth
+assert 'autoRoleChecks.add(user.id)' in auth and 'void verifyRoles();' in auth
+assert 'RETRY ROLE CHECK' in auth and 'RECONNECT DISCORD' in auth
 auth_path.write_text(auth)
 html=html.replace("PREVIEW BUILD","LIVE FLEET MANAGER")
 html=html.replace("LOCAL DEMO CONFIGURATION","FLEET CONFIGURATION")
@@ -72,11 +67,18 @@ assert "sdas-production-access" in html
 shutil.copy2("scripts/sdfm-production-login.js",target/"sdfm-production-login.js")
 html=html.replace("<head>",'<head><script src="/SDFM/sdfm-production-login.js"></script>',1)
 assert 'src="/SDFM/sdfm-production-login.js"' in html
-# The legacy cloud bridge is embedded in the staged HTML, so it must use the same adapter.
-html=html.replace(
- 'persistSession:true,autoRefreshToken:true',
- 'persistSession:true,autoRefreshToken:true,storage:window.sdasFleetAuthStorage'
-)
+# The cloud bridge and login area must not separately consume the OAuth callback.
+cloud_before='''import("https://esm.sh/@supabase/supabase-js@2").then(async mod=>{
+    client=mod.createClient(SUPA,PUB,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});'''
+cloud_after='''window.sdasFleetSharedClientPromise.then(async sharedClient=>{
+    client=sharedClient;'''
+assert html.count(cloud_before)==1, "Cloud bridge initializer changed"
+html=html.replace(cloud_before,cloud_after)
+assert 'window.sdasFleetSharedClientPromise.then(async sharedClient=>' in html
+assert 'mod.createClient(SUPA,PUB' not in html
+# Reference a fresh asset URL so cached 2026-era verification JavaScript is not reused.
+assert html.count('src="/SDFM/auth-preview.js"')==1
+html=html.replace('src="/SDFM/auth-preview.js"', 'src="/SDFM/auth-preview.js?v=20261020-auth-recovery"')
 target.joinpath("index.html").write_text(html)
 # Pages serves case-sensitive folders; support user-typed lowercase URLs directly.
 lowercase = Path("dist/sdfm")
@@ -94,5 +96,11 @@ rules = [
     "/SDFM /SDFM/ 301",
 ]
 redirects.write_text(existing.rstrip() + ("\\n" if existing.strip() else "") + "\\n".join(rules) + "\\n")
+# Prevent browsers from retaining a stale auth script during subsequent releases.
+headers=Path("dist/_headers")
+existing_headers=headers.read_text() if headers.exists() else ""
+fleet_headers="""\n/SDFM/\n  Cache-Control: no-cache, must-revalidate\n/SDFM/index.html\n  Cache-Control: no-cache, must-revalidate\n/SDFM/auth-preview.js\n  Cache-Control: no-cache, must-revalidate\n/sdfm/\n  Cache-Control: no-cache, must-revalidate\n/sdfm/index.html\n  Cache-Control: no-cache, must-revalidate\n"""
+assert "/SDFM/auth-preview.js" not in existing_headers, "Review existing auth response headers"
+headers.write_text(existing_headers.rstrip()+"\n"+fleet_headers)
 print("Lowercase Fleet Manager redirects staged at dist/_redirects")
 print("SDFM isolated; homepage preserved")
