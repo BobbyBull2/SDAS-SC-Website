@@ -82,6 +82,23 @@ try {
       });
       console.log('IMPORT_LAYOUT_AUDIT',JSON.stringify(dataDOM));
     }
+    if (tab === 'data') {
+      const cards = await page.evaluate(() => {
+        const grid=document.querySelector('#app .sdas-import-columns');
+        const panels=[...(grid?.children||[])];
+        return {count:panels.length,
+          headings:panels.map(e=>e.querySelector('h3')?.textContent?.trim()),
+          widths:panels.map(e=>Math.round(e.getBoundingClientRect().width)),
+          display:grid?getComputedStyle(grid).display:null,
+          demo:document.querySelector('#app')?.innerText.includes('MEMBER PROFILES (DEMO)'),
+          hasRsiFile:!!document.querySelector('#sdas-rsi-file'),
+          hasBackup:document.querySelector('#app')?.innerText.includes('BACKUP / RESTORE')};
+      });
+      console.log('IMPORT_CARDS',JSON.stringify(cards));
+      if(cards.count!==3||cards.display!=='grid'||cards.demo||!cards.hasRsiFile||!cards.hasBackup||
+        Math.max(...cards.widths)-Math.min(...cards.widths)>3)
+        throw Error('Data Import three-card layout failed: '+JSON.stringify(cards));
+    }
     if (tab === 'data' && (!state.hasBackup || !state.hasRSI)) {
       throw new Error('Data Import view missing BACKUP / RESTORE: ' + JSON.stringify(state));
     }
