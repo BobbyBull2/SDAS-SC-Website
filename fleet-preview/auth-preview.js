@@ -161,6 +161,7 @@
  const lib=await import("https://esm.sh/@supabase/supabase-js@2");
  const sb=lib.createClient(url,key,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});
  let renderNumber=0;
+ const autoRoleChecks=new Set();
  const render=async()=>{
   const current=++renderNumber;
   const {data:{user},error}=await sb.auth.getUser();
@@ -176,31 +177,38 @@
   if(current!==renderNumber)return;
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
   else if(membership){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch"}[membership.role]||"Restricted")+" access";}
-  else{state.textContent="PILOT: "+name+" • Verification pending";}
+  else{state.textContent="PILOT: "+name+" • Verifying SDAS membership…";}
   const verifyRoles=async()=>{
     actions.replaceChildren();state.textContent="Checking SDAS Discord roles…";
-    const {data:{session}}=await sb.auth.getSession();
-    if(!session?.provider_token){
-      state.textContent="Reconnect Discord to grant permission to view SDAS roles.";
-      button("SIGN OUT / RECONNECT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
-      return;
-    }
     try{
+      const {data:{session},error:sessionError}=await sb.auth.getSession();
+      if(sessionError)throw Error("Your login session could not be loaded. Sign out and sign in again.");
+      if(!session?.provider_token){
+        state.textContent="Discord login succeeded, but SDFM needs a fresh Discord authorization. Sign out and sign in again here. You can approve security prompts on a second device, but finish the login in this browser.";
+        button("SIGN OUT / RECONNECT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
+        return;
+      }
       const res=await fetch(url+"/functions/v1/verify-sdas-discord",{method:"POST",
         headers:{"Content-Type":"application/json","apikey":key,"Authorization":"Bearer "+session.access_token},
         body:JSON.stringify({provider_token:session.provider_token})});
-      const json=await res.json();
-      if(!res.ok)throw Error(json.error||"Role verification failed");
+      const json=await res.json().catch(()=>({}));
+      if(!res.ok)throw Error(json.error||"The role verification service returned an error.");
+      if(!json.verified)throw Error("Your Discord membership could not be verified.");
       await render();
       window.dispatchEvent(new Event("sdas-auth-ready"));
     }catch(e){
-      state.textContent="Role access: "+e.message;
+      const message=e?.message||String(e);
+      state.textContent="SDAS verification could not finish: "+message+". Please retry or reconnect Discord.";
       button("RETRY ROLE CHECK",verifyRoles);
       button("SIGN OUT / RECONNECT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
     }
   };
   button(membership?"REFRESH SDAS ROLES":"VERIFY SDAS ROLES",verifyRoles);
   button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
+  if(!membership&&!membershipError&&!autoRoleChecks.has(user.id)){
+   autoRoleChecks.add(user.id);
+   void verifyRoles();
+  }
  };
  sb.auth.onAuthStateChange(()=>{setTimeout(render,0)});
  await render();
