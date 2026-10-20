@@ -23,8 +23,9 @@
     // obsolete leading home character in its text node, leaving events intact.
     const terminal = nav.querySelector('button[data-view="home"]');
     const firstNode = terminal?.firstChild;
-    if (firstNode?.nodeType === Node.TEXT_NODE && /^\\s*⌂\\s*/.test(firstNode.textContent)) {
-      firstNode.textContent = firstNode.textContent.replace(/^\\s*⌂\\s*/, "");
+    if (firstNode?.nodeType === Node.TEXT_NODE &&
+        firstNode.textContent.trimStart().startsWith("⌂")) {
+      firstNode.textContent = firstNode.textContent.replace("⌂", "").trimStart();
     }
 
 
