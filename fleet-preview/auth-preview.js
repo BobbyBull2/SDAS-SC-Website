@@ -83,10 +83,10 @@
   :root{--sdas-gold:#e3c489;--sdas-cyan:#55d8ed;--sdas-ink:#04131d}
   body{background:linear-gradient(180deg,#071722,#041019 75%)!important;color:#e9f4fa}
   #sdas-fleet-masthead{min-height:310px!important;margin:0 0 0!important;padding:29px 30px 35px 41%!important;align-items:flex-start!important;text-align:left!important;background:linear-gradient(90deg,#041019d4,#04101997 42%,#0410194d 75%),url("https://raw.githubusercontent.com/BobbyBull2/SDAS-SC-Website/preview/fleet-terminal-v2/public/images/preview-hangar.png") center 50%/cover no-repeat,#05141d!important;-webkit-mask-image:none!important;mask-image:none!important;border-bottom:0!important}
-  #sdas-fleet-masthead .fleet-emblem{left:3%!important;top:calc(50% - 58px)!important;transform:translateY(-50%)!important;width:35%!important;height:160px!important;max-height:calc(100% - 28px)!important}
+  #sdas-fleet-masthead .fleet-emblem{left:3%!important;top:calc(50% - 78px)!important;transform:translateY(-50%)!important;width:26.25%!important;height:120px!important;max-height:calc(100% - 28px)!important}
   #sdas-fleet-masthead .fleet-kicker{margin:0 0 5px!important;letter-spacing:.3em!important;font-size:12px!important}
   /* Shift the caption and main Fleet Manager title down together, leaving the login rail clear. */
-  #sdas-fleet-masthead .fleet-kicker,#sdas-fleet-masthead .fleet-title.fleet-gold{position:relative!important;top:94px!important}
+  #sdas-fleet-masthead .fleet-kicker,#sdas-fleet-masthead .fleet-title.fleet-gold{position:relative!important;top:109px!important}
   #sdas-fleet-masthead .fleet-kicker:before{display:none!important}
   #sdas-fleet-masthead .fleet-title{font-size:clamp(32px,3.55vw,65px)!important;line-height:1.13!important;letter-spacing:.01em!important}
   #sdas-fleet-masthead .fleet-title:not(.fleet-gold){display:none!important}
