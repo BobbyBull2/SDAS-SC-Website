@@ -116,7 +116,7 @@ assert 'sdasFleetRetryCloudLoad' in html, "Fleet connection retry not staged"
 assert 'sdas-cloud-status' in html, "Fleet status feedback not staged"
 # Reference a fresh asset URL so cached 2026-era verification JavaScript is not reused.
 assert html.count('src="/SDFM/auth-preview.js"')==1
-html=html.replace('src="/SDFM/auth-preview.js"', 'src="/SDFM/auth-preview.js?v=20261020-cloud-handoff"')
+html=html.replace('src="/SDFM/auth-preview.js"', 'src="/SDFM/auth-preview.js?v=20261020-prospect-readonly"')
 target.joinpath("index.html").write_text(html)
 # Pages serves case-sensitive folders; support user-typed lowercase URLs directly.
 lowercase = Path("dist/sdfm")
