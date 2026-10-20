@@ -1377,7 +1377,7 @@ body>.shell,.shell{
    Image-only correction; leaves masthead layout, buttons and desktop intact. */
 @media (max-width: 760px) {
   #sdas-fleet-masthead .fleet-emblem img {
-    transform: translateX(-15%) !important;
+    transform: translateX(-35%) !important;
     transform-origin: center center !important;
   }
 }
