@@ -1207,3 +1207,95 @@ body>.shell,.shell{
     bottom:clamp(73px,5.8vw,91px)!important;
   }
 }
+
+
+/* MK XXI — accessible small text, quick actions and Pilot Profile mobile cards */
+#sdas-golden-live .gside .gbox:nth-child(2) .gactions>.gbtn{
+  font-size:clamp(14px,1vw,16px)!important;
+  letter-spacing:.015em!important;
+  line-height:1.25!important;
+  min-height:54px!important;
+  padding:10px 6px!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+#sdas-golden-live .gtag,
+#sdas-golden-live .gsmall,
+#sdas-golden-live th,
+#sdas-golden-live .gconnected{
+  font-size:clamp(12px,.9vw,14px)!important;
+  letter-spacing:.045em!important;
+  line-height:1.45!important;
+}
+#sdas-golden-live .gmuted,#sdas-golden-live .gfoot{
+  font-size:clamp(13px,.95vw,15px)!important;
+  line-height:1.5!important;
+}
+#sdas-golden-live .gbtn:not(.gactions .gbtn){
+  font-size:clamp(13px,.95vw,15px)!important;
+  letter-spacing:.035em!important;
+}
+#app .eyebrow,#app .small,#app .muted.small,
+#app .metric-label,#app .fleet-note,#app .sub{
+  font-size:clamp(12px,.9vw,14px)!important;
+  line-height:1.5!important;
+}
+#app table th{font-size:clamp(12px,.9vw,14px)!important;letter-spacing:.045em!important}
+#app table td{font-size:clamp(13px,1vw,16px)!important;line-height:1.5!important}
+@media(max-width:760px){
+  #app .sdas-pilot-ships-mobile{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    table-layout:auto!important;
+  }
+  #app .sdas-pilot-ships-mobile thead{display:none!important}
+  #app .sdas-pilot-ships-mobile tbody{display:grid!important;gap:12px!important}
+  #app .sdas-pilot-ships-mobile tbody tr{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:14px 18px!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+    min-width:0!important;
+    padding:16px!important;
+    border:1px solid #326878!important;
+    border-radius:9px!important;
+    background:#081d2a!important;
+  }
+  #app .sdas-pilot-ships-mobile tbody td{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:5px!important;
+    padding:0!important;
+    width:auto!important;min-width:0!important;max-width:100%!important;
+    border:0!important;
+    white-space:normal!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+    line-height:1.45!important;
+    font-size:clamp(14px,3.6vw,16px)!important;
+  }
+  #app .sdas-pilot-ships-mobile tbody td:first-child{grid-column:1/-1!important}
+  #app .sdas-pilot-ships-mobile tbody td::before{
+    content:attr(data-label)!important;
+    color:#79dbe7!important;
+    display:block!important;
+    font-weight:700!important;
+    font-size:12px!important;
+    letter-spacing:.05em!important;
+    text-transform:uppercase!important;
+  }
+  #app .table-wrap:has(.sdas-pilot-ships-mobile){
+    overflow-x:visible!important;
+    width:100%!important;min-width:0!important;
+  }
+  #app .sdas-pilot-ships-mobile tbody td:last-child{
+    overflow-wrap:anywhere!important;
+  }
+  #app .layout.three>.panel,#app .layout.three .section{min-width:0!important}
+}
+@media(max-width:390px){
+  #app .sdas-pilot-ships-mobile tbody tr{gap:12px!important;padding:12px!important}
+  #sdas-golden-live .gside .gbox:nth-child(2) .gactions>.gbtn{font-size:13px!important}
+}
