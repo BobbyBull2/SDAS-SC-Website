@@ -67,6 +67,35 @@
       }
     }
 
+    // Data / Import: keep existing controls and their event handlers, but place
+    // the three functional import/backup panels into one responsive row.
+    // The separate local demo pilot-switching controls are not part of fleet import.
+    const dataActive = document.querySelector('#nav [data-view="data"].active');
+    if (dataActive) {
+      const app = document.getElementById("app");
+      const columns = [...(app?.children || [])].find(el => el.classList.contains("layout")
+        && el.textContent.includes("BACKUP / RESTORE")
+        && el.textContent.includes("PLEDGED SHIP CSV IMPORT"));
+      const rsiHost = app?.querySelector("#sdas-rsi-import-host");
+      if (app && columns && rsiHost && rsiHost.querySelector("#sdas-rsi-import")) {
+        columns.classList.add("sdas-import-columns");
+        if (columns.firstElementChild !== rsiHost) columns.prepend(rsiHost);
+        for (const el of [...columns.children]) {
+          if (el === rsiHost) el.classList.add("sdas-import-card-host");
+          else el.classList.add("sdas-import-card");
+        }
+        const demoPanel = [...app.children].find(el =>
+          el.tagName === "SECTION" &&
+          el.classList.contains("panel") &&
+          /MEMBER PROFILES\\s*\\(DEMO\\)/i.test(el.textContent || ""));
+        demoPanel?.remove(); // UI only; does not alter records or login state.
+        const kicker = app.querySelector(".page-head .eyebrow");
+        if (kicker && kicker.textContent.trim() === "LOCAL DEMO CONFIGURATION") {
+          kicker.textContent = "FLEET FILE MANAGEMENT";
+        }
+      }
+    }
+
     // The old code gave .shell the top-action-group class, turning the entire
     // application into an action row. Never style or remove the shell as a button group.
     document.querySelector(".shell")?.classList.remove("sdas-top-action-group");
