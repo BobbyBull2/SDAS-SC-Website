@@ -23,13 +23,13 @@
   try{
    const [profiles,ships,loadouts,photos]=await Promise.all([
     client.from("pilot_profiles").select("user_id,display_name,rsi_handle"),
-    client.from("fleet_ships").select("*").order("created_at",{ascending:true}),
-    client.from("ship_loadouts").select("ship_id,components,name"),
-    client.from("ship_photos").select("ship_id,object_path")
+    client.from("preview_fleet_ships").select("*").order("created_at",{ascending:true}),
+    client.from("preview_ship_loadouts").select("ship_id,components,name"),
+    client.from("preview_ship_photos").select("ship_id,object_path")
    ]);
    for(const res of [profiles,ships,loadouts,photos])if(res.error)throw res.error;
    const photoMap={};
-   for(const p of photos.data||[]){const {data:sign}=await client.storage.from("fleet-photos").createSignedUrl(p.object_path,3600);if(sign?.signedUrl)photoMap[p.ship_id]=sign.signedUrl;}
+   for(const p of photos.data||[]){const {data:sign}=await client.storage.from("fleet-preview-photos").createSignedUrl(p.object_path,3600);if(sign?.signedUrl)photoMap[p.ship_id]=sign.signedUrl;}
    db={members:(profiles.data||[]).map(p=>({id:p.user_id,name:p.display_name,handle:p.rsi_handle||"",role:"Member"})),ships:(ships.data||[]).map(s=>fromRow(s,photoMap))};
    // Other ship owners may not have a visible pilot_profiles row due to missing
    // profile setup or read permissions. Keep their ships visible and show a
@@ -59,15 +59,15 @@
    canvas.getContext("2d").drawImage(picture,0,0,canvas.width,canvas.height);picture.close();
    const b=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",.75));
    if(!b||b.size>2097152)throw Error("Image exceeds 2 MB after compression.");
-   const path=user.id+"/"+ship.id+"/"+Date.now()+".jpg";
-   const up=await client.storage.from("fleet-photos").upload(path,b,{contentType:"image/jpeg",upsert:false});
+   const path=user.id+"/preview/"+ship.id+"/"+Date.now()+".jpg";
+   const up=await client.storage.from("fleet-preview-photos").upload(path,b,{contentType:"image/jpeg",upsert:false});
    if(up.error)throw up.error;
-   const old=await client.from("ship_photos").select("id,object_path").eq("ship_id",ship.id);
+   const old=await client.from("preview_ship_photos").select("id,object_path").eq("ship_id",ship.id);
    if(old.error)throw old.error;
-   const ins=await client.from("ship_photos").insert({ship_id:ship.id,object_path:path});
+   const ins=await client.from("preview_ship_photos").insert({ship_id:ship.id,object_path:path});
    if(ins.error)throw ins.error;
-   for(const x of old.data||[]){await client.from("ship_photos").delete().eq("id",x.id);await client.storage.from("fleet-photos").remove([x.object_path]);}
-   const {data:sign}=await client.storage.from("fleet-photos").createSignedUrl(path,3600);
+   for(const x of old.data||[]){await client.from("preview_ship_photos").delete().eq("id",x.id);await client.storage.from("fleet-preview-photos").remove([x.object_path]);}
+   const {data:sign}=await client.storage.from("fleet-preview-photos").createSignedUrl(path,3600);
    if(sign?.signedUrl)ship.image=sign.signedUrl;
  }
  async function sync(){
@@ -78,10 +78,10 @@
    const owned=db.ships.filter(s=>s.owner===user.id);
    const ids=new Set(owned.map(s=>s.id));
    const removed=[...known].filter(id=>!ids.has(id));
-   for(const id of removed){const r=await client.from("fleet_ships").delete().eq("id",id).eq("owner_id",user.id);if(r.error)throw r.error;}
+   for(const id of removed){const r=await client.from("preview_fleet_ships").delete().eq("id",id).eq("owner_id",user.id);if(r.error)throw r.error;}
    for(const s of owned){
-     const r=await client.from("fleet_ships").upsert(summary(s),{onConflict:"id"});if(r.error)throw r.error;
-     const l=await client.from("ship_loadouts").upsert({ship_id:s.id,name:"Current",components:s.loadout||{}},{onConflict:"ship_id,name"});if(l.error)throw l.error;
+     const r=await client.from("preview_fleet_ships").upsert(summary(s),{onConflict:"id"});if(r.error)throw r.error;
+     const l=await client.from("preview_ship_loadouts").upsert({ship_id:s.id,name:"Current",components:s.loadout||{}},{onConflict:"ship_id,name"});if(l.error)throw l.error;
      if(s.image?.startsWith("data:image/"))await uploadPhoto(s);
    }
    known=ids;status("Saved to Supabase • "+owned.length+" personal ships. Other members can see org-shared ships.");
