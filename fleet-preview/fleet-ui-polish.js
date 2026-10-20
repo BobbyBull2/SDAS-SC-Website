@@ -51,6 +51,22 @@
       }
     }
 
+    // Pilot Directory > Pilot Profile: retain the real table on desktop,
+    // but label its cells so small screens can render accessible ship cards.
+    const pilotsActive = document.querySelector('#nav [data-view="pilots"].active');
+    if (pilotsActive) {
+      for (const table of document.querySelectorAll("#app .section .table-wrap table")) {
+        if (table.classList.contains("sdas-pilot-ships-mobile")) continue;
+        const labels = [...table.querySelectorAll("thead th")].map(th => th.textContent.trim());
+        if (!labels.length || labels[0].toUpperCase() !== "SHIP") continue;
+        table.classList.add("sdas-pilot-ships-mobile");
+        for (const row of table.querySelectorAll("tbody tr"))
+          [...row.children].forEach((cell, i) => {
+            if (cell.tagName === "TD") cell.setAttribute("data-label", labels[i] || "DETAIL");
+          });
+      }
+    }
+
     // The old code gave .shell the top-action-group class, turning the entire
     // application into an action row. Never style or remove the shell as a button group.
     document.querySelector(".shell")?.classList.remove("sdas-top-action-group");
