@@ -66,6 +66,22 @@ try {
     if (state.missing || state.active !== tab || !state.visible || state.markup < 50) {
       throw new Error('Navigation failed on ' + tab + ': ' + JSON.stringify(state));
     }
+    if (tab === 'data') {
+      const dataDOM = await page.evaluate(() => {
+        const app=document.getElementById('app'),root=app.querySelector('.layout');
+        const brief=el=>{ if(!el)return null;const r=el.getBoundingClientRect();return {
+          tag:el.tagName,id:el.id,className:el.className,
+          head:el.innerText?.replace(/\\s+/g,' ').slice(0,120),width:Math.round(r.width),
+          height:Math.round(r.height),childCount:el.children.length,
+          parent:el.parentElement?.tagName+':'+el.parentElement?.className
+        }};
+        return {appChildren:[...app.children].map(brief),layout:brief(root),
+          layoutChildren:[...(root?.children||[])].map(brief),
+          rsi:brief(document.getElementById('sdas-rsi-import-host')),
+          dataHead:app.innerHTML.slice(0,2300)};
+      });
+      console.log('IMPORT_LAYOUT_AUDIT',JSON.stringify(dataDOM));
+    }
     if (tab === 'data' && (!state.hasBackup || !state.hasRSI)) {
       throw new Error('Data Import view missing BACKUP / RESTORE: ' + JSON.stringify(state));
     }
