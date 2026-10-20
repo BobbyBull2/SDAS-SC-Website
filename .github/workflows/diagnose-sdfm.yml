@@ -14,7 +14,7 @@ jobs:
           python3 - <<'PY'
           import urllib.request
           domains=["https://sdas.space","https://sdas-sc-website.pages.dev","https://17b99fe7.sdas-sc-website.pages.dev"]
-          paths=["/","/SDFM/","/SDFM/index.html","/SDFM/auth-preview.js","/SDFM/fleet-design.css","/SDFM/public/images/preview-hangar.png"]
+          paths=["/","/sdfm/","/SDFM/","/SDFM/index.html","/SDFM/auth-preview.js","/SDFM/fleet-design.css","/SDFM/public/images/preview-hangar.png"]
           for domain in domains:
             for path in paths:
               url=domain+path
@@ -23,7 +23,7 @@ jobs:
                 with urllib.request.urlopen(req,timeout=15) as response:
                   body=response.read()
                   head=body[:400].decode("utf-8","replace").replace(chr(10)," ")
-                  print("CHECK",url,"STATUS",response.status,"MIME",response.headers.get("content-type"),"SIZE",len(body),"HEAD",head[:120])
+                  print("CHECK",url,"FINAL",response.url,"STATUS",response.status,"MIME",response.headers.get("content-type"),"SIZE",len(body),"HEAD",head[:120])
               except Exception as e:
                 print("CHECK",url,"ERROR",repr(e))
           PY
