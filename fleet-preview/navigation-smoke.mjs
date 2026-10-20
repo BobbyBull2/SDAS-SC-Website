@@ -115,6 +115,21 @@ try {
       logoBottom:logo?.getBoundingClientRect().bottom};
   });
   console.log('HERO_POSITION',JSON.stringify(titlePosition));
+  const wordmark = await page.evaluate(() => {
+    const h=document.querySelector('#sdas-fleet-masthead .fleet-title.fleet-gold');
+    const and=h?.querySelector('.fleet-and-inline');
+    const mast=document.querySelector('#sdas-fleet-masthead');
+    const r=h?.getBoundingClientRect(), m=mast?.getBoundingClientRect();
+    const a=and?getComputedStyle(and):null;
+    return {text:h?.textContent?.replace(/\\s+/g,' ').trim(),parts:h?.querySelectorAll('.fleet-title-part').length,
+      white:a?.webkitTextFillColor,ratio:and&&h?parseFloat(a.fontSize)/parseFloat(getComputedStyle(h).fontSize):0,
+      right:r?.right,mastRight:m?.right,bottom:r?.bottom,mastBottom:m?.bottom};
+  });
+  console.log('WORDMARK_CHECK',JSON.stringify(wordmark));
+  if(wordmark.text!=='SOME DUDES and a FLEET MANAGER'||wordmark.parts!==2||
+    wordmark.ratio<.45||wordmark.ratio>.55||wordmark.right>wordmark.mastRight+2||
+    wordmark.bottom>wordmark.mastBottom+3)throw Error('Wordmark not correctly sized or contained: '+JSON.stringify(wordmark));
+
   if(titlePosition.titleTop < titlePosition.logoTop + 45)
     throw Error('Title was not lowered as requested: '+JSON.stringify(titlePosition));
 
