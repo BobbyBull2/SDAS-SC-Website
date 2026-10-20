@@ -1,0 +1,41 @@
+name: Verify SDFM production release
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/stage-sdfm.py'
+      - 'fleet-preview/**'
+      - 'src/**'
+      - '.github/workflows/deploy-cloudflare-pages.yml'
+      - '.github/workflows/release-sdfm-verify.yml'
+jobs:
+  verify:
+    if: github.head_ref == 'release/sdfm-production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Verify isolated SDFM route
+        run: |
+          python3 scripts/stage-sdfm.py
+          test -s dist/SDFM/index.html
+          test -s dist/SDFM/auth-preview.js
+          test -s dist/SDFM/public/images/preview-hangar.png
+          node --check dist/SDFM/auth-preview.js
+          node --check dist/SDFM/fleet-ui-polish.js
+          python3 - <<'PY'
+          from pathlib import Path
+          homepage=Path('dist/index.html').read_text()
+          fleet=Path('dist/SDFM/index.html').read_text()
+          assert '<div id="root">' in homepage
+          assert 'SDFM/' in fleet and 'sdas-production-access' in fleet
+          assert 'PREVIEW BUILD' not in fleet
+          print('Home intact; Fleet protected and in subfolder')
+          PY
