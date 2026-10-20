@@ -41,6 +41,10 @@ html=html.replace("PREVIEW BUILD","LIVE FLEET MANAGER")
 html=html.replace("LOCAL DEMO CONFIGURATION","FLEET CONFIGURATION")
 assert 'src="/SDFM/auth-preview.js"' in html
 assert 'href="/SDFM/fleet-design.css"' in html
+# Refresh the production stylesheet after the mobile logo-only optical correction.
+# Without an asset version, mobile Safari can retain the earlier logo positioning.
+html=html.replace('href="/SDFM/fleet-design.css"',
+                  'href="/SDFM/fleet-design.css?v=20261020-logo35"')
 # Only the authenticated cloud-backed application is visible in production.
 # Keep the Discord login controls available while the private data is loading.
 gate = """<style id="sdas-production-access">
