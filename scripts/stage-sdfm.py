@@ -24,5 +24,27 @@ html=html.replace("PREVIEW BUILD","LIVE FLEET MANAGER")
 html=html.replace("LOCAL DEMO CONFIGURATION","FLEET CONFIGURATION")
 assert 'src="/SDFM/auth-preview.js"' in html
 assert 'href="/SDFM/fleet-design.css"' in html
+# Only the authenticated cloud-backed application is visible in production.
+# Keep the Discord login controls available while the private data is loading.
+gate = """<style id="sdas-production-access">
+html:not(.sdas-cloud-verified) #app,
+html:not(.sdas-cloud-verified) #nav,
+html:not(.sdas-cloud-verified) #sdas-golden-live{display:none!important}
+html:not(.sdas-cloud-verified) .shell:after{
+content:"Sign in with Discord and verify SDAS membership to access the live fleet.";
+display:block;margin:24px auto;max-width:600px;padding:28px;
+border:1px solid #3b91a4;border-radius:12px;text-align:center;
+background:#071e2a;color:#a9eaf3;font:600 16px/1.5 system-ui}
+#pilotSelect{display:none!important}
+</style><script>
+(function(){
+function check(){document.documentElement.classList.toggle("sdas-cloud-verified",window.sdasCloudActive===true)}
+document.addEventListener("DOMContentLoaded",check);
+window.addEventListener("sdas-auth-ready",check);
+setInterval(check,600);
+})();
+</script>"""
+html=html.replace("</head>",gate+"</head>",1)
+assert "sdas-production-access" in html
 target.joinpath("index.html").write_text(html)
 print("SDFM isolated; homepage preserved")
