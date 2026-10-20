@@ -190,8 +190,9 @@
   const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role").eq("user_id",user.id).maybeSingle();
   if(current!==renderNumber)return;
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
-  else if(membership){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch"}[membership.role]||"Restricted")+" access";}
+  else if(membership){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch",prospect:"Prospect — Read Only"}[membership.role]||"Restricted")+" access";}
   else{state.textContent=roleFailures.get(user.id)||(verifyingUsers.has(user.id)?"PILOT: "+name+" • Checking SDAS membership…":"PILOT: "+name+" • SDAS membership needs verification");}
+  window.sdasFleetAccessRole=membership?.role||null;
   announceLoginState(true,!!membership&&!membershipError);
   if(membership&&!window.sdasCloudActive)window.dispatchEvent(new Event("sdas-auth-ready"));
   const verifyRoles=async()=>{
