@@ -3,13 +3,27 @@
    Only the obsolete local-import shortcut and preview-label pill are removed. */
 (() => {
   "use strict";
-  const LABEL = "SOME DUDES FLEET MANAGER";
+  const LABEL = "SOME DUDES and a FLEET MANAGER";
   const normalized = text => String(text || "").replace(/\s+/g, " ").trim().toUpperCase();
 
   const apply = () => {
     const masthead = document.getElementById("sdas-fleet-masthead");
     const title = masthead?.querySelector(".fleet-title.fleet-gold");
-    if (title && title.textContent.trim() !== LABEL) title.textContent = LABEL;
+    // Compose an accessible, styled wordmark without losing the user's exact wording.
+    // Preserve the three nodes between observer passes to avoid mutation loops.
+    if (title && (title.textContent.trim() !== LABEL ||
+        !title.querySelector(".fleet-and-inline"))) {
+      const left = document.createElement("span");
+      left.className = "fleet-title-part";
+      left.textContent = "SOME DUDES";
+      const middle = document.createElement("span");
+      middle.className = "fleet-and-inline";
+      middle.textContent = "and a";
+      const right = document.createElement("span");
+      right.className = "fleet-title-part";
+      right.textContent = "FLEET MANAGER";
+      title.replaceChildren(left, " ", middle, " ", right);
+    }
 
     // The old code gave .shell the top-action-group class, turning the entire
     // application into an action row. Never style or remove the shell as a button group.
