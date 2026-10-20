@@ -177,6 +177,20 @@ try {
   console.log('NAV_GEOMETRY_MOBILE',JSON.stringify(mobile));
   if(mobile.length!==5||mobile.some(x=>x.right>392||x.left<0))throw Error('Mobile tabs overflow viewport');
   await page.locator('#nav').screenshot({path:'/tmp/fleet-tabs-mobile.png'});
+  await page.locator('#nav [data-view="registry"]').click();
+  await page.waitForTimeout(500);
+  const registryMobile = await page.evaluate(() => {
+    const table=document.querySelector('#app .sdas-registry-mobile');
+    const row=table?.querySelector('tbody tr');
+    const cell=row?.querySelector('td');
+    return {hasTable:!!table, rowDisplay:row?getComputedStyle(row).display:null,
+      columns:row?getComputedStyle(row).gridTemplateColumns:null,
+      label:cell?.getAttribute('data-label')||null,
+      overflow:document.documentElement.scrollWidth>innerWidth+4};
+  });
+  console.log("REGISTRY_MOBILE",JSON.stringify(registryMobile));
+  if(!registryMobile.hasTable||registryMobile.rowDisplay!=='grid'||!registryMobile.label||registryMobile.overflow)
+    throw Error("Mobile registry cards not usable: "+JSON.stringify(registryMobile));
   await page.locator('#nav [data-view="data"]').click();
   if(!await page.locator('#app').innerText().then(t=>t.includes('BACKUP / RESTORE')))throw Error('Mobile import tab does not render');
   console.log('BROWSER_ERRORS', JSON.stringify(errors.slice(0, 8)));
