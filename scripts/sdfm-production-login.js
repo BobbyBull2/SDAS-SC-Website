@@ -116,6 +116,30 @@
     status.setAttribute("role", "status");
     status.setAttribute("aria-live", "polite");
 
+
+    function updateCard() {
+      if(window.sdasCloudActive===true)return;
+      const auth=window.sdasFleetLoginState;
+      if(!auth?.signedIn){
+        button.textContent="Sign in with Discord to access the SDAS Fleet Manager";
+        row.style.display="";
+        help.textContent="Uncheck to keep your login only for this browser session. Use this on shared devices.";
+        status.textContent="";
+      }else if(auth.verified){
+        button.textContent="Retry Fleet Connection";
+        row.style.display="none";
+        help.textContent="Discord login and SDAS membership are verified. Your fleet data is connecting.";
+        status.textContent=window.sdasFleetCloudStatus||"Connecting to fleet data…";
+      }else{
+        button.textContent="Reconnect Discord to verify SDAS membership";
+        row.style.display="none";
+        help.textContent="Discord login succeeded. Use the role verification controls above, or reconnect if Discord authorization expired.";
+        status.textContent="";
+      }
+    }
+    window.addEventListener("sdas-fleet-auth-state",updateCard);
+    window.addEventListener("sdas-cloud-status",updateCard);
+    window.addEventListener("sdas-auth-ready",updateCard);
     checkbox.addEventListener("change", () => {
       try { localStorage.setItem(preferenceKey, checkbox.checked ? "true" : "false"); }
       catch { status.textContent = "Your browser could not save the sign-in preference."; }
@@ -123,6 +147,18 @@
     });
     button.addEventListener("click", async () => {
       status.textContent = "";
+      if(window.sdasFleetLoginState?.verified && window.sdasCloudActive!==true){
+        if(typeof window.sdasFleetRetryCloudLoad !== "function"){
+          status.textContent="Fleet connection is still initializing. Refresh the page and try again.";
+          return;
+        }
+        button.disabled=true;
+        status.textContent="Retrying the secure fleet connection…";
+        try{await window.sdasFleetRetryCloudLoad();}
+        catch(error){status.textContent="Fleet connection failed: "+(error?.message||String(error));}
+        finally{button.disabled=false;updateCard();}
+        return;
+      }
       if (typeof window.sdasFleetStartDiscordLogin !== "function") {
         const topLogin = [...document.querySelectorAll("#sdas-auth-actions button")]
           .find(item => /LOGIN WITH DISCORD/i.test(item.textContent || ""));
@@ -140,6 +176,7 @@
     });
 
     card.append(button, row, help, status);
+    updateCard();
     const shell = document.querySelector(".shell");
     if (shell) shell.insertAdjacentElement("afterend", card);
     else document.body.append(card);

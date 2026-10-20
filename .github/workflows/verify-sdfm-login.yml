@@ -34,8 +34,12 @@ jobs:
           assert 'sdasFleetSharedClientPromise' in login
           assert 'sdasFleetSharedClientPromise' in auth and 'sdasFleetSharedClientPromise' in cloud
           assert 'sdasFleetStartDiscordLogin' in auth
+          assert 'sdasFleetRetryCloudLoad' in cloud
+          assert 'sdas-cloud-status' in cloud
+          assert 'Retry Fleet Connection' in login
+          assert 'sdfm-production-login.js?v=20261020-cloud-handoff' in html
           assert 'RECONNECT DISCORD' in auth
-          assert 'auth-preview.js?v=20261020-auth-recovery' in html
+          assert 'auth-preview.js?v=20261020-cloud-handoff' in html
           assert 'Cache-Control: no-cache' in Path('dist/_headers').read_text()
           assert 'sdas-live-signin-card' in Path('dist/SDFM/sdfm-production-login.js').read_text()
           assert 'sdas-production-access' in html

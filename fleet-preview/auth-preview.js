@@ -168,6 +168,10 @@
  };
  window.sdasFleetStartDiscordLogin=startDiscordLogin;
  let renderNumber=0;
+ const announceLoginState=(signedIn,verified)=>{
+   window.sdasFleetLoginState={signedIn,verified};
+   window.dispatchEvent(new CustomEvent("sdas-fleet-auth-state",{detail:window.sdasFleetLoginState}));
+ };
  const autoRoleChecks=new Set();
  const roleFailures=new Map();
  const verifyingUsers=new Set();
@@ -177,6 +181,7 @@
   if(current!==renderNumber)return;
   actions.replaceChildren();
   if(error||!user){
+   announceLoginState(false,false);
    state.textContent="";
    button("LOGIN WITH DISCORD",startDiscordLogin);
    return;
@@ -187,6 +192,8 @@
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
   else if(membership){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch"}[membership.role]||"Restricted")+" access";}
   else{state.textContent=roleFailures.get(user.id)||(verifyingUsers.has(user.id)?"PILOT: "+name+" • Checking SDAS membership…":"PILOT: "+name+" • SDAS membership needs verification");}
+  announceLoginState(true,!!membership&&!membershipError);
+  if(membership&&!window.sdasCloudActive)window.dispatchEvent(new Event("sdas-auth-ready"));
   const verifyRoles=async()=>{
     actions.replaceChildren();verifyingUsers.add(user.id);roleFailures.delete(user.id);state.textContent="Checking SDAS Discord roles…";
     try{

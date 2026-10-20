@@ -12,12 +12,36 @@
  label.style.cssText="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0";label.setAttribute("role","status");label.setAttribute("aria-live","polite");
  label.textContent="FLEET CLOUD // Demo records remain local until verified login.";
  document.querySelector(".header")?.after(label);
- const status=t=>{label.textContent="FLEET CLOUD // "+t};
+ const status=t=>{
+  label.textContent="FLEET CLOUD // "+t;
+  window.sdasFleetCloudStatus=String(t);
+  window.dispatchEvent(new CustomEvent("sdas-cloud-status",{detail:String(t)}));
+ };
  const summary=s=>({id:s.id,owner_id:user.id,model_name:String(s.name||"Unknown ship").slice(0,150),nickname:s.nickname||null,ownership:({"Pledged":"pledged","aUEC":"auec","Loaner":"loaner","Other":"other"})[s.origin]||"other",role:s.role||null,paint:s.paint||null,notes:s.notes||null,org_visible:s.visibility==="org",show_loadout:s.visibility==="org"});
  const fromRow=(r,photos)=>({id:r.id,owner:r.owner_id,name:r.model_name,nickname:r.nickname||"",origin:({"pledged":"Pledged","auec":"aUEC","loaner":"Loaner","other":"Other"})[r.ownership]||"Other",role:r.role||"Other",visibility:r.org_visible?"org":"private",paint:r.paint||"",notes:r.notes||"",image:photos[r.id]||"",loadout:{}});
+ // Auth can finish while a cloud request is in progress. Queue the follow-up
+ // instead of discarding the SIGNED_IN event before the session becomes available.
+ let activeLoad=null,reloadRequested=false;
  async function loadCloud(){
-  const {data:{user:u}}=await client.auth.getUser();if(!u)return;
-  const {data:m}=await client.from("sdas_memberships").select("role").eq("user_id",u.id).maybeSingle();
+  if(activeLoad){reloadRequested=true;return activeLoad;}
+  activeLoad=loadCloudOnce();
+  try{return await activeLoad;}
+  finally{
+   activeLoad=null;
+   if(reloadRequested){reloadRequested=false;setTimeout(()=>{void loadCloud()},0);}
+  }
+ }
+ async function loadCloudOnce(){
+  if(!client){status("Fleet connection is initializing. Please retry.");return;}
+  let u;
+  try{
+   const authResult=await client.auth.getUser();
+   if(authResult.error)throw authResult.error;
+   u=authResult.data?.user;
+  }catch(e){status("Unable to read Discord session: "+(e.message||String(e)));return;}
+  if(!u){status("Waiting for Discord to finish signing in…");return;}
+  const {data:m,error:membershipError}=await client.from("sdas_memberships").select("role").eq("user_id",u.id).maybeSingle();
+  if(membershipError){status("Membership read failed: "+membershipError.message);return;}
   if(!m){status("Sign in and verify SDAS membership to load shared fleets.");return;}
   user=u;booting=true;
   try{
@@ -41,7 +65,8 @@
    if(!db.members.find(m=>m.id===u.id))db.members.push({id:u.id,name:u.user_metadata?.full_name||"Pilot",handle:"",role:"Member"});
    for(const l of loadouts.data||[]){const ship=db.ships.find(s=>s.id===l.ship_id);if(ship)ship.loadout=l.components||{};}
    current=u.id;known=new Set(db.ships.filter(s=>s.owner===current).map(s=>s.id));ready=true;
-   const selector=document.querySelector("#pilotSelect");selector.value=current;selector.disabled=true;selector.style.display="none";
+   const selector=document.querySelector("#pilotSelect");
+   if(selector){selector.value=current;selector.disabled=true;selector.style.display="none";}
    const demoOptions=document.querySelector("#pilotSelect");if(demoOptions?.parentElement)demoOptions.parentElement.style.opacity=".5";
    window.sdasCloudActive=true;
    selected=null;render();
@@ -136,7 +161,10 @@
   render();status("Pilot display name updated to "+name+". Discord sign-in is unchanged.");
  };
  window.sdasCloudQueueSave=()=>{if(ready)sync()};
- window.addEventListener("sdas-auth-ready",()=>{loadCloud()});
+ // A successful membership check always wakes the fleet loader, including
+ // returning users whose browser already held a valid Discord session.
+ window.addEventListener("sdas-auth-ready",()=>{if(!ready)void loadCloud()});
+ window.sdasFleetRetryCloudLoad=()=>loadCloud();
  const back=document.createElement("button");back.textContent="IMPORT MY EXISTING LOCAL SHIPS";back.className="btn";back.style.margin="8px 0";label.after(back);
  const refresh=document.createElement("button");refresh.textContent="REFRESH ORG FLEET";refresh.className="btn";refresh.style.margin="8px";back.after(refresh);
  refresh.onclick=async()=>{if(!ready||busy)return;await loadCloud();};
@@ -269,7 +297,9 @@
  })();
  import("https://esm.sh/@supabase/supabase-js@2").then(async mod=>{
    client=mod.createClient(SUPA,PUB,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});
+   // Subscribe first: Supabase can emit SIGNED_IN while the initial cloud
+   // read is awaiting getUser(), otherwise that event is missed.
+   client.auth.onAuthStateChange(()=>{setTimeout(()=>{if(!ready)void loadCloud()},150)});
    await loadCloud();
-   client.auth.onAuthStateChange(()=>{setTimeout(()=>{if(!ready)loadCloud()},400)});
  }).catch(e=>status("Connection module unavailable: "+e.message));
 })();
