@@ -67,6 +67,7 @@ assert "sdas-production-access" in html
 shutil.copy2("scripts/sdfm-production-login.js",target/"sdfm-production-login.js")
 html=html.replace("<head>",'<head><script src="/SDFM/sdfm-production-login.js"></script>',1)
 assert 'src="/SDFM/sdfm-production-login.js"' in html
+html=html.replace('src="/SDFM/sdfm-production-login.js"', 'src="/SDFM/sdfm-production-login.js?v=20261020-cloud-handoff"')
 # The cloud bridge and login area must not separately consume the OAuth callback.
 cloud_before='''import("https://esm.sh/@supabase/supabase-js@2").then(async mod=>{
    client=mod.createClient(SUPA,PUB,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});'''
@@ -76,9 +77,11 @@ assert html.count(cloud_before)==1, "Cloud bridge initializer changed"
 html=html.replace(cloud_before,cloud_after)
 assert 'window.sdasFleetSharedClientPromise.then(async sharedClient=>' in html
 assert 'mod.createClient(SUPA,PUB' not in html
+assert 'sdasFleetRetryCloudLoad' in html, "Fleet connection retry not staged"
+assert 'sdas-cloud-status' in html, "Fleet status feedback not staged"
 # Reference a fresh asset URL so cached 2026-era verification JavaScript is not reused.
 assert html.count('src="/SDFM/auth-preview.js"')==1
-html=html.replace('src="/SDFM/auth-preview.js"', 'src="/SDFM/auth-preview.js?v=20261020-auth-recovery"')
+html=html.replace('src="/SDFM/auth-preview.js"', 'src="/SDFM/auth-preview.js?v=20261020-cloud-handoff"')
 target.joinpath("index.html").write_text(html)
 # Pages serves case-sensitive folders; support user-typed lowercase URLs directly.
 lowercase = Path("dist/sdfm")
@@ -99,7 +102,7 @@ redirects.write_text(existing.rstrip() + ("\\n" if existing.strip() else "") + "
 # Prevent browsers from retaining a stale auth script during subsequent releases.
 headers=Path("dist/_headers")
 existing_headers=headers.read_text() if headers.exists() else ""
-fleet_headers="""\n/SDFM/\n  Cache-Control: no-cache, must-revalidate\n/SDFM/index.html\n  Cache-Control: no-cache, must-revalidate\n/SDFM/auth-preview.js\n  Cache-Control: no-cache, must-revalidate\n/sdfm/\n  Cache-Control: no-cache, must-revalidate\n/sdfm/index.html\n  Cache-Control: no-cache, must-revalidate\n"""
+fleet_headers="""\n/SDFM/\n  Cache-Control: no-cache, must-revalidate\n/SDFM/index.html\n  Cache-Control: no-cache, must-revalidate\n/SDFM/auth-preview.js\n  Cache-Control: no-cache, must-revalidate\n/SDFM/sdfm-production-login.js\n  Cache-Control: no-cache, must-revalidate\n/sdfm/\n  Cache-Control: no-cache, must-revalidate\n/sdfm/index.html\n  Cache-Control: no-cache, must-revalidate\n"""
 assert "/SDFM/auth-preview.js" not in existing_headers, "Review existing auth response headers"
 headers.write_text(existing_headers.rstrip()+"\n"+fleet_headers)
 print("Lowercase Fleet Manager redirects staged at dist/_redirects")
