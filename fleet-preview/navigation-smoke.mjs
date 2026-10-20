@@ -211,6 +211,31 @@ try {
   console.log("REGISTRY_MOBILE",JSON.stringify(registryMobile));
   if(!registryMobile.hasTable||registryMobile.rowDisplay!=='grid'||!registryMobile.label||registryMobile.overflow)
     throw Error("Mobile registry cards not usable: "+JSON.stringify(registryMobile));
+  // Inspect real pilot profile markup and font sizes before choosing responsive rules.
+  await page.locator('#nav [data-view="pilots"]').click();
+  await page.waitForTimeout(400);
+  const pilotDOM = await page.evaluate(() => {
+    const app=document.getElementById('app');
+    const tables=[...app.querySelectorAll('table')].map(t => ({
+      cls:t.className,outer:t.outerHTML.slice(0,1900),
+      parent:t.parentElement?.outerHTML.slice(0,200),
+      style:{width:Math.round(t.getBoundingClientRect().width),minWidth:getComputedStyle(t).minWidth}
+    }));
+    const btns=[...app.querySelectorAll('button')].map(b=>({text:b.textContent.slice(0,45),cls:b.className})).slice(0,18);
+    const headings=[...app.querySelectorAll('h2,h3,h4')].map(h=>({text:h.textContent.slice(0,50),parent:h.parentElement?.className})).slice(0,16);
+    return {tables,btns,headings, appHead:app.innerHTML.slice(0,1000)};
+  });
+  console.log('PILOT_DOM_AUDIT',JSON.stringify(pilotDOM));
+  // Also inspect active smallest text treatments (not static font declarations).
+  await page.locator('#nav [data-view="home"]').click();
+  await page.waitForTimeout(250);
+  const fontAudit=await page.evaluate(()=>{
+    const root=document.querySelector('#sdas-golden-live');
+    return [...root.querySelectorAll('.gbtn,.gmuted,.gtag,.gsmall,.gconnected,th,td,.gfoot,.gstate')]
+      .slice(0,22).map(e=>({sel:e.className||e.tagName,text:e.textContent.trim().slice(0,32),
+      size:getComputedStyle(e).fontSize,letterSpacing:getComputedStyle(e).letterSpacing}));
+  });
+  console.log('FONT_AUDIT',JSON.stringify(fontAudit));
   await page.locator('#nav [data-view="data"]').click();
   if(!await page.locator('#app').innerText().then(t=>t.includes('BACKUP / RESTORE')))throw Error('Mobile import tab does not render');
   console.log('BROWSER_ERRORS', JSON.stringify(errors.slice(0, 8)));
