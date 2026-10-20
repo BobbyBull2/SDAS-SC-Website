@@ -1414,6 +1414,9 @@ body>.shell,.shell{
     height:100%!important;
     object-fit:contain!important;
     object-position:center center!important;
+    /* Offset the extra transparent left margin baked into the combined SDAS wordmark. */
+    transform:translateX(-9%)!important;
+    transform-origin:center center!important;
   }
   #sdas-fleet-masthead .fleet-kicker {
     flex:0 0 auto!important;
