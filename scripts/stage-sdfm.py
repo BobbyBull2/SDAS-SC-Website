@@ -20,6 +20,12 @@ Path("dist/index.html").write_bytes(homepage)
 html=target.joinpath("index.html").read_text()
 for name in ("fleet-design.css","fleet-ui-polish.js","rsi-import.js","auth-preview.js"):
     html=html.replace('"/'+name+'"','"/SDFM/'+name+'"')
+# Clear the verified state and reload when the user signs out.
+auth_path=target/"auth-preview.js"
+auth=auth_path.read_text()
+auth=auth.replace("await sb.auth.signOut();window.sdasCloudLogout?.();",
+                  "await sb.auth.signOut();window.sdasCloudActive=false;location.reload();")
+auth_path.write_text(auth)
 html=html.replace("PREVIEW BUILD","LIVE FLEET MANAGER")
 html=html.replace("LOCAL DEMO CONFIGURATION","FLEET CONFIGURATION")
 assert 'src="/SDFM/auth-preview.js"' in html
@@ -35,7 +41,7 @@ content:"Sign in with Discord and verify SDAS membership to access the live flee
 display:block;margin:24px auto;max-width:600px;padding:28px;
 border:1px solid #3b91a4;border-radius:12px;text-align:center;
 background:#071e2a;color:#a9eaf3;font:600 16px/1.5 system-ui}
-#pilotSelect{display:none!important}
+#pilotSelect{display:none!important}\n#app button[onclick*="resetDemo"]{display:none!important}\n#app button[onclick*="addDemo"]{display:none!important}
 </style><script>
 (function(){
 function check(){document.documentElement.classList.toggle("sdas-cloud-verified",window.sdasCloudActive===true)}
