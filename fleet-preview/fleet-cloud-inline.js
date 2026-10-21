@@ -17,6 +17,62 @@
    window.sdasFleetCloudStatus=String(t);
    window.dispatchEvent(new CustomEvent("sdas-cloud-status",{detail:String(t)}));
  };
+ // Signed-in members with stale or failed verification must not see
+ // the demo dataset or a misleading empty registry. Show a recovery panel.
+ const recoveryStyle=document.createElement("style");
+ recoveryStyle.textContent=`
+  html.sdas-preview-verification-needed #app,
+  html.sdas-preview-verification-needed #sdas-golden-live{display:none!important}
+  #sdas-preview-recovery{display:none;max-width:720px;margin:22px auto 28px;
+    padding:22px 26px;border:1px solid #51bfd3;border-radius:12px;
+    background:#071f2ddd;color:#d5f5fb;font:500 16px/1.5 system-ui,sans-serif}
+  #sdas-preview-recovery h3{color:#f5dba7;margin:0 0 9px;font-size:20px}
+  #sdas-preview-recovery p{margin:0 0 15px;overflow-wrap:break-word}
+  #sdas-preview-recover-button{padding:11px 16px;min-height:44px;
+    border:1px solid #61cde2;border-radius:7px;cursor:pointer;
+    background:#164358;color:#d6f6fc;font:700 14px system-ui,sans-serif}
+ `;
+ document.head.append(recoveryStyle);
+ const recoveryPanel=document.createElement("section");
+ recoveryPanel.id="sdas-preview-recovery";
+ recoveryPanel.setAttribute("role","status");
+ recoveryPanel.setAttribute("aria-live","polite");
+ const recoveryTitle=document.createElement("h3");
+ const recoveryMessage=document.createElement("p");
+ const recoveryButton=document.createElement("button");
+ recoveryButton.id="sdas-preview-recover-button";
+ recoveryButton.type="button";
+ recoveryButton.textContent="REFRESH SDAS ROLES";
+ recoveryButton.addEventListener("click",()=>{
+   const actions=[...document.querySelectorAll("#sdas-auth-actions button")];
+   const action=actions.find(b=>/RECONNECT DISCORD/i.test(b.textContent||""))||
+     actions.find(b=>/RETRY ROLE CHECK|REFRESH SDAS ROLES|VERIFY SDAS ROLES/i.test(b.textContent||""));
+   if(action)action.click();
+   else recoveryMessage.textContent="Sign in with Discord to verify SDAS membership.";
+ });
+ recoveryPanel.append(recoveryTitle,recoveryMessage,recoveryButton);
+ const recoveryHost=document.querySelector(".shell")||document.body;
+ recoveryHost.insertAdjacentElement("afterend",recoveryPanel);
+ const updateBlocked=()=>{
+   const auth=window.sdasFleetLoginState;
+   const blocked=!!auth?.signedIn && !ready;
+   document.documentElement.classList.toggle("sdas-preview-verification-needed",blocked);
+   recoveryPanel.style.display=blocked?"block":"none";
+   if(blocked){
+     recoveryTitle.textContent=auth.verified?"Loading secure fleet…":"Fleet access requires verification";
+     recoveryMessage.textContent=window.sdasFleetCloudStatus||auth.reason||"Refresh your SDAS role or reconnect Discord.";
+     const actions=[...document.querySelectorAll("#sdas-auth-actions button")];
+     recoveryButton.textContent=actions.some(b=>/RECONNECT DISCORD/i.test(b.textContent||""))?
+       "RECONNECT DISCORD":"REFRESH SDAS ROLES";
+   }
+ };
+ window.addEventListener("sdas-fleet-auth-state",updateBlocked);
+ window.addEventListener("sdas-cloud-status",updateBlocked);
+ window.addEventListener("sdas-fleet-verification-needed",()=>{
+   if(ready){ready=false;user=null;window.sdasCloudActive=false;}
+   updateBlocked();
+ });
+ window.addEventListener("sdas-fleet-loaded",updateBlocked);
  const summary=s=>({id:s.id,owner_id:user.id,model_name:String(s.name||"Unknown ship").slice(0,150),nickname:s.nickname||null,ownership:({"Pledged":"pledged","aUEC":"auec","Loaner":"loaner","Other":"other"})[s.origin]||"other",role:s.role||null,paint:s.paint||null,notes:s.notes||null,org_visible:s.visibility==="org",show_loadout:s.visibility==="org"});
  const fromRow=(r,photos)=>({id:r.id,owner:r.owner_id,name:r.model_name,nickname:r.nickname||"",origin:({"pledged":"Pledged","auec":"aUEC","loaner":"Loaner","other":"Other"})[r.ownership]||"Other",role:r.role||"Other",visibility:r.org_visible?"org":"private",paint:r.paint||"",notes:r.notes||"",image:photos[r.id]||"",loadout:{}});
  const ROLE_RANK={admin:"super_admin",officer:"board_member",member:"patch",prospect:"prospect"};
