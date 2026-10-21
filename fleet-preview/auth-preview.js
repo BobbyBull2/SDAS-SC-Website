@@ -161,7 +161,7 @@
  const lib=await import("https://esm.sh/@supabase/supabase-js@2");
  const sb=lib.createClient(url,key,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});
  let renderNumber=0;
- const attemptedAutomaticChecks=new Set();
+ const attemptedAutomaticChecks=new Map();
  const expectedRank={admin:"super_admin",officer:"board_member",member:"patch",prospect:"prospect"};
  const isVerified=m=>!!(m && expectedRank[m.role]===m.discord_rank &&
    m.last_role_checked_at && Date.now()-Date.parse(m.last_role_checked_at)>=0 &&
@@ -194,6 +194,7 @@
     !membership?"Fleet access requires verification":
     verified?"Verified SDAS "+membership.role+" access":"Fleet access requires verification";
   announce(true,verified,reason);
+  if(!verified)window.dispatchEvent(new Event("sdas-fleet-verification-needed"));
   state.textContent=verified?name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch",prospect:"Prospect — Read Only"}[membership.role]||"Restricted")+
     " access":name+" • "+reason;
   if(verified)window.dispatchEvent(new Event("sdas-auth-ready"));
@@ -216,6 +217,7 @@
         body:JSON.stringify({provider_token:session.provider_token})});
       const json=await res.json().catch(()=>({}));
       if(!res.ok||json.verified===false)throw Error(json.error||"SDAS verification was not approved");
+      attemptedAutomaticChecks.delete(user.id);
       await render();
       window.dispatchEvent(new Event("sdas-auth-ready"));
     }catch(e){
@@ -227,8 +229,9 @@
   };
   button(membership?"REFRESH SDAS ROLES":"VERIFY SDAS ROLES",verifyRoles);
   button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
-  if(!verified && !membershipError && !attemptedAutomaticChecks.has(user.id)){
-    attemptedAutomaticChecks.add(user.id);
+  if(!verified && !membershipError &&
+    Date.now()-(attemptedAutomaticChecks.get(user.id)||0)>2*60*1000){
+    attemptedAutomaticChecks.set(user.id,Date.now());
     void verifyRoles();
   }
  };
