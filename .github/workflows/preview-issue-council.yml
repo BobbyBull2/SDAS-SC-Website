@@ -1,0 +1,50 @@
+name: SDAS Top 5 Issue Council Preview
+on:
+  push:
+    branches: [preview/issue-council-v1]
+    paths:
+      - 'src/**'
+      - 'supabase/**'
+      - '.github/workflows/preview-issue-council.yml'
+      - 'package-lock.json'
+      - 'package.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: issue-council-preview
+  cancel-in-progress: true
+jobs:
+  build-preview:
+    name: Test and deploy SDAS issue preview
+    if: github.ref == 'refs/heads/preview/issue-council-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout preview branch
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Run project tests
+        run: npm test
+      - name: Build preview website
+        run: npm run build
+      - name: Verify SDAS Issue Council is only in preview assets
+        run: |
+          test -s dist/index.html
+          test -s dist/new-members/index.html
+          grep -R -q 'SDAS TOP 5 ISSUES' dist/assets
+          grep -R -q 'ADD YOUR ISSUE' dist/assets
+          test -s src/issue-council.css
+          echo 'Preview Issue Council assets are present.'
+      - name: Deploy Cloudflare Pages preview (not production)
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=sdas-sc-website --branch=issue-council-review
