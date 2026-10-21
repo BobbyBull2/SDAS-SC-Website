@@ -56,7 +56,11 @@ jobs:
           fleet=Path("dist/SDFM/index.html").read_text()
           assert '<div id="root">' in home
           assert '/SDFM/auth-preview.js' in fleet
-          assert 'auth-preview.js?v=20261020-prospect-readonly' in fleet
+          assert 'auth-preview.js?v=20261021-session-recovery' in fleet
+          assert 'Fleet access requires verification' in fleet
+          assert 'validMembership(m)' in fleet
+          assert 'client.from("fleet_ships")' in fleet
+          assert 'client.from("preview_fleet_ships")' not in fleet
           assert 'sdasFleetSharedClientPromise' in fleet
           assert 'sdas-prospect-readonly-style' in fleet
           assert 'sdasFleetProspectReadOnly' in fleet
