@@ -52,3 +52,8 @@
 .issue-disclaimer{margin-top:14px;color:#95a8ad;font-size:12px;line-height:1.55}
 .issue-message{color:#9ee5d8;font:600 13px 'Barlow',sans-serif;margin-top:12px}
 @media(max-width:700px){.issue-toolbar{gap:8px}.issue-search{flex-basis:100%}.issue-primary,.issue-external{flex:1 1 auto;padding:10px}.issue-card{flex-basis:80vw;max-width:300px}.issue-add-form{grid-template-columns:1fr}.issue-add-form>label:nth-of-type(1),.issue-form-bottom{grid-column:1}.issue-submit-panel{padding:14px}.issue-heading .section-heading{align-items:center}}
+
+/* RSI sign-in is a convenience link, not a gate on public SDAS issue cards. */
+.issue-rsi-login{border-color:#3d797d;color:#cff5ee;background:linear-gradient(145deg,#183c43,#10272d)}
+.issue-rsi-hint{color:#a7b9bd;font-size:12px;line-height:1.5;margin:0 0 12px}
+.issue-rsi-hint strong{color:#e6d1a6}
