@@ -147,9 +147,9 @@ export function IssueCouncil(){
   <p className="issue-rsi-hint">The SDAS issue list is public. Sign in on <strong>RSI's official website</strong> in a new tab before opening reports to participate; SDAS never receives your RSI credentials.</p>
   <div className="issue-card-rail" ref={rail} tabIndex={0} aria-label="SDAS issues, horizontal scrolling">
    {slots.map((issue,i)=>issue?<article className={'issue-card '+(i<5?'issue-featured':'')} key={issue.issue_code}>
-    <div className="issue-card-top"><span>#{String(i+1).padStart(2,'0')}</span><strong>{'id' in issue?(i<5?'SDAS PRIORITY':'SDAS QUEUE'):'CIG KNOWN ISSUE'}</strong></div>
+    <div className="issue-card-top"><span>#{String(i+1).padStart(2,'0')}</span><strong>{'id' in issue?(i<5?'SDAS PRIORITY':'SDAS QUEUE'):'4.10+ ISSUE'}</strong></div>
     <span className="issue-card-code">{issue.issue_code}</span><h3>{issue.title}</h3>
-    <p className="issue-added">{'id' in issue ? <>ADDED BY: {issue.is_anonymous?'Anonymous':issue.display_name}</> : 'SOURCE: OFFICIAL CIG KNOWN ISSUES'}</p>
+    <p className="issue-added">{'id' in issue ? <>ADDED BY: {issue.is_anonymous?'Anonymous':issue.display_name}</> : 'SOURCE: PUBLIC ISSUE INDEX · BUILD: '+issue.version}</p>
     <p className="issue-card-note">Official CIG status and votes: view on RSI</p>
     <a href={issue.issue_url} target="_blank" rel="noopener noreferrer" className="issue-card-button">VIEW &amp; PROMOTE <ArrowUpRight size={16}/></a>
     {'id' in issue&&canModerate&&<button className="issue-remove" onClick={()=>void remove(issue.id)} type="button" aria-label={'Remove '+issue.issue_code}>Remove from preview</button>}
@@ -164,7 +164,7 @@ export function IssueCouncil(){
   {loading&&<p className="feed-notice">Loading SDAS Issue Council preview…</p>}
   {feedError&&<p className="feed-notice" role="alert">{feedError}</p>}
   {message&&<p className="issue-message" role="status">{message}</p>}
-  <div className="issue-meta"><span><ShieldCheck size={15}/> {reports.length} member-submitted issue{reports.length===1?'':'s'} · SDAS entries ranked newest first</span><span>Featured fallback: <a href={cigKnownIssuesSource} target="_blank" rel="noopener noreferrer">CIG Known Issues</a> (updated {cigKnownIssuesSourceUpdated}) • Not vote-ranked</span></div>
+  <div className="issue-meta"><span><ShieldCheck size={15}/> {reports.length} member-submitted issue{reports.length===1?'':'s'} · SDAS entries ranked newest first</span><span>Featured fallback: <a href={cigKnownIssuesSource} target="_blank" rel="noopener noreferrer">4.10+ Issue Council reports</a> (curated {cigKnownIssuesSourceUpdated}) • Build versions from third-party issue index, not vote-ranked</span></div>
   {showForm&&<div className="issue-submit-panel">
     <div className="issue-panel-header"><div><p className="eyebrow">SDAS / BUG OPERATIONS</p><h3>ADD AN ISSUE COUNCIL REPORT</h3></div><button type="button" aria-label="Close issue form" onClick={()=>setShowForm(false)}><X/></button></div>
     <div className="issue-auth">
