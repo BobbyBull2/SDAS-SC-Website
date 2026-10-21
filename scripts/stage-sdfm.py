@@ -100,7 +100,10 @@ html.sdas-prospect-readonly #sdas-top-action-edit{display:none!important}
   window.addEventListener('sdas-cloud-status',readonly);
 })();
 </script>"""
-html=html.replace("</head>",gate+prospect_style+"</head>",1)
+# Use the homepage's approved reclining astronaut for Fleet browser/bookmark icons.
+favicon_tags = '<link rel="icon" type="image/png" sizes="128x128" href="/images/sdas-spaceman.png"/><link rel="apple-touch-icon" href="/images/sdas-spaceman.png"/>'
+html=html.replace("</head>",favicon_tags+gate+prospect_style+"</head>",1)
+assert html.count('rel="icon"') == 1 and html.count('rel="apple-touch-icon"') == 1
 assert "sdas-production-access" in html
 # Load storage selection before the bundled cloud bridge and Discord client.
 shutil.copy2("scripts/sdfm-production-login.js",target/"sdfm-production-login.js")
