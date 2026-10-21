@@ -101,7 +101,7 @@ html.sdas-prospect-readonly #sdas-top-action-edit{display:none!important}
 })();
 </script>"""
 # Use the homepage's approved reclining astronaut for Fleet browser/bookmark icons.
-favicon_tags = '<link rel="icon" type="image/png" sizes="128x128" href="/images/sdas-spaceman.png"/><link rel="apple-touch-icon" href="/images/sdas-spaceman.png"/>'
+favicon_tags = '<link rel="icon" type="image/png" sizes="128x128" href="/images/sdas-spaceman.png?v=20261021-exact-recliner"/><link rel="shortcut icon" type="image/png" href="/images/sdas-spaceman.png?v=20261021-exact-recliner"/><link rel="apple-touch-icon" sizes="128x128" href="/images/sdas-spaceman.png?v=20261021-exact-recliner"/>'
 html=html.replace("</head>",favicon_tags+gate+prospect_style+"</head>",1)
 assert html.count('rel="icon"') == 1 and html.count('rel="apple-touch-icon"') == 1
 assert "sdas-production-access" in html
