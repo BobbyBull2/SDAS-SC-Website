@@ -37,7 +37,6 @@ jobs:
           test -s fleet-preview/fleet-cloud-inline.js
           test -s fleet-preview/rsi-import.js
           cp fleet-preview/rsi-import.js dist/rsi-import.js
-          cp fleet-preview/asop-import.js dist/asop-import.js
           cp fleet-preview/fleet-ui-polish.js dist/fleet-ui-polish.js
           python3 - <<'PY'
           from pathlib import Path
@@ -98,7 +97,7 @@ jobs:
           </script>'''
           s=s.replace('</body>',nasa_script+'</body>',1)
           assert '</script></body>' in s
-          s=s.replace('</script></body>', '\n'+bridge+'\n</script><script defer src="/rsi-import.js"></script><script defer src="/asop-import.js"></script><script type="module" src="/auth-preview.js"></script></body>',1)
+          s=s.replace('</script></body>', '\n'+bridge+'\n</script><script defer src="/rsi-import.js"></script><script type="module" src="/auth-preview.js"></script></body>',1)
           # Diagnostic: inspect only short code fragments around relevant app selectors.
           for needle in ['const app=', 'id="app"', 'id="view"', 'id="viewRoot"', 'function dataPage(', 'function navTo(', 'function render(', 'BACKUP / RESTORE', 'PLEDGED SHIP CSV IMPORT']:
             index=s.find(needle)
@@ -140,7 +139,6 @@ jobs:
           for file in /tmp/fleet-script-*.js; do node --check "$file"; done
           node --check dist/auth-preview.js
           node --check dist/rsi-import.js
-          node --check dist/asop-import.js
           node --check dist/fleet-ui-polish.js
       - name: Browser navigation smoke test
         run: |
