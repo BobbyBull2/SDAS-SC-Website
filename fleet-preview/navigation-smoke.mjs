@@ -18,6 +18,35 @@ try {
     navParent:document.querySelector('#nav')?.parentElement?.tagName
   }));
   console.log('INITIAL_DOM',JSON.stringify(await snapshot()));
+  // Signed-in/expired-member simulation: a denied read must be a recovery
+  // state, not an empty table. Unsigned preview visitors retain demo navigation.
+  await page.evaluate(()=>{
+    window.sdasFleetLoginState={signedIn:true,verified:false,reason:"Fleet access requires verification"};
+    window.dispatchEvent(new Event("sdas-fleet-auth-state"));
+  });
+  await page.waitForTimeout(100);
+  const expiredView=await page.evaluate(()=>({
+    blocked:document.documentElement.classList.contains("sdas-preview-verification-needed"),
+    appHidden:getComputedStyle(document.querySelector("#app")).display==="none",
+    banner:document.querySelector("#sdas-preview-recovery")?.innerText,
+    button:document.querySelector("#sdas-preview-recover-button")?.textContent
+  }));
+  console.log("SESSION_EXPIRED_VIEW",JSON.stringify(expiredView));
+  if(!expiredView.blocked||!expiredView.appHidden||
+     !expiredView.banner?.includes("Fleet access requires verification")||
+     !/REFRESH SDAS ROLES|RECONNECT DISCORD/.test(expiredView.button||""))
+     throw Error("Expired verification renders misleading fleet state: "+JSON.stringify(expiredView));
+  await page.evaluate(()=>{
+    window.sdasFleetLoginState={signedIn:false,verified:false,reason:"Sign in with Discord"};
+    window.dispatchEvent(new Event("sdas-fleet-auth-state"));
+  });
+  const resumed=await page.evaluate(()=>({
+    blocked:document.documentElement.classList.contains("sdas-preview-verification-needed"),
+    appVisible:getComputedStyle(document.querySelector("#app")).display!=="none"
+  }));
+  if(resumed.blocked||!resumed.appVisible)
+    throw Error("Recovered preview doesn't restore navigation: "+JSON.stringify(resumed));
+
   await page.evaluate(() => {
     const originalRemove = Element.prototype.remove;
     Element.prototype.remove = function(...args) {
