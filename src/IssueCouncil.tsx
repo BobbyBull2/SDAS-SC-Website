@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, LockKeyhole, Plus, Search, ShieldCheck, X } from 'lucide-react';
 import './issue-council.css';
+import { cigKnownIssues, cigKnownIssuesSource, cigKnownIssuesSourceUpdated } from './cig-known-issues';
 
 // Issue Council URLs are user navigation only. CIG reports are never created or
 // promoted by this app; visitors act on the official RSI Issue Council.
@@ -122,8 +123,15 @@ export function IssueCouncil(){
    if(error){setMessage('Unable to remove this issue.');return;}
    await readReports(sb);setMessage('Issue removed from preview.');
  };
- const visible=reports.filter(i=>(i.title+' '+i.issue_code+' '+i.display_name).toLowerCase().includes(search.trim().toLowerCase()));
- const slots=Array.from({length:Math.max(10,Math.min(visible.length,25))},(_,i)=>visible[i]||null);
+ const sdaspool=reports.filter(i=>(i.title+' '+i.issue_code+' '+i.display_name).toLowerCase().includes(search.trim().toLowerCase()));
+ const cigpool=cigKnownIssues.filter(i=>!reports.some(r=>r.issue_code===i.issue_code)&&
+   (i.title+' '+i.issue_code).toLowerCase().includes(search.trim().toLowerCase()));
+ // Member submissions always win priority. The official known-issues fallback
+ // fills unclaimed featured slots only; slots 6–10 remain available for Dudes.
+ const featured=[...sdaspool.slice(0,5),...cigpool].slice(0,5);
+ const queued=sdaspool.slice(5,10);
+ const slots=Array.from({length:10},(_,i)=>i<5?(featured[i]||null):(queued[i-5]||null));
+
  return <section className="section issue-council" id="issue-council" aria-labelledby="sdas-issues-heading">
   <div className="section-heading issue-heading">
    <div><p className="eyebrow">COMMUNITY OPERATIONS / CIG ISSUE COUNCIL</p><h2 id="sdas-issues-heading">SDAS TOP 5 ISSUES</h2><p className="toolkit-subtitle">Our crew's bugs take priority. Help fix the 'verse — one report at a time.</p></div>
@@ -136,13 +144,13 @@ export function IssueCouncil(){
     <button className="issue-primary" type="button" onClick={()=>setShowForm(v=>!v)}><Plus size={16}/> ADD YOUR ISSUE</button>
   </div>
   <div className="issue-card-rail" ref={rail} tabIndex={0} aria-label="SDAS issues, horizontal scrolling">
-   {slots.map((issue,i)=>issue?<article className={'issue-card '+(i<5?'issue-featured':'')} key={issue.id}>
-    <div className="issue-card-top"><span>#{String(i+1).padStart(2,'0')}</span><strong>{i<5?'SDAS TOP 5':'SDAS QUEUE'}</strong></div>
+   {slots.map((issue,i)=>issue?<article className={'issue-card '+(i<5?'issue-featured':'')} key={issue.issue_code}>
+    <div className="issue-card-top"><span>#{String(i+1).padStart(2,'0')}</span><strong>{'submitted_by' in issue?(i<5?'SDAS PRIORITY':'SDAS QUEUE'):'CIG KNOWN ISSUE'}</strong></div>
     <span className="issue-card-code">{issue.issue_code}</span><h3>{issue.title}</h3>
-    <p className="issue-added">ADDED BY: {issue.is_anonymous?'Anonymous':issue.display_name}</p>
+    <p className="issue-added">{'submitted_by' in issue ? <>ADDED BY: {issue.is_anonymous?'Anonymous':issue.display_name}</> : 'SOURCE: OFFICIAL CIG KNOWN ISSUES'}</p>
     <p className="issue-card-note">Official CIG status and votes: view on RSI</p>
     <a href={issue.issue_url} target="_blank" rel="noopener noreferrer" className="issue-card-button">VIEW &amp; PROMOTE <ArrowUpRight size={16}/></a>
-    {canModerate&&<button className="issue-remove" onClick={()=>void remove(issue.id)} type="button" aria-label={'Remove '+issue.issue_code}>Remove from preview</button>}
+    {'submitted_by' in issue&&canModerate&&<button className="issue-remove" onClick={()=>void remove(issue.id)} type="button" aria-label={'Remove '+issue.issue_code}>Remove from preview</button>}
    </article>:<article className="issue-card issue-empty" key={'empty-'+i}>
     <div className="issue-card-top"><span>#{String(i+1).padStart(2,'0')}</span><strong>{i<5?'OPEN PRIORITY':'AVAILABLE SLOT'}</strong></div>
     <span className="issue-empty-icon"><Plus size={27}/></span>
@@ -154,7 +162,7 @@ export function IssueCouncil(){
   {loading&&<p className="feed-notice">Loading SDAS Issue Council preview…</p>}
   {feedError&&<p className="feed-notice" role="alert">{feedError}</p>}
   {message&&<p className="issue-message" role="status">{message}</p>}
-  <div className="issue-meta"><span><ShieldCheck size={15}/> {reports.length} member-submitted issue{reports.length===1?'':'s'} · SDAS entries ranked newest first</span><span>Swipe sideways to browse • Empty slots are placeholders, not live CIG rankings</span></div>
+  <div className="issue-meta"><span><ShieldCheck size={15}/> {reports.length} member-submitted issue{reports.length===1?'':'s'} · SDAS entries ranked newest first</span><span>Featured fallback: <a href={cigKnownIssuesSource} target="_blank" rel="noopener noreferrer">CIG Known Issues</a> (updated {cigKnownIssuesSourceUpdated}) • Not vote-ranked</span></div>
   {showForm&&<div className="issue-submit-panel">
     <div className="issue-panel-header"><div><p className="eyebrow">SDAS / BUG OPERATIONS</p><h3>ADD AN ISSUE COUNCIL REPORT</h3></div><button type="button" aria-label="Close issue form" onClick={()=>setShowForm(false)}><X/></button></div>
     <div className="issue-auth">
