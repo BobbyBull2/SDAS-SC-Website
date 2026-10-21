@@ -19,63 +19,105 @@
  };
  const summary=s=>({id:s.id,owner_id:user.id,model_name:String(s.name||"Unknown ship").slice(0,150),nickname:s.nickname||null,ownership:({"Pledged":"pledged","aUEC":"auec","Loaner":"loaner","Other":"other"})[s.origin]||"other",role:s.role||null,paint:s.paint||null,notes:s.notes||null,org_visible:s.visibility==="org",show_loadout:s.visibility==="org"});
  const fromRow=(r,photos)=>({id:r.id,owner:r.owner_id,name:r.model_name,nickname:r.nickname||"",origin:({"pledged":"Pledged","auec":"aUEC","loaner":"Loaner","other":"Other"})[r.ownership]||"Other",role:r.role||"Other",visibility:r.org_visible?"org":"private",paint:r.paint||"",notes:r.notes||"",image:photos[r.id]||"",loadout:{}});
- // Auth can finish while a cloud request is in progress. Queue the follow-up
- // instead of discarding the SIGNED_IN event before the session becomes available.
+ // Retry safely when Discord verification finishes during a cloud request.
+ const ROLE_RANK={admin:"super_admin",officer:"board_member",member:"patch",prospect:"prospect"};
+ const validMembership=m=>!!(m && ROLE_RANK[m.role]===m.discord_rank &&
+   Number.isFinite(Date.parse(m.last_role_checked_at)) &&
+   Date.now()-Date.parse(m.last_role_checked_at)>=0 &&
+   Date.now()-Date.parse(m.last_role_checked_at)<12*60*60*1000);
  let activeLoad=null,reloadRequested=false;
+ function requireVerification(message){
+   // Keep existing data unchanged. The production gate will hide the fleet
+   // until verified again; never suggest the registry was emptied.
+   ready=false;user=null;window.sdasCloudActive=false;
+   status(message||"Fleet access requires verification. Refresh roles or reconnect Discord.");
+   window.sdasGoldenRefresh?.();
+ }
  async function loadCloud(){
-  if(activeLoad){reloadRequested=true;return activeLoad;}
-  activeLoad=loadCloudOnce();
-  try{return await activeLoad;}
-  finally{
-   activeLoad=null;
-   if(reloadRequested){reloadRequested=false;setTimeout(()=>{void loadCloud()},0);}
-  }
+   if(activeLoad){reloadRequested=true;return activeLoad;}
+   activeLoad=loadCloudOnce();
+   try{return await activeLoad;}
+   finally{
+     activeLoad=null;
+     if(reloadRequested){reloadRequested=false;setTimeout(()=>void loadCloud(),0);}
+   }
  }
  async function loadCloudOnce(){
-  if(!client){status("Fleet connection is initializing. Please retry.");return;}
-  let u;
-  try{
-   const authResult=await client.auth.getUser();
-   if(authResult.error)throw authResult.error;
-   u=authResult.data?.user;
-  }catch(e){status("Unable to read Discord session: "+(e.message||String(e)));return;}
-  if(!u){status("Waiting for Discord to finish signing in…");return;}
-  const {data:m,error:membershipError}=await client.from("sdas_memberships").select("role").eq("user_id",u.id).maybeSingle();
-  if(membershipError){status("Membership read failed: "+membershipError.message);return;}
-  if(!m){status("Sign in and verify SDAS membership to load shared fleets.");return;}
-  const prospect=m.role==="prospect";
-  window.sdasFleetProspectReadOnly=prospect;
-  document.documentElement.classList.toggle("sdas-prospect-readonly",prospect);
-  user=u;booting=true;
-  try{
-   const [profiles,ships,loadouts,photos]=await Promise.all([
-    client.from("pilot_profiles").select("user_id,display_name,rsi_handle"),
-    client.from("fleet_ships").select("*").order("created_at",{ascending:true}),
-    client.from("ship_loadouts").select("ship_id,components,name"),
-    client.from("ship_photos").select("ship_id,object_path")
-   ]);
-   for(const res of [profiles,ships,loadouts,photos])if(res.error)throw res.error;
-   const photoMap={};
-   for(const p of photos.data||[]){const {data:sign}=await client.storage.from("fleet-photos").createSignedUrl(p.object_path,3600);if(sign?.signedUrl)photoMap[p.ship_id]=sign.signedUrl;}
-   db={members:(profiles.data||[]).map(p=>({id:p.user_id,name:p.display_name,handle:p.rsi_handle||"",role:"Member"})),ships:(ships.data||[]).map(s=>fromRow(s,photoMap))};
-   // Other ship owners may not have a visible pilot_profiles row due to missing
-   // profile setup or read permissions. Keep their ships visible and show a
-   // truthful, readable fallback instead of the legacy 'Unknown member' label.
-   for(const ownerId of new Set(db.ships.map(s=>s.owner).filter(Boolean))){
-     if(!db.members.some(m=>String(m.id)===String(ownerId)))
-       db.members.push({id:ownerId,name:"Pilot profile unavailable",handle:"",role:"Member"});
+   if(!client){status("Fleet connection is initializing. Please retry.");return;}
+   let u;
+   try{
+     const response=await client.auth.getUser();
+     if(response.error)throw response.error;
+     u=response.data?.user;
+   }catch(e){
+     requireVerification("Fleet access requires verification. Reconnect Discord. "+
+       (e?.message||String(e)));return;
    }
-   if(!db.members.find(m=>m.id===u.id))db.members.push({id:u.id,name:u.user_metadata?.full_name||"Pilot",handle:"",role:"Member"});
-   for(const l of loadouts.data||[]){const ship=db.ships.find(s=>s.id===l.ship_id);if(ship)ship.loadout=l.components||{};}
-   current=u.id;known=new Set(db.ships.filter(s=>s.owner===current).map(s=>s.id));ready=true;
-   const selector=document.querySelector("#pilotSelect");
-   if(selector){selector.value=current;selector.disabled=true;selector.style.display="none";}
-   const demoOptions=document.querySelector("#pilotSelect");if(demoOptions?.parentElement)demoOptions.parentElement.style.opacity=".5";
-   window.sdasCloudActive=true;
-   selected=null;render();
-   status("Connected as "+who(current).name+" • "+known.size+" owned vessels • shared registry live. Changes sync to Supabase.");
-  }catch(e){status("Could not load fleet: "+e.message+" (local demo retained)");}
-  finally{booting=false;}
+   if(!u){requireVerification("Sign in with Discord to access the fleet.");return;}
+   const {data:m,error:membershipError}=await client.from("sdas_memberships")
+     .select("role,discord_rank,last_role_checked_at").eq("user_id",u.id).maybeSingle();
+   if(membershipError){
+     requireVerification("Membership check failed: "+membershipError.message);
+     return;
+   }
+   if(!validMembership(m)){
+     requireVerification("Fleet access requires verification. Refresh SDAS Roles or reconnect Discord.");
+     return;
+   }
+   const prospect=m.role==="prospect";
+   window.sdasFleetProspectReadOnly=prospect;
+   document.documentElement.classList.toggle("sdas-prospect-readonly",prospect);
+   user=u;booting=true;
+   try{
+     const [profiles,ships,loadouts,photos]=await Promise.all([
+       client.from("pilot_profiles").select("user_id,display_name,rsi_handle"),
+       client.from("fleet_ships").select("*").order("created_at",{ascending:true}),
+       client.from("ship_loadouts").select("ship_id,components,name"),
+       client.from("ship_photos").select("ship_id,object_path")
+     ]);
+     for(const res of [profiles,ships,loadouts,photos])if(res.error)throw res.error;
+     // RLS may silently return [] when verification expires during the read.
+     // Recheck before accepting a genuinely empty registry.
+     const {data:confirmed,error:checkError}=await client.from("sdas_memberships")
+       .select("role,discord_rank,last_role_checked_at").eq("user_id",u.id).maybeSingle();
+     if(checkError||!validMembership(confirmed)){
+       requireVerification("Fleet access requires verification. Reconnect Discord.");
+       return;
+     }
+     const photoMap={};
+     for(const p of photos.data||[]){
+       const {data:sign}=await client.storage.from("fleet-photos")
+         .createSignedUrl(p.object_path,3600);
+       if(sign?.signedUrl)photoMap[p.ship_id]=sign.signedUrl;
+     }
+     db={members:(profiles.data||[]).map(p=>({id:p.user_id,name:p.display_name,handle:p.rsi_handle||"",role:"Member"})),
+         ships:(ships.data||[]).map(s=>fromRow(s,photoMap))};
+     for(const ownerId of new Set(db.ships.map(s=>s.owner).filter(Boolean))){
+       if(!db.members.some(m=>String(m.id)===String(ownerId)))
+         db.members.push({id:ownerId,name:"Pilot profile unavailable",handle:"",role:"Member"});
+     }
+     if(!db.members.some(m=>m.id===u.id))
+       db.members.push({id:u.id,name:u.user_metadata?.full_name||"Pilot",handle:"",role:"Member"});
+     for(const l of loadouts.data||[]){
+       const ship=db.ships.find(s=>s.id===l.ship_id);
+       if(ship)ship.loadout=l.components||{};
+     }
+     current=u.id;
+     known=new Set(db.ships.filter(s=>s.owner===current).map(s=>s.id));
+     ready=true;
+     const selector=document.querySelector("#pilotSelect");
+     if(selector){selector.value=current;selector.disabled=true;selector.style.display="none";}
+     if(selector?.parentElement)selector.parentElement.style.opacity=".5";
+     window.sdasCloudActive=true;
+     selected=null;render();
+     window.sdasGoldenRefresh?.();
+     status("Connected as "+who(current).name+" • "+
+       (known.size?known.size+" owned vessels":"No personal ships added yet")+
+       " • shared registry live. Changes sync to Supabase.");
+   }catch(e){
+     ready=false;window.sdasCloudActive=false;
+     status("Fleet loading failed: "+(e?.message||String(e))+". Retry Fleet Connection.");
+   }finally{booting=false;}
  }
  async function uploadPhoto(ship){
    if(!ship.image?.startsWith("data:image/"))return;
@@ -168,11 +210,14 @@
  window.sdasCloudQueueSave=()=>{if(ready&&!window.sdasFleetProspectReadOnly)sync()};
  // A successful membership check always wakes the fleet loader, including
  // returning users whose browser already held a valid Discord session.
- window.addEventListener("sdas-auth-ready",()=>{if(!ready)void loadCloud()});
+ window.addEventListener("sdas-auth-ready",()=>{void loadCloud()});
+ window.addEventListener("sdas-fleet-verification-needed",()=>{
+   if(ready||window.sdasCloudActive)requireVerification("Fleet access requires verification. Refresh roles or reconnect Discord.");
+ });
  window.sdasFleetRetryCloudLoad=()=>loadCloud();
  const back=document.createElement("button");back.textContent="IMPORT MY EXISTING LOCAL SHIPS";back.className="btn";back.style.margin="8px 0";label.after(back);
  const refresh=document.createElement("button");refresh.textContent="REFRESH ORG FLEET";refresh.className="btn";refresh.style.margin="8px";back.after(refresh);
- refresh.onclick=async()=>{if(!ready||busy)return;await loadCloud();};
+ refresh.onclick=async()=>{if(busy)return;await loadCloud();};
  dedupeCloudCommands();
  back.onclick=async()=>{
    if(window.sdasFleetProspectReadOnly)return alert("Prospect access is read-only.");
@@ -262,7 +307,7 @@
   const owned=ready&&user?db.ships.filter(x=>x.owner===user.id):[];
   const org=ready&&user?db.ships.filter(x=>x.visibility==="org"):[];
   const role=document.querySelector("#sdas-auth-state")?.textContent?.trim()||"Discord role verification required";
-  const digest=JSON.stringify([!!ready,user?.id,owned.map(x=>[x.id,x.name,x.role,x.visibility]),org.length,role]);
+  const digest=JSON.stringify([!!ready,user?.id,window.sdasFleetCloudStatus,owned.map(x=>[x.id,x.name,x.role,x.visibility]),org.length,role]);
   const existing=document.getElementById("sdas-golden-live");
   if(existing&&digest===last){original.style.display="none";return;}
   last=digest;existing?.remove();
@@ -270,12 +315,12 @@
   const main=e("div","gbox gmain"),head=e("div","ghead"),intro=e("div");
   intro.append(e("div","gtag","SDAS // SECURE FLEET OPERATIONS"));
   const title=e("h2");title.append("FLEET ",e("span","","OVERVIEW"));intro.append(title);
-  intro.append(e("div","gmuted",ready?"Connected as "+(db.members.find(x=>x.id===user.id)?.name||"SDAS pilot")+" • "+owned.length+" owned vessels • shared registry live":"Sign in with Discord to view your verified fleet"));
-  add(head,intro,e("div","gconnected",ready?"FLEET CLOUD ONLINE":"SIGN-IN REQUIRED"));main.append(head);
+  intro.append(e("div","gmuted",ready?"Connected as "+(db.members.find(x=>x.id===user.id)?.name||"SDAS pilot")+" • "+(owned.length?owned.length+" owned vessels":"No personal ships added yet")+" • shared registry live":(window.sdasFleetCloudStatus||"Fleet access requires verification")));
+  add(head,intro,e("div","gconnected",ready?"FLEET CLOUD ONLINE":"VERIFICATION REQUIRED"));main.append(head);
   const wrap=e("div","gtablewrap"),tbl=e("table"),hr=e("tr");
   ["SHIP NAME","MANUFACTURER","ROLE","OWNERSHIP","SHARED","OPEN"].forEach(t=>hr.append(e("th","",t)));
   tbl.append(add(e("thead"),hr));const body=e("tbody");
-  if(!owned.length){const tr=e("tr"),td=e("td","",ready?"No personal vessels have been added yet.":"Your ships appear after Discord sign-in.");td.colSpan=6;tr.append(td);body.append(tr);}
+  if(!owned.length){const tr=e("tr"),td=e("td","",ready?"No personal ships added yet.":"Fleet access requires verification. Reconnect Discord.");td.colSpan=6;tr.append(td);body.append(tr);}
   for(const s of owned){
     const tr=e("tr"),td=e("td","gship");
     // Overview is a text-only quick reference: show the model name, never a nickname or photograph.
@@ -287,7 +332,7 @@
   tbl.append(body);wrap.append(tbl);main.append(wrap);
   add(main,add(e("div","gfoot"),e("span","",owned.length+" personal • "+org.length+" org-shared vessels"),realButton("OPEN MY HANGAR →",/^MY HANGAR$/i)));
   const aside=e("aside","gside"),sync=e("section","gbox");
-  add(sync,e("h3","","SYNC STATUS"),add(e("div","gsync"),e("div","gorb",ready?"☁":"↻"),add(e("div"),e("div","gtag","FLEET CLOUD"),e("div","gstate",ready?"CONNECTED":"OFFLINE"),e("div","gmuted",ready?owned.length+" personal vessels loaded":"Verify your Discord membership"))));
+  add(sync,e("h3","","SYNC STATUS"),add(e("div","gsync"),e("div","gorb",ready?"☁":"↻"),add(e("div"),e("div","gtag","FLEET CLOUD"),e("div","gstate",ready?"CONNECTED":"OFFLINE"),e("div","gmuted",ready?owned.length+" personal vessels loaded":"Fleet access requires verification"))));
   const action=e("section","gbox");action.append(e("h3","","QUICK ACTIONS"));
   add(action,add(e("div","gactions"),...(window.sdasFleetProspectReadOnly?[]:[realButton("↓ IMPORT",/^DATA\s*\/\s*IMPORT$/i)]),realButton("↻ REFRESH FLEET",/^REFRESH ORG FLEET$/i),realButton("♙ REFRESH ROLES",/^(REFRESH|VERIFY) SDAS ROLES$/i),realButton("⇥ SIGN OUT",/^SIGN OUT$/i)));
   const access=e("section","gbox");access.append(e("h3","","ROLE ACCESS"));
