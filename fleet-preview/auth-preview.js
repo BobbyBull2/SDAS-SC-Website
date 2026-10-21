@@ -172,7 +172,12 @@
    window.sdasFleetLoginState={signedIn,verified};
    window.dispatchEvent(new CustomEvent("sdas-fleet-auth-state",{detail:window.sdasFleetLoginState}));
  };
- const autoRoleChecks=new Set();
+ const autoRoleChecks=new Map();
+ const ROLE_RANK={admin:"super_admin",officer:"board_member",member:"patch",prospect:"prospect"};
+ const isVerified=m=>!!(m && ROLE_RANK[m.role]===m.discord_rank &&
+   m.last_role_checked_at && Number.isFinite(Date.parse(m.last_role_checked_at)) &&
+   Date.now()-Date.parse(m.last_role_checked_at)>=0 &&
+   Date.now()-Date.parse(m.last_role_checked_at)<12*60*60*1000);
  const roleFailures=new Map();
  const verifyingUsers=new Set();
  const render=async()=>{
@@ -189,12 +194,14 @@
   const name=user.user_metadata?.full_name||user.user_metadata?.name||user.email||"Discord pilot";
   const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role,discord_rank,last_role_checked_at").eq("user_id",user.id).maybeSingle();
   if(current!==renderNumber)return;
+  const verified=!membershipError&&isVerified(membership);
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
-  else if(membership){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch",prospect:"Prospect — Read Only"}[membership.role]||"Restricted")+" access";}
-  else{state.textContent=roleFailures.get(user.id)||(verifyingUsers.has(user.id)?"PILOT: "+name+" • Checking SDAS membership…":"PILOT: "+name+" • SDAS membership needs verification");}
-  window.sdasFleetAccessRole=membership?.role||null;
-  announceLoginState(true,!!membership&&!membershipError);
-  if(membership&&!window.sdasCloudActive)window.dispatchEvent(new Event("sdas-auth-ready"));
+  else if(verified){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch",prospect:"Prospect — Read Only"}[membership.role]||"Restricted")+" access";}
+  else{state.textContent=roleFailures.get(user.id)||(verifyingUsers.has(user.id)?"PILOT: "+name+" • Checking SDAS membership…":"PILOT: "+name+" • Fleet access requires verification");}
+  window.sdasFleetAccessRole=verified?membership.role:null;
+  announceLoginState(true,verified);
+  if(!verified)window.dispatchEvent(new Event("sdas-fleet-verification-needed"));
+  if(verified&&!window.sdasCloudActive)window.dispatchEvent(new Event("sdas-auth-ready"));
   const verifyRoles=async()=>{
     actions.replaceChildren();verifyingUsers.add(user.id);roleFailures.delete(user.id);state.textContent="Checking SDAS Discord roles…";
     try{
@@ -214,6 +221,7 @@
       if(!res.ok)throw Error(json.error||"The role verification service returned an error.");
       if(!json.verified)throw Error("Your Discord membership could not be verified.");
       roleFailures.delete(user.id);
+      autoRoleChecks.delete(user.id);
       await render();
       window.dispatchEvent(new Event("sdas-auth-ready"));
     }catch(e){
@@ -227,14 +235,19 @@
   };
   button(membership?"REFRESH SDAS ROLES":"VERIFY SDAS ROLES",verifyRoles);
   button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
-  const expectedRank=({admin:"super_admin",officer:"board_member",member:"patch",prospect:"prospect"})[membership?.role];
-  const freshRoleCheck=membership?.last_role_checked_at&&Date.now()-new Date(membership.last_role_checked_at).getTime()<12*60*60*1000;
-  const needsRoleCheck=!membership||membership.discord_rank!==expectedRank||!freshRoleCheck;
-  if(!membershipError&&needsRoleCheck&&!autoRoleChecks.has(user.id)){
-   autoRoleChecks.add(user.id);
-   void verifyRoles();
+  // Retry once every two minutes while stale; a page left open overnight
+  // must not get stuck behind a one-time verification attempt.
+  if(!verified&&!membershipError&&
+    Date.now()-(autoRoleChecks.get(user.id)||0)>2*60*1000 &&
+    !verifyingUsers.has(user.id)){
+    autoRoleChecks.set(user.id,Date.now());
+    void verifyRoles();
   }
  };
+ document.addEventListener("visibilitychange",()=>{
+   if(document.visibilityState==="visible")void render();
+ });
+ setInterval(()=>{if(document.visibilityState==="visible")void render()},5*60*1000);
  sb.auth.onAuthStateChange(()=>{setTimeout(render,0)});
  await render();
  }catch(e){state.textContent="Login test unavailable: "+(e.message||String(e));}
