@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, LockKeyhole, Plus, Search, ShieldCheck, X } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, LockKeyhole, LogIn, Plus, Search, ShieldCheck, X } from 'lucide-react';
 import './issue-council.css';
 import { cigKnownIssues, cigKnownIssuesSource, cigKnownIssuesSourceUpdated } from './cig-known-issues';
 
@@ -139,10 +139,12 @@ export function IssueCouncil(){
   </div>
   <div className="issue-toolbar">
     <form onSubmit={e=>{e.preventDefault();window.open(searchUrl(search),'_blank','noopener,noreferrer');}} className="issue-search" role="search" aria-label="Search Issue Council"><Search size={17}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search SDAS reports or all CIG issues" aria-label="Search issue reports"/><button type="submit">SEARCH CIG <ArrowUpRight size={14}/></button></form>
+    <a className="issue-external issue-rsi-login" href="https://robertsspaceindustries.com/connect" target="_blank" rel="noopener noreferrer" aria-label="Sign in to RSI on the official website (opens in a new tab)"><LogIn size={15}/> SIGN IN TO RSI <ExternalLink size={13}/></a>
     <a className="issue-external" href={IC_ROOT+'/issues'} target="_blank" rel="noopener noreferrer">BROWSE ALL <ExternalLink size={14}/></a>
     <a className="issue-external" href={IC_ROOT} target="_blank" rel="noopener noreferrer">CREATE ON CIG <ExternalLink size={14}/></a>
     <button className="issue-primary" type="button" onClick={()=>setShowForm(v=>!v)}><Plus size={16}/> ADD YOUR ISSUE</button>
   </div>
+  <p className="issue-rsi-hint">The SDAS issue list is public. Sign in on <strong>RSI's official website</strong> in a new tab before opening reports to participate; SDAS never receives your RSI credentials.</p>
   <div className="issue-card-rail" ref={rail} tabIndex={0} aria-label="SDAS issues, horizontal scrolling">
    {slots.map((issue,i)=>issue?<article className={'issue-card '+(i<5?'issue-featured':'')} key={issue.issue_code}>
     <div className="issue-card-top"><span>#{String(i+1).padStart(2,'0')}</span><strong>{'id' in issue?(i<5?'SDAS PRIORITY':'SDAS QUEUE'):'CIG KNOWN ISSUE'}</strong></div>
