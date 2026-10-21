@@ -9,6 +9,7 @@ const IC_ROOT='https://issue-council.robertsspaceindustries.com/projects/STAR-CI
 const SUPABASE_URL='https://zfvfpbfkbvudaezichrh.supabase.co';
 const PUBLISHABLE_KEY='sb_publishable_n10yR_G-0OOmFWjHdrb8Yw_8lJfs8io';
 const MEMBER_ROLES=['admin','officer','member'];
+const ISSUE_AUTH_DRAFT_KEY='sdas-issue-preview-oauth-draft';
 type Report={id:string;issue_code:string;title:string;issue_url:string;display_name:string;is_anonymous:boolean;created_at:string};
 const isReportCode=(code:string)=>/^STARC-[0-9]{1,10}$/.test(code);
 function officialCode(input:string){
@@ -63,6 +64,23 @@ export function IssueCouncil(){
  useEffect(()=>{
    let alive=true;
    let unsubscribe:undefined|(()=>void);
+   // Supabase OAuth reloads the page. Restore an unfinished issue submission
+   // and reopen the form when a pilot returns to this exact preview origin.
+   try {
+     const draft=window.sessionStorage.getItem(ISSUE_AUTH_DRAFT_KEY);
+     if(draft){
+       window.sessionStorage.removeItem(ISSUE_AUTH_DRAFT_KEY);
+       const saved=JSON.parse(draft);
+       if(typeof saved.savedAt==='number'&&Date.now()-saved.savedAt<30*60*1000){
+         setReportInput(typeof saved.reportInput==='string'?saved.reportInput:'');
+         setTitle(typeof saved.title==='string'?saved.title:'');
+         setPilot(typeof saved.pilot==='string'?saved.pilot:'');
+         setAnonymous(saved.anonymous!==false);
+         setShowForm(true);
+         window.setTimeout(()=>{if(alive)document.getElementById('issue-council')?.scrollIntoView({block:'start'});},120);
+       }
+     }
+   } catch { /* Storage may be disabled; authentication still works. */ }
    (async()=>{
      try {
        const moduleUrl='https://esm.sh/@supabase/supabase-js@2.57.0';
@@ -80,8 +98,16 @@ export function IssueCouncil(){
  },[]);
  const login=async()=>{
    if(!sb)return;
+   // Preserve the report draft across the Discord round trip. Use a stable
+   // path without a hash: OAuth implicit flow needs the URL fragment for tokens.
+   try{
+     window.sessionStorage.setItem(ISSUE_AUTH_DRAFT_KEY,JSON.stringify({reportInput,title,pilot,anonymous,savedAt:Date.now()}));
+   }catch{ /* Signing in still works when session storage is unavailable. */ }
    setAuthNote('Opening Discord authentication…');
-   const {error}=await sb.auth.signInWithOAuth({provider:'discord',options:{redirectTo:location.origin+location.pathname+location.hash,scopes:'identify guilds guilds.members.read'}});
+   // Must appear verbatim in Supabase Auth > URL Configuration > Redirect URLs.
+   // Only the Issue Council preview origin is used; SDFM's live return stays unchanged.
+   const previewReturnUrl=window.location.origin+window.location.pathname;
+   const {error}=await sb.auth.signInWithOAuth({provider:'discord',options:{redirectTo:previewReturnUrl,scopes:'identify guilds guilds.members.read'}});
    if(error)setAuthNote(error.message);
  };
  const verify=async()=>{
