@@ -34,7 +34,8 @@ assert auth.count(auth_before)==1, "Auth initializer changed"
 auth=auth.replace(auth_before,auth_after)
 assert 'window.sdasFleetSharedClientPromise' in auth
 assert 'window.sdasFleetStartDiscordLogin=startDiscordLogin' in auth
-assert 'autoRoleChecks.add(user.id)' in auth and 'void verifyRoles();' in auth
+assert 'autoRoleChecks.set(user.id,Date.now())' in auth and 'void verifyRoles();' in auth
+assert 'sdas-fleet-verification-needed' in auth and 'isVerified(membership)' in auth
 assert 'RETRY ROLE CHECK' in auth and 'RECONNECT DISCORD' in auth
 auth_path.write_text(auth)
 html=html.replace("PREVIEW BUILD","LIVE FLEET MANAGER")
@@ -120,10 +121,14 @@ html=html.replace(cloud_before,cloud_after)
 assert 'window.sdasFleetSharedClientPromise.then(async sharedClient=>' in html
 assert 'mod.createClient(SUPA,PUB' not in html
 assert 'sdasFleetRetryCloudLoad' in html, "Fleet connection retry not staged"
+assert 'Fleet access requires verification' in html, "Fleet recovery status not staged"
+assert 'validMembership(m)' in html, "Production must validate 12-hour role verification"
+assert 'client.from("fleet_ships")' in html, "Production fleet source changed"
+assert 'client.from("preview_fleet_ships")' not in html, "Preview fleet tables leaked into production"
 assert 'sdas-cloud-status' in html, "Fleet status feedback not staged"
 # Reference a fresh asset URL so cached 2026-era verification JavaScript is not reused.
 assert html.count('src="/SDFM/auth-preview.js"')==1
-html=html.replace('src="/SDFM/auth-preview.js"', 'src="/SDFM/auth-preview.js?v=20261020-prospect-readonly"')
+html=html.replace('src="/SDFM/auth-preview.js"', 'src="/SDFM/auth-preview.js?v=20261021-session-recovery"')
 target.joinpath("index.html").write_text(html)
 # Pages serves case-sensitive folders; support user-typed lowercase URLs directly.
 lowercase = Path("dist/sdfm")
