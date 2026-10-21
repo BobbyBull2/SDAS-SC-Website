@@ -195,6 +195,7 @@
   const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role,discord_rank,last_role_checked_at").eq("user_id",user.id).maybeSingle();
   if(current!==renderNumber)return;
   const verified=!membershipError&&isVerified(membership);
+  if(verified)autoRoleChecks.delete(user.id);
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
   else if(verified){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch",prospect:"Prospect — Read Only"}[membership.role]||"Restricted")+" access";}
   else{state.textContent=roleFailures.get(user.id)||(verifyingUsers.has(user.id)?"PILOT: "+name+" • Checking SDAS membership…":"PILOT: "+name+" • Fleet access requires verification");}
@@ -221,7 +222,6 @@
       if(!res.ok)throw Error(json.error||"The role verification service returned an error.");
       if(!json.verified)throw Error("Your Discord membership could not be verified.");
       roleFailures.delete(user.id);
-      autoRoleChecks.delete(user.id);
       await render();
       window.dispatchEvent(new Event("sdas-auth-ready"));
     }catch(e){
