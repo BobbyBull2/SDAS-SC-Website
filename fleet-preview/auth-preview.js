@@ -161,6 +161,21 @@
  const lib=await import("https://esm.sh/@supabase/supabase-js@2");
  const sb=lib.createClient(url,key,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});
  let renderNumber=0;
+ const attemptedAutomaticChecks=new Set();
+ const expectedRank={admin:"super_admin",officer:"board_member",member:"patch",prospect:"prospect"};
+ const isVerified=m=>!!(m && expectedRank[m.role]===m.discord_rank &&
+   m.last_role_checked_at && Date.now()-Date.parse(m.last_role_checked_at)>=0 &&
+   Date.now()-Date.parse(m.last_role_checked_at)<12*60*60*1000);
+ const startDiscordLogin=async()=>{
+   const r=await sb.auth.signInWithOAuth({provider:"discord",options:{
+     redirectTo:location.origin+location.pathname,scopes:"identify guilds guilds.members.read"}});
+   if(r.error)throw r.error;
+ };
+ window.sdasFleetStartDiscordLogin=startDiscordLogin;
+ const announce=(signedIn,verified,reason)=>{
+   window.sdasFleetLoginState={signedIn,verified,reason};
+   window.dispatchEvent(new CustomEvent("sdas-fleet-auth-state",{detail:window.sdasFleetLoginState}));
+ };
  const render=async()=>{
   const current=++renderNumber;
   const {data:{user},error}=await sb.auth.getUser();
@@ -168,40 +183,57 @@
   actions.replaceChildren();
   if(error||!user){
    state.textContent="";
-   button("LOGIN WITH DISCORD",async()=>{const r=await sb.auth.signInWithOAuth({provider:"discord",options:{redirectTo:location.origin+location.pathname,scopes:"identify guilds guilds.members.read"}});if(r.error)state.textContent=r.error.message;});
+   announce(false,false,"Sign in to access the fleet");button("LOGIN WITH DISCORD",startDiscordLogin);
    return;
   }
   const name=user.user_metadata?.full_name||user.user_metadata?.name||user.email||"Discord pilot";
-  const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role").eq("user_id",user.id).maybeSingle();
+  const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role,discord_rank,last_role_checked_at").eq("user_id",user.id).maybeSingle();
   if(current!==renderNumber)return;
-  if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
-  else if(membership){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch"}[membership.role]||"Restricted")+" access";}
-  else{state.textContent="PILOT: "+name+" • Verification pending";}
+  const verified=!membershipError && isVerified(membership);
+  const reason=membershipError?"Membership lookup failed: "+membershipError.message:
+    !membership?"Fleet access requires verification":
+    verified?"Verified SDAS "+membership.role+" access":"Fleet access requires verification";
+  announce(true,verified,reason);
+  state.textContent=verified?name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch",prospect:"Prospect — Read Only"}[membership.role]||"Restricted")+
+    " access":name+" • "+reason;
+  if(verified)window.dispatchEvent(new Event("sdas-auth-ready"));
+  let verifying=false;
   const verifyRoles=async()=>{
+    if(verifying)return;
+    verifying=true;
     actions.replaceChildren();state.textContent="Checking SDAS Discord roles…";
-    const {data:{session}}=await sb.auth.getSession();
-    if(!session?.provider_token){
-      state.textContent="Reconnect Discord to grant permission to view SDAS roles.";
-      button("SIGN OUT / RECONNECT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
-      return;
-    }
     try{
+      const {data:{session},error:sessionError}=await sb.auth.getSession();
+      if(sessionError)throw sessionError;
+      if(!session?.provider_token){
+        state.textContent="Discord authorization needs renewal. Your ships are safe.";
+        button("RECONNECT DISCORD",startDiscordLogin);
+        button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
+        return;
+      }
       const res=await fetch(url+"/functions/v1/verify-sdas-discord",{method:"POST",
         headers:{"Content-Type":"application/json","apikey":key,"Authorization":"Bearer "+session.access_token},
         body:JSON.stringify({provider_token:session.provider_token})});
-      const json=await res.json();
-      if(!res.ok)throw Error(json.error||"Role verification failed");
+      const json=await res.json().catch(()=>({}));
+      if(!res.ok||json.verified===false)throw Error(json.error||"SDAS verification was not approved");
       await render();
       window.dispatchEvent(new Event("sdas-auth-ready"));
     }catch(e){
-      state.textContent="Role access: "+e.message;
+      state.textContent="Fleet access requires verification: "+(e?.message||String(e));
       button("RETRY ROLE CHECK",verifyRoles);
-      button("SIGN OUT / RECONNECT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
-    }
+      button("RECONNECT DISCORD",startDiscordLogin);
+      button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
+    }finally{verifying=false;}
   };
   button(membership?"REFRESH SDAS ROLES":"VERIFY SDAS ROLES",verifyRoles);
   button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
+  if(!verified && !membershipError && !attemptedAutomaticChecks.has(user.id)){
+    attemptedAutomaticChecks.add(user.id);
+    void verifyRoles();
+  }
  };
+ document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")void render()});
+ setInterval(()=>{if(document.visibilityState==="visible")void render()},5*60*1000);
  sb.auth.onAuthStateChange(()=>{setTimeout(render,0)});
  await render();
  }catch(e){state.textContent="Login test unavailable: "+(e.message||String(e));}
