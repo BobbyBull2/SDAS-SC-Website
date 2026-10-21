@@ -42,6 +42,11 @@ jobs:
           grep -R -q 'ADD YOUR ISSUE' dist/assets
           test -s src/issue-council.css
           echo 'Preview Issue Council assets are present.'
+      - name: Probe public CIG issue vote ranking (diagnostic only)
+        continue-on-error: true
+        run: |
+          npx playwright install --with-deps chromium
+          node scripts/probe-issue-council.mjs
       - name: Deploy Cloudflare Pages preview (not production)
         uses: cloudflare/wrangler-action@v4
         with:
