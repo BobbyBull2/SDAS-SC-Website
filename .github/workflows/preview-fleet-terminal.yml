@@ -18,6 +18,30 @@ concurrency:
   group: fleet-terminal-v25-review-${{ github.event.pull_request.number || github.ref_name }}
   cancel-in-progress: true
 jobs:
+  live-http-probe:
+    name: Read-only live SDFM HTTP check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - name: Probe SDFM and its JavaScript from GitHub's network
+        run: |
+          python3 - <<'PY'
+          import urllib.request
+          for url in [
+            'https://sdas.space/',
+            'https://sdas.space/SDFM/',
+            'https://sdas.space/SDFM/auth-preview.js',
+            'https://sdas.space/SDFM/sdfm-production-login.js',
+            'https://sdas-sc-website.pages.dev/SDFM/'
+          ]:
+            try:
+              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
+              with urllib.request.urlopen(req,timeout=12) as r:
+                text=r.read(1000)
+                print('PROBE',url,'STATUS',r.status,'CONTENT_TYPE',r.headers.get('Content-Type'),'FINAL_URL',r.url,'SAMPLE',repr(text[:100]))
+            except Exception as error:
+              print('PROBE_FAILURE',url,type(error).__name__,str(error)[:240])
+          PY
   preview:
     if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/preview/fleet-terminal-v2') || (github.event_name == 'push' && github.ref == 'refs/heads/preview/fleet-terminal-v2') || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'preview/fleet-terminal-v2')
     runs-on: ubuntu-24.04
