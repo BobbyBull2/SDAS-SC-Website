@@ -23,7 +23,7 @@ html=target.joinpath("index.html").read_text()
 # deploy a /SDFM/fleet-cloud-inline.js file, and serving HTML for that URL
 # generates a strict-MIME console error in Safari and Chromium.
 import re
-obsolete_cloud_tag = r"""<script\\b(?=[^>]*\\bsrc=["'][^"']*fleet-cloud-inline\\.js(?:\\?[^"']*)?["'])[^>]*>\\s*</script>"""
+obsolete_cloud_tag = r"""<script\b(?=[^>]*\bsrc=["'][^"']*fleet-cloud-inline\.js(?:\?[^"']*)?["'])[^>]*>\s*</script>"""
 html, removed_cloud_tags = re.subn(obsolete_cloud_tag, "", html, flags=re.IGNORECASE)
 assert removed_cloud_tags >= 1, "Expected redundant Fleet bridge script tag missing; inspect source"
 print("Removed redundant Fleet bridge script references:", removed_cloud_tags)
