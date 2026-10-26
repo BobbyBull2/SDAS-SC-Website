@@ -47,6 +47,12 @@ jobs:
                 print('PROBE',url,'STATUS',r.status,'CONTENT_TYPE',r.headers.get('Content-Type'),'FINAL_URL',r.url,'SAMPLE',repr(text[:100]))
             except Exception as error:
               print('PROBE_FAILURE',url,type(error).__name__,str(error)[:240])
+          import re
+          with urllib.request.urlopen(urllib.request.Request('https://sdas.space/SDFM/',headers={'User-Agent':'Mozilla/5.0'}),timeout=20) as r:
+            html=r.read().decode('utf-8','replace')
+          stale_tag=bool(re.search(r"""<script[^>]*src=["'][^"']*fleet-cloud-inline\\.js["']""",html,re.I))
+          print('SDFM_LIVE_HTML_CHECK','correct_title',('Some Dudes and a Fleet Manager' in html),
+            'obsolete_external_script',stale_tag,'bytes',len(html))
           PY
   cloudflare-production-alias-audit:
     name: Read-only Cloudflare Pages alias audit
