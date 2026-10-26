@@ -85,6 +85,75 @@ jobs:
                 },default=str)[:3200])
             except Exception as e:print('CLOUDFLARE_AUDIT_FAILED',str(e)[:240])
           PY
+  repair-production-cloudflare-build:
+    name: Restore SDFM to canonical Cloudflare production build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - name: Correct Pages Git build and redeploy production
+        run: |
+          python3 - <<'PY'
+          import os,json,urllib.request,time
+          base='https://api.cloudflare.com/client/v4/accounts/'+os.environ['CF_ACCOUNT_ID']+'/pages/projects/sdas-sc-website'
+          headers={'Authorization':'Bearer '+os.environ['CF_API_TOKEN'],'Content-Type':'application/json'}
+          def api(method,url,data=None):
+            body=json.dumps(data).encode() if data is not None else None
+            with urllib.request.urlopen(urllib.request.Request(url,data=body,headers=headers,method=method),timeout=35) as resp:
+              response=json.load(resp)
+            if not response.get('success'):raise RuntimeError('Cloudflare API error '+repr(response.get('errors')))
+            return response['result']
+          project=api('GET',base)
+          assert project['production_branch']=='main','Wrong production branch'
+          current=project.get('build_config') or {}
+          wanted='npm run build && python3 scripts/stage-sdfm.py'
+          print('PREVIOUS_BUILD_COMMAND',current.get('build_command'))
+          if current.get('build_command')!=wanted:
+            newcfg={'build_command':wanted,
+              'destination_dir':current.get('destination_dir') or 'dist',
+              'root_dir':current.get('root_dir') or ''}
+            updated=api('PATCH',base,{'build_config':newcfg})
+            print('UPDATED_BUILD_COMMAND',(updated.get('build_config') or {}).get('build_command'))
+          verify=api('GET',base)
+          assert (verify.get('build_config') or {}).get('build_command')==wanted, 'Cloudflare build command not saved'
+          canonical=verify.get('canonical_deployment') or {}
+          assert canonical.get('environment')=='production', 'Canonical production deployment missing'
+          print('RETRYING_CANONICAL_GIT_DEPLOYMENT',canonical['id'])
+          retry=api('POST',base+'/deployments/'+canonical['id']+'/retry')
+          deployment=retry['id']
+          print('RETRIED_DEPLOYMENT_ID',deployment,'URL',retry.get('url'))
+          success=False
+          for attempt in range(65):
+            result=api('GET',base+'/deployments/'+deployment)
+            latest=result.get('latest_stage') or {}
+            stage=latest.get('status')
+            if attempt%6==0 or stage in ('success','failure','canceled'):
+              print('DEPLOY_STATUS',attempt,latest.get('name'),stage)
+            if stage=='success' and latest.get('name')=='deploy':
+              success=True;break
+            if stage in ('failure','canceled'):
+              raise RuntimeError('Canonical Cloudflare rebuild failed; deployment id '+deployment)
+            time.sleep(6)
+          if not success:raise RuntimeError('Cloudflare rebuild did not finish within polling window')
+          # Live domain may take seconds to switch to the canonical Git build.
+          for attempt in range(12):
+            try:
+              with urllib.request.urlopen('https://sdas.space/SDFM/',timeout=15) as r:
+                page=r.read(200000).decode('utf-8','replace')
+              with urllib.request.urlopen('https://sdas.space/SDFM/auth-preview.js',timeout=15) as r:
+                mime=r.headers.get('Content-Type','');js=r.read(200)
+              good='Some Dudes' in page and 'javascript' in mime.lower() and js.startswith(b'/* SDAS')
+              print('LIVE_ROUTE_CHECK',attempt,'page_is_fleet',('Some Dudes' in page),
+                'js_content_type',mime,'js_valid',js.startswith(b'/* SDAS'))
+              if good:break
+            except Exception as exc:print('LIVE_ROUTE_ERROR',str(exc)[:180])
+            time.sleep(5)
+          else:
+            raise RuntimeError('Canonical build succeeded, but official /SDFM/ assets still failed health check')
+          print('PRODUCTION_SDFM_RESTORED')
+          PY
   preview:
     if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/preview/fleet-terminal-v2') || (github.event_name == 'push' && github.ref == 'refs/heads/preview/fleet-terminal-v2') || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'preview/fleet-terminal-v2')
     runs-on: ubuntu-24.04
