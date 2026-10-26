@@ -75,6 +75,8 @@ jobs:
                 print('CLOUDFLARE_PROJECT',json.dumps({
                   'name':data.get('name'),'subdomain':data.get('subdomain'),
                   'production_branch':data.get('production_branch'),
+                  'build_config':{k:(data.get('build_config') or {}).get(k) for k in ['build_command','destination_dir','root_dir','build_caching']},
+                  'git_auto_production':(data.get('source') or {}).get('config',{}).get('production_deployments_enabled'),
                   'domains':data.get('domains'),
                   'latest_deployment':{k:(data.get('latest_deployment') or {}).get(k)
                     for k in ['id','url','environment','created_on','aliases','deployment_trigger']},
