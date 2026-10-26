@@ -32,7 +32,12 @@ jobs:
             'https://sdas.space/SDFM/',
             'https://sdas.space/SDFM/auth-preview.js',
             'https://sdas.space/SDFM/sdfm-production-login.js',
-            'https://sdas-sc-website.pages.dev/SDFM/'
+            'https://sdas-sc-website.pages.dev/SDFM/',
+            'https://sdas.space/SDFM/index.html',
+            'https://sdas.space/SDFM/fleet-design.css',
+            'https://sdas.space/sdfm/',
+            'https://fb811f5d.sdas-sc-website.pages.dev/SDFM/',
+            'https://fb811f5d.sdas-sc-website.pages.dev/SDFM/auth-preview.js'
           ]:
             try:
               req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
