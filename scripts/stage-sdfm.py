@@ -18,6 +18,15 @@ shutil.copytree("dist/public/images",target/"public/images",dirs_exist_ok=True)
 shutil.rmtree("dist/public")
 Path("dist/index.html").write_bytes(homepage)
 html=target.joinpath("index.html").read_text()
+# The cloud bridge is already embedded inside the legacy app script by the
+# staging workflow. Remove its redundant external script tag: Pages does not
+# deploy a /SDFM/fleet-cloud-inline.js file, and serving HTML for that URL
+# generates a strict-MIME console error in Safari and Chromium.
+import re
+obsolete_cloud_tag = r"""<script\b(?=[^>]*\bsrc=["'][^"']*fleet-cloud-inline\.js(?:\?[^"']*)?["'])[^>]*>\s*</script>"""
+html, removed_cloud_tags = re.subn(obsolete_cloud_tag, "", html, flags=re.IGNORECASE)
+assert removed_cloud_tags >= 1, "Expected redundant Fleet bridge script tag missing; inspect source"
+print("Removed redundant Fleet bridge script references:", removed_cloud_tags)
 for name in ("fleet-design.css","fleet-ui-polish.js","rsi-import.js","auth-preview.js"):
     html=html.replace('"/'+name+'"','"/SDFM/'+name+'"')
 # Clear the verified state and reload when the user signs out.
