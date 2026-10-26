@@ -8,6 +8,36 @@ page.on('console', msg => {
   if (msg.type() === 'error') errors.push('console: ' + msg.text().slice(0, 350));
 });
 try {
+  // External read-only live-site diagnostic from GitHub's network. Never
+  // modifies production, never logs in, and doesn't fail preview smoke tests.
+  for(const url of [
+    'https://sdas.space/',
+    'https://sdas.space/SDFM/',
+    'https://sdas-sc-website.pages.dev/SDFM/'
+  ]){
+    const live=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,
+      userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.7 Mobile/15E148 Safari/604.1'});
+    const failures=[];
+    live.on('pageerror',e=>failures.push('JS '+e.message));
+    live.on('requestfailed',r=>failures.push('NETWORK '+r.url().slice(0,130)+' '+r.failure()?.errorText));
+    live.on('console',m=>{if(m.type()==='error')failures.push('CONSOLE '+m.text().slice(0,180))});
+    try{
+      const response=await live.goto(url,{waitUntil:'domcontentloaded',timeout:18000});
+      await live.waitForTimeout(3500);
+      const snapshot=await live.evaluate(()=>({
+        url:location.href,title:document.title,text:document.body?.innerText?.slice(0,350)||'',
+        bodyChildren:document.body?.children.length||0,
+        signin:!!document.getElementById('sdas-live-signin-card'),
+        signinVisible:document.getElementById('sdas-live-signin-card')?
+          getComputedStyle(document.getElementById('sdas-live-signin-card')).display:null,
+        cloudStatus:window.sdasFleetCloudStatus||null,
+        scripts:[...document.querySelectorAll('script[src]')].map(s=>s.src).slice(-8)
+      }));
+      console.log('LIVE_SDFM_DIAGNOSTIC',url,'http',response?.status(),JSON.stringify(snapshot),'errors',JSON.stringify(failures.slice(0,10)));
+    }catch(error){
+      console.log('LIVE_SDFM_DIAGNOSTIC_ERROR',url,String(error).slice(0,300),'errors',JSON.stringify(failures.slice(0,8)));
+    }finally{await live.close();}
+  }
   await page.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded' });
   await page.locator('#nav [data-view]').first().waitFor({ timeout: 10000 });
   const snapshot = () => page.evaluate(() => ({
