@@ -25,10 +25,11 @@
    Number.isFinite(Date.parse(m.last_role_checked_at)) &&
    Date.now()-Date.parse(m.last_role_checked_at)>=0 &&
    Date.now()-Date.parse(m.last_role_checked_at)<12*60*60*1000);
- let activeLoad=null,reloadRequested=false;
+ let activeLoad=null,reloadRequested=false,photoLoadSerial=0;
  function requireVerification(message){
    // Keep existing data unchanged. The production gate will hide the fleet
    // until verified again; never suggest the registry was emptied.
+   photoLoadSerial++;
    ready=false;user=null;window.sdasCloudActive=false;
    status(message||"Fleet access requires verification. Refresh roles or reconnect Discord.");
    window.sdasGoldenRefresh?.();
@@ -39,7 +40,11 @@
    try{return await activeLoad;}
    finally{
      activeLoad=null;
-     if(reloadRequested){reloadRequested=false;setTimeout(()=>void loadCloud(),0);}
+     // Auth events can pile up while a load is active. Do not fetch the
+     // entire registry again when that load already succeeded.
+     const retry=reloadRequested&&!ready;
+     reloadRequested=false;
+     if(retry)setTimeout(()=>void loadCloud(),0);
    }
  }
  async function loadCloudOnce(){
@@ -68,14 +73,17 @@
    window.sdasFleetProspectReadOnly=prospect;
    document.documentElement.classList.toggle("sdas-prospect-readonly",prospect);
    user=u;booting=true;
+   const photoToken=++photoLoadSerial;
+   status("Loading verified SDAS fleet records…");
    try{
-     const [profiles,ships,loadouts,photos]=await Promise.all([
+     // Photos are optional. Do not block the ships, directory or loadouts
+     // behind storage requests; load just the core registry first.
+     const [profiles,ships,loadouts]=await Promise.all([
        client.from("pilot_profiles").select("user_id,display_name,rsi_handle"),
        client.from("fleet_ships").select("*").order("created_at",{ascending:true}),
-       client.from("ship_loadouts").select("ship_id,components,name"),
-       client.from("ship_photos").select("ship_id,object_path")
+       client.from("ship_loadouts").select("ship_id,components,name")
      ]);
-     for(const res of [profiles,ships,loadouts,photos])if(res.error)throw res.error;
+     for(const res of [profiles,ships,loadouts])if(res.error)throw res.error;
      // RLS may silently return [] when verification expires during the read.
      // Recheck before accepting a genuinely empty registry.
      const {data:confirmed,error:checkError}=await client.from("sdas_memberships")
@@ -84,14 +92,8 @@
        requireVerification("Fleet access requires verification. Reconnect Discord.");
        return;
      }
-     const photoMap={};
-     for(const p of photos.data||[]){
-       const {data:sign}=await client.storage.from("fleet-photos")
-         .createSignedUrl(p.object_path,3600);
-       if(sign?.signedUrl)photoMap[p.ship_id]=sign.signedUrl;
-     }
      db={members:(profiles.data||[]).map(p=>({id:p.user_id,name:p.display_name,handle:p.rsi_handle||"",role:"Member"})),
-         ships:(ships.data||[]).map(s=>fromRow(s,photoMap))};
+         ships:(ships.data||[]).map(s=>fromRow(s,{}))};
      for(const ownerId of new Set(db.ships.map(s=>s.owner).filter(Boolean))){
        if(!db.members.some(m=>String(m.id)===String(ownerId)))
          db.members.push({id:ownerId,name:"Pilot profile unavailable",handle:"",role:"Member"});
@@ -114,10 +116,43 @@
      status("Connected as "+who(current).name+" • "+
        (known.size?known.size+" owned vessels":"No personal ships added yet")+
        " • shared registry live. Changes sync to Supabase.");
+     // Start independent, batched photo hydration after the fleet is visible.
+     void hydrateShipPhotos(u.id,photoToken);
    }catch(e){
      ready=false;window.sdasCloudActive=false;
      status("Fleet loading failed: "+(e?.message||String(e))+". Retry Fleet Connection.");
    }finally{booting=false;}
+ }
+ // Read and sign optional photo records in one storage request, rather
+ // than signing each image serially before the fleet becomes available.
+ async function hydrateShipPhotos(ownerId,token){
+   try{
+     const {data:photos,error}=await client.from("ship_photos")
+       .select("ship_id,object_path");
+     if(error)throw error;
+     const items=(photos||[]).filter(p=>p.ship_id&&p.object_path);
+     if(!items.length)return;
+     const {data:signed,error:signError}=await client.storage
+       .from("fleet-photos").createSignedUrls(items.map(p=>p.object_path),3600);
+     if(signError)throw signError;
+     // A logout, role expiry or newer load must never resurrect old imagery.
+     if(!ready||user?.id!==ownerId||token!==photoLoadSerial)return;
+     let changed=false;
+     for(let i=0;i<items.length;i++){
+       const signedUrl=signed?.[i]?.signedUrl;
+       if(!signedUrl)continue;
+       const ship=db.ships.find(s=>s.id===items[i].ship_id);
+       if(ship&&ship.image!==signedUrl){ship.image=signedUrl;changed=true;}
+     }
+     if(changed&&!busy){
+       render();
+       window.sdasGoldenRefresh?.();
+     }
+   }catch(error){
+     // Photos are nonessential; never downgrade an already loaded fleet.
+     console.warn("Fleet photos could not be loaded; ships remain available.",
+       error?.message||String(error));
+   }
  }
  async function uploadPhoto(ship){
    if(!ship.image?.startsWith("data:image/"))return;
