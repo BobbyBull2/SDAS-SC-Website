@@ -50,8 +50,8 @@ test('loads photos as a single optional batch after fleet rendering',async()=>{
   await f.hydrate('pilot-a',1);
   assert.equal(f.metrics().batchCalls,1);
   assert.equal(f.metrics().renderCalls,1);
-  assert.match(f.ships[0].image,/a\\.jpg$/);
-  assert.match(f.ships[1].image,/b\\.jpg$/);
+  assert.ok(f.ships[0].image.endsWith('/a.jpg'));
+  assert.ok(f.ships[1].image.endsWith('/b.jpg'));
   const core=extract(' async function loadCloudOnce(){',' // Read and sign optional photo records');
   assert.ok(core.includes('void hydrateShipPhotos(u.id,photoToken);'));
   assert.ok(core.indexOf('window.sdasCloudActive=true;')<core.indexOf('void hydrateShipPhotos(u.id,photoToken);'));
@@ -98,9 +98,9 @@ ${loadFn}
 });
 
 test('schema, security checks and production tables are unchanged',()=>{
-  assert.match(cloud,/validMembership\\(m\\)/);
-  assert.match(cloud,/select\\("role,discord_rank,last_role_checked_at"\\)/);
-  assert.match(cloud,/client\\.from\\("fleet_ships"\\)/);
-  assert.doesNotMatch(cloud,/client\\.from\\("preview_fleet_ships"\\)/);
-  assert.match(cloud,/window\\.sdasFleetProspectReadOnly/);
+  assert.ok(cloud.includes('validMembership(m)'));
+  assert.ok(cloud.includes('select("role,discord_rank,last_role_checked_at")'));
+  assert.ok(cloud.includes('client.from("fleet_ships")'));
+  assert.ok(!cloud.includes('client.from("preview_fleet_ships")'));
+  assert.ok(cloud.includes('window.sdasFleetProspectReadOnly'));
 });
