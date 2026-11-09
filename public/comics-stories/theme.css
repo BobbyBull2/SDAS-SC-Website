@@ -21,7 +21,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 4px #40e4dc15,0 0 12px var(--cyan);animation:beacon 2.8s ease-in-out infinite}
 @keyframes beacon{50%{opacity:.45;box-shadow:0 0 0 7px #40e4dc0d,0 0 17px var(--cyan)}}
 .banner{position:relative;isolation:isolate;overflow:hidden;min-height:420px;padding:0;border-bottom:1px solid #64ded0a8;background:#071218;box-shadow:0 16px 45px #0007}
-.banner .hero-art{position:absolute;z-index:-3;inset:-3% -1%;background:url('/images/sdas-comics-cinematic-hero.webp') center 52%/cover no-repeat;transform:scale(1.03);animation:hero-drift 24s ease-in-out infinite alternate}
+.banner .hero-art{position:absolute;z-index:-3;inset:-3% -1%;background:url('/images/sdas-comics-cinematic-hero.avif') center 52%/cover no-repeat;transform:scale(1.03);animation:hero-drift 24s ease-in-out infinite alternate}
 @keyframes hero-drift{from{transform:scale(1.03) translateX(0)}to{transform:scale(1.10) translateX(-.6%)}}
 .banner:before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,#031016 0%,#031016f4 15%,#05161ac7 35%,#04152161 58%,#07131b05 87%),linear-gradient(0deg,#04141be8 0%,transparent 42%,#071a283d 100%)}
 .banner:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.4;background:linear-gradient(90deg,transparent 96%,#a6fff21b 100%),repeating-linear-gradient(0deg,transparent 0,transparent 3px,#a4daeb0a 4px);background-size:100% 100%,100% 5px}
