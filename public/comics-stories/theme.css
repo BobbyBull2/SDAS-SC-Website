@@ -131,3 +131,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .top .brand:hover img.sdas-official-logo{filter:none}
 @media(max-width:920px){.top .brand{flex-basis:170px;max-width:170px}.top .brand img.sdas-official-logo{height:auto;max-height:64px}}
 @media(max-width:620px){.top .brand{flex-basis:142px;max-width:142px;width:142px;margin:0 auto}.top .brand img.sdas-official-logo{width:100%;height:auto;max-height:60px;object-position:center}}
+
+/* Optional JPG cover for locally previewed stories. */
+.story-cover{display:flex;justify-content:center;align-items:center;max-width:1100px;margin:30px auto 0;padding:14px;background:linear-gradient(140deg,#102e37,#051319);border:1px solid #408189;box-shadow:0 14px 35px #0008,inset 0 0 24px #35efef12}
+.story-cover img{display:block;width:100%;max-height:min(65vh,620px);object-fit:contain;box-shadow:0 8px 26px #0008}
+#story-view .storytext{margin-top:24px}
+@media(max-width:620px){.story-cover{padding:7px;margin-top:20px}.story-cover img{max-height:55vh}#story-view .storytext{margin-top:16px}}
