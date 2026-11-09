@@ -137,3 +137,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .story-cover img{display:block;width:100%;max-height:min(65vh,620px);object-fit:contain;box-shadow:0 8px 26px #0008}
 #story-view .storytext{margin-top:24px}
 @media(max-width:620px){.story-cover{padding:7px;margin-top:20px}.story-cover img{max-height:55vh}#story-view .storytext{margin-top:16px}}
+
+/* Fleet Manager emblem, sourced verbatim from its embedded masthead asset.
+   Typography mirrors SDAS.space: Black Ops One / Barlow / Barlow Condensed. */
+:root{--display:'Black Ops One',sans-serif;--body:'Barlow',sans-serif;--condensed:'Barlow Condensed',sans-serif}
+body{font-family:var(--body);font-weight:400}
+.top .brand{display:flex;align-items:center;justify-content:flex-start;gap:0;flex:0 1 240px;width:240px;max-width:240px;min-width:0;overflow:visible}
+.top .brand img.sdas-fleet-logo{display:block;width:100%;max-width:100%;height:auto;max-height:72px;object-fit:contain;object-position:left center;background:transparent;filter:none;transition:none}
+.top .brand:hover img.sdas-fleet-logo{filter:none}
+.nav a{font-family:var(--condensed);font-weight:600;letter-spacing:1px}
+.banner h1,.archive-head h2,.reader-head h2,.dialog h2{font-family:var(--display);font-weight:400;letter-spacing:1px}
+.banner p,.entry h2,.entry .meta,.entry p.meta,.fine{font-family:var(--condensed)}
+.eyebrow,.archive-kicker,.microstrip span,.hero-fact,.preview,.hero-coordinate,.archive-count small,.tag,#detail-meta,.page-counter{font-family:var(--condensed)}
+.storytext{font-family:var(--body)}
+@media(max-width:920px){.top .brand{flex-basis:170px;max-width:170px;width:170px}.top .brand img.sdas-fleet-logo{max-height:64px}}
+@media(max-width:620px){.top .brand{flex-basis:142px;max-width:142px;width:142px;margin:0 auto;justify-content:center}.top .brand img.sdas-fleet-logo{max-height:58px;object-position:center}.nav a{font-size:11px;letter-spacing:.5px}}
