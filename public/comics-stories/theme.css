@@ -21,8 +21,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 4px #40e4dc15,0 0 12px var(--cyan);animation:beacon 2.8s ease-in-out infinite}
 @keyframes beacon{50%{opacity:.45;box-shadow:0 0 0 7px #40e4dc0d,0 0 17px var(--cyan)}}
 .banner{position:relative;isolation:isolate;overflow:hidden;min-height:420px;padding:0;border-bottom:1px solid #64ded0a8;background:#071218;box-shadow:0 16px 45px #0007}
-.banner .hero-art{position:absolute;z-index:-3;inset:-3% -1%;background:url('/images/sdas-comics-overlook-patch-flag.avif') center 30%/cover no-repeat;transform:scale(1.03);animation:hero-drift 24s ease-in-out infinite alternate}
-@keyframes hero-drift{from{transform:scale(1.03) translateX(0)}to{transform:scale(1.10) translateX(-.6%)}}
+.banner .hero-art{position:absolute;z-index:-3;inset:0;background:url('/images/sdas-comics-overlook-patch-flag.avif') center 36%/cover no-repeat;transform:none;animation:none;filter:none;will-change:auto}
 .banner:before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,#031016 0%,#031016f4 15%,#05161ac7 35%,#04152161 58%,#07131b05 87%),linear-gradient(0deg,#04141be8 0%,transparent 42%,#071a283d 100%)}
 .banner:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.4;background:linear-gradient(90deg,transparent 96%,#a6fff21b 100%),repeating-linear-gradient(0deg,transparent 0,transparent 3px,#a4daeb0a 4px);background-size:100% 100%,100% 5px}
 .hero-glow{position:absolute;z-index:1;inset:auto 0 0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--cyan) 20%,transparent 85%);box-shadow:0 0 25px var(--cyan)}
@@ -125,3 +124,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .banner .hero-art{background-position:center 30%;background-color:#071218}
 @media(max-width:920px){.top .brand img{width:225px;max-width:40vw;height:70px}.banner,.hero-frame{min-height:440px}}
 @media(max-width:620px){.top .brand img{width:218px;max-width:82vw;height:70px;object-position:center}.banner,.hero-frame{min-height:460px}.banner .hero-art{background-position:73% 32%}}
+
+/* SDAS identity: exact official name rendered as crisp text, never AI-generated lettering. */
+.brand{display:inline-flex;align-items:center;gap:12px;white-space:nowrap;text-decoration:none}
+.brand .brand-mark{display:block;width:52px;height:52px;max-width:52px;flex:none;object-fit:contain;filter:drop-shadow(0 0 9px #36d7dc66)}
+.brand-wordmark{display:flex;flex-direction:column;align-items:flex-start;line-height:1;min-width:0}
+.brand-wordmark strong{display:block;font:clamp(25px,2.5vw,38px)/.92 var(--display);letter-spacing:2px;color:#edf4f6;text-shadow:0 2px 0 #071014,0 0 15px #65fff72a}
+.brand-wordmark small{display:block;margin-top:7px;font:600 clamp(8px,.72vw,11px)/1.15 var(--condensed);letter-spacing:1.9px;color:#b2d1d5}
+.banner:after{opacity:.14;background:linear-gradient(90deg,transparent 96%,#a6fff21b 100%)}
+@media(max-width:620px){.brand{justify-content:center}.brand .brand-mark{width:38px;height:38px}.brand-wordmark strong{font-size:28px}.brand-wordmark small{font-size:8px;letter-spacing:1px}.banner .hero-art{background-position:64% center}}
