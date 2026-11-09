@@ -21,7 +21,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 4px #40e4dc15,0 0 12px var(--cyan);animation:beacon 2.8s ease-in-out infinite}
 @keyframes beacon{50%{opacity:.45;box-shadow:0 0 0 7px #40e4dc0d,0 0 17px var(--cyan)}}
 .banner{position:relative;isolation:isolate;overflow:hidden;min-height:420px;padding:0;border-bottom:1px solid #64ded0a8;background:#071218;box-shadow:0 16px 45px #0007}
-.banner .hero-art{position:absolute;z-index:-3;inset:0;background:url('/images/sdas-comics-hangar-banner-clear.webp') center 52%/cover no-repeat;transform:none;animation:none;filter:none;will-change:auto}
+.banner .hero-art{position:relative;z-index:0;inset:auto;background:#071218;transform:none;animation:none;filter:none;will-change:auto}
 .banner:before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,#031016eb 0%,#031016c9 16%,#05161a85 37%,#04152124 67%,#07131b08 92%),linear-gradient(0deg,#04141b78 0%,transparent 56%,#071a2810 100%)}
 .banner:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.16;background:linear-gradient(90deg,transparent 96%,#a6fff21b 100%),repeating-linear-gradient(0deg,transparent 0,transparent 3px,#a4daeb0a 4px);background-size:100% 100%,100% 5px}
 .hero-glow{position:absolute;z-index:1;inset:auto 0 0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--cyan) 20%,transparent 85%);box-shadow:0 0 25px var(--cyan)}
@@ -155,3 +155,120 @@ body{font-family:var(--body);font-weight:400}
 
 /* Keep the hangar scene framed with detail at narrow viewport sizes. */
 @media(max-width:850px){.banner .hero-art{background-position:73% center}}
+
+
+/* Responsive, uncropped SDAS hangar: the image is a pixel-identical lossless
+   conversion of the supplied 2048x682 artwork. No cover cropping or upscaling. */
+.banner{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  overflow:hidden;
+  background:linear-gradient(180deg,#061a23 0%,#06151b 58%,#041115 100%);
+}
+.banner:before,.banner:after{display:none}
+.banner .hero-art{
+  position:relative;
+  display:block;
+  box-sizing:border-box;
+  width:100%;
+  max-width:2048px;
+  min-height:0;
+  height:auto;
+  aspect-ratio:2048 / 682;
+  margin-inline:auto;
+  padding:0;
+  background:#06131a;
+  overflow:hidden;
+  isolation:isolate;
+  line-height:0;
+  flex:none;
+  cursor:zoom-in;
+}
+.banner .hero-art > img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:2048 / 682;
+  object-fit:contain;
+  object-position:center;
+  filter:none;
+  transform:none;
+}
+.banner .hero-art:focus-visible{
+  outline:3px solid var(--cyan);
+  outline-offset:-3px;
+}
+.banner .hero-frame{
+  position:relative;
+  z-index:1;
+  min-height:0;
+  width:min(95%,1540px);
+  margin-inline:auto;
+  padding:clamp(22px,3vw,42px) 0;
+  background:transparent;
+}
+.banner .hero-coordinate{position:static;align-self:flex-end;margin-top:14px}
+.banner .hero-glow{pointer-events:none}
+.entry img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:16 / 9;
+  object-fit:contain;
+  object-position:center;
+  background:#06131a;
+  filter:none;
+}
+.thumb img{
+  object-fit:contain;
+  object-position:center;
+  background:#06131a;
+}
+.story-cover img,.page img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  object-position:center;
+}
+@media(max-width:920px){
+  .banner,.banner .hero-frame{min-height:0}
+  .banner .hero-frame{width:94%;padding:24px 0}
+  .banner .hero-coordinate{display:none}
+  .entry img{height:auto}
+}
+@media(max-width:620px){
+  .banner,.banner .hero-frame{min-height:0}
+  .banner .hero-art{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    aspect-ratio:auto;
+    height:clamp(145px,36vw,230px);
+    min-height:0;
+    background:#06131a;
+  }
+  .banner .hero-art > img{
+    width:100%;
+    height:auto;
+    max-height:100%;
+    aspect-ratio:2048 / 682;
+    object-fit:contain;
+  }
+  .banner .hero-frame{padding:22px 0 28px}
+  .banner .hero-facts{max-width:100%}
+  .banner .hero-fact{line-height:1.4}
+  .entry img{height:auto}
+  .entry h2,.entry .meta{overflow-wrap:anywhere}
+  .reader-controls{flex-wrap:wrap}
+  .reader-controls .btn{flex:1 1 125px}
+  .story-cover img{max-height:min(65vh,540px)}
+  .page img{max-height:72vh}
+  .microstrip{flex-wrap:wrap}
+}
+@media(max-width:390px){
+  .banner .hero-art{height:145px}
+  .entry img{height:auto}
+  .banner .hero-frame{padding:18px 0 24px}
+}
