@@ -1,7 +1,7 @@
 /* SDAS Comics & Stories fullscreen comic reader, isolated from fleet and publishing flows. */
 (() => {
   let root,stage,picture,counter,previous,next,zoomLabel,minus,plus,mag,closeBtn;
-  let zoom=1, opener=null, nativeFullscreen=false, imageToken=0;
+  let zoom=1, opener=null, nativeFullscreen=false, imageToken=0, panOrigin=null, lastDragAt=0;
   const reader=()=>window.SdasComicsReader;
   const node=(tag,className,content)=>{
     const el=document.createElement(tag);
@@ -51,7 +51,29 @@
     minus.addEventListener('click',()=>setZoom(zoom-.25));
     plus.addEventListener('click',()=>setZoom(zoom+.25));
     mag.addEventListener('click',()=>setZoom(zoom===1?2:1));
-    picture.addEventListener('click',()=>setZoom(zoom===1?2:1));
+    picture.addEventListener('click',()=>{
+      if(Date.now()-lastDragAt<350)return;
+      setZoom(zoom===1?2:1);
+    });
+    stage.addEventListener('pointerdown',event=>{
+      if(zoom<=1||event.pointerType!=='mouse'||event.button!==0)return;
+      panOrigin={x:event.clientX,y:event.clientY,left:stage.scrollLeft,top:stage.scrollTop,moved:false};
+      stage.setPointerCapture?.(event.pointerId);
+    });
+    stage.addEventListener('pointermove',event=>{
+      if(!panOrigin)return;
+      const dx=event.clientX-panOrigin.x,dy=event.clientY-panOrigin.y;
+      if(Math.abs(dx)>4||Math.abs(dy)>4)panOrigin.moved=true;
+      if(panOrigin.moved){
+        stage.scrollLeft=panOrigin.left-dx;
+        stage.scrollTop=panOrigin.top-dy;
+      }
+    });
+    stage.addEventListener('pointerup',()=>{
+      if(panOrigin?.moved)lastDragAt=Date.now();
+      panOrigin=null;
+    });
+    stage.addEventListener('pointercancel',()=>{panOrigin=null});
     previous.addEventListener('click',()=>move(-1));
     next.addEventListener('click',()=>move(1));
     closeBtn.addEventListener('click',close);
@@ -91,6 +113,8 @@
     plus.disabled=zoom>=3;
     mag.setAttribute('aria-pressed',String(zoom>1));
     mag.title=zoom===1?'Magnify to 200%':'Return to fit';
+    stage.style.cursor=zoom>1?'grab':'default';
+    picture.style.cursor=zoom>1?'grab':'zoom-in';
     if(!picture.naturalWidth||!picture.naturalHeight)return;
     const availableW=Math.max(1,stage.clientWidth-20),availableH=Math.max(1,stage.clientHeight-16);
     const fit=Math.min(availableW/picture.naturalWidth,availableH/picture.naturalHeight);
