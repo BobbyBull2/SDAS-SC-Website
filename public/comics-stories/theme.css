@@ -291,7 +291,7 @@ body{font-family:var(--body);font-weight:400}
 }
 @media(max-width:390px){.banner .hero-art{height:auto;aspect-ratio:2048 / 545.6}}
 /* Comics have a 50% wider reading area, with full-resolution vertical pages. */
-.reader{max-width:min(1800px,99%);width:99%}
+.reader{max-width:min(1350px,99%);width:99%}
 .page{min-height:0}
 .page img{width:100%;height:auto;max-height:none;object-fit:contain}
 @media(max-width:620px){.reader{width:100%;max-width:100%}.page img{max-height:none}.strip{justify-content:flex-start;overflow:auto;flex-wrap:nowrap}}
@@ -317,3 +317,51 @@ body{font-family:var(--body);font-weight:400}
 .comment-form textarea{width:100%;min-height:78px;resize:vertical;background:#06171d;color:#f1f9f8;border:1px solid #3c7276;padding:10px;font:14px/1.5 var(--body)}
 .comment-form .btn{justify-self:start}
 @media(max-width:620px){.entry-social{padding:9px;gap:8px}.entry-comments{padding:11px 0}.social-action{font-size:12px}}
+
+/* Fullscreen comic interaction / magnifier. Keeps the normal page at 75% of the
+   previous 1800px reader; fullscreen can use the entire display. */
+.page #page-img{cursor:zoom-in}
+.page #page-img:focus-visible{outline:3px solid var(--cyan);outline-offset:5px}
+.reader-zoom-hint{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;margin:8px auto 12px;color:#afdae0;font:600 13px var(--condensed);letter-spacing:.2px}
+.reader-zoom-hint .btn{min-height:36px;padding:7px 14px}
+body.sdas-reader-active{overflow:hidden}
+.sdas-fullscreen-reader[hidden]{display:none!important}
+.sdas-fullscreen-reader{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;color:#f2ffff;background:rgba(2,8,12,.985);isolation:isolate;width:100vw;height:100dvh;overflow:hidden}
+.sdas-fullscreen-reader:fullscreen{width:100%;height:100%;background:#02090e}
+.sdas-fullscreen-toolbar{display:flex;align-items:center;flex-wrap:wrap;justify-content:space-between;gap:8px 18px;padding:10px 18px;min-height:62px;background:linear-gradient(120deg,#0c303b,#061419);border-bottom:1px solid #3c787a;z-index:2}
+.sdas-fullscreen-heading{font:700 clamp(13px,2vw,19px) var(--condensed);max-width:48vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sdas-fullscreen-counter{font:600 12px var(--tech);color:var(--cyan);margin-left:auto}
+.sdas-fullscreen-zoom{display:flex;align-items:center;justify-content:flex-end;gap:7px}
+.sdas-fullscreen-control{display:grid;place-items:center;min-width:41px;height:40px;border:1px solid #417f84;border-radius:3px;background:#11333d;color:#f1fffe;font:700 21px var(--condensed);cursor:pointer}
+.sdas-fullscreen-control:hover:not(:disabled),.sdas-fullscreen-control:focus-visible{background:#20545e;border-color:var(--cyan)}
+.sdas-fullscreen-control:disabled,.sdas-fullscreen-arrow:disabled{opacity:.3;cursor:default}
+.sdas-fullscreen-magnifier{font-size:19px}
+.sdas-zoom-value{font:700 12px var(--tech);min-width:50px;text-align:center;color:var(--gold)}
+.sdas-fullscreen-close{margin-left:10px;border-color:#aa7777;background:#40232c}
+.sdas-fullscreen-stage{display:flex;flex:1 1 auto;min-height:0;min-width:0;width:100%;overflow:auto;overscroll-behavior:contain;scrollbar-color:#588e91 #061b23;touch-action:pan-x pan-y}
+.sdas-fullscreen-image{display:block;flex:0 0 auto;max-width:none!important;max-height:none!important;width:auto;height:auto;margin:auto;object-fit:contain;user-select:none;cursor:zoom-in}
+.sdas-fullscreen-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;display:grid;place-items:center;width:58px;height:72px;background:#071b25d9;border:1px solid #4a9693;border-radius:4px;color:#dffefa;font:40px/1 var(--condensed);text-shadow:0 0 10px #00ffe55c;cursor:pointer;touch-action:manipulation}
+.sdas-fullscreen-arrow:hover:not(:disabled){background:#155061;border-color:var(--cyan)}
+.sdas-fullscreen-prev{left:9px}.sdas-fullscreen-next{right:9px}
+.sdas-fullscreen-hint{padding:7px 12px;background:#04141a;border-top:1px solid #21535b;text-align:center;color:#85b9bf;font:12px/1.35 var(--condensed)}
+/* Every story and comic uses the same social panel, including reading view. */
+#detail-social{margin:24px auto 35px;max-width:min(1350px,99%);border:1px solid #28575c;background:linear-gradient(130deg,#0c232b,#06161c)}
+#detail-social .detail-social-heading{margin:0;padding:15px 16px 4px;color:var(--gold);font:700 16px var(--condensed);letter-spacing:1px;text-transform:uppercase}
+#detail-social .entry-social{border:0;padding:12px 16px}
+#detail-social .entry-comments{border-color:#335a5d}
+@media(max-width:700px){
+  .sdas-fullscreen-toolbar{gap:7px;padding:7px 9px;min-height:55px}
+  .sdas-fullscreen-heading{max-width:48%;font-size:13px}
+  .sdas-fullscreen-counter{margin-left:0;font-size:10px}
+  .sdas-fullscreen-zoom{gap:4px;margin-left:auto}
+  .sdas-fullscreen-control{min-width:33px;height:36px;font-size:19px}
+  .sdas-fullscreen-arrow{width:42px;height:55px;font-size:28px}
+  .sdas-fullscreen-prev{left:3px}.sdas-fullscreen-next{right:3px}
+  .sdas-fullscreen-hint{font-size:10px}
+  .reader-zoom-hint{font-size:12px}
+}
+@media(max-width:390px){
+  .sdas-fullscreen-heading{max-width:100%;flex:1 1 100%}
+  .sdas-fullscreen-counter{margin-left:auto}
+  .sdas-fullscreen-zoom{margin-left:0}
+}
