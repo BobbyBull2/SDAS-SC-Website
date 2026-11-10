@@ -159,3 +159,19 @@ header .nav-wrap>.brand>span:not(.brand-emblem){display:none}
   }
   .hero .art-credit{top:auto;bottom:130px;right:13px}
 }
+
+/* Keep ALL hero messaging anchored to the left of the banner, even on
+   ultrawide monitors. The panorama and blurred edges remain centered.
+   Phones retain the established stacked, readable text arrangement. */
+@media(min-width:541px){
+  .hero-content{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:none;
+    margin:0;
+    padding-left:clamp(24px,3vw,64px);
+    padding-right:clamp(24px,3vw,64px);
+    text-align:left;
+  }
+}
