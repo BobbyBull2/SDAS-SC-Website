@@ -9,7 +9,7 @@
   const owns = post => Boolean(user && post && (post.ownerId === user.id || isAdmin()));
   const isAdmin = () => Boolean(user && membership && membership.role === 'admin' && membership.discord_rank === 'super_admin' && fresh(membership));
   const fresh = m => Boolean(m && m.last_role_checked_at && Date.now()-Date.parse(m.last_role_checked_at) < 12*3600000 && Date.now() >= Date.parse(m.last_role_checked_at));
-  const member = () => Boolean(membership && fresh(membership) && ((membership.role==='admin'&&membership.discord_rank==='super_admin')||(membership.role==='officer'&&membership.discord_rank==='board_member')||(membership.role==='member'&&membership.discord_rank==='patch')));
+  const member = () => Boolean(membership && fresh(membership) && ((membership.role==='admin'&&membership.discord_rank==='super_admin')||(membership.role==='officer'&&membership.discord_rank==='board_member')||(membership.role==='member'&&membership.discord_rank==='patch')||(membership.role==='prospect'&&membership.discord_rank==='prospect')));
   const imageUrl = path => path ? sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl : null;
   function pathFromUrl(value) {
     if (!value || typeof value !== 'string') return null;
@@ -102,7 +102,7 @@
   async function save(post, previous) {
     if (!sb) await init();
     await refreshAccess();
-    if(!member()) throw Error('Verified SDAS Patch, Board Member, or Super Admin access is required. Sign in with Discord and refresh your roles.');
+    if(!member()) throw Error('Verified SDAS Prospect or higher access is required. Sign in with Discord and refresh your roles.');
     if(previous?.server && !owns(previous))throw Error('Only the author or an SDAS Super Admin may edit this post.');
     const id=previous?.server?previous.id:crypto.randomUUID();
     const uploads=[];
@@ -139,5 +139,62 @@
     if(error)throw error;
     // Uploaded media is intentionally retained until safe garbage collection to avoid losing shared assets.
   }
-  window.SdasComicsCloud={init,access,refreshAccess,signIn,signOut,list,save,remove,canEdit:owns,canUpload:member};
+
+  // Preview social data is shared across devices and governed by table RLS.
+  async function socialStats() {
+    if(!sb)await init();
+    const {data,error}=await sb.from('preview_sdas_comics_social_stats')
+      .select('post_id,like_count,comment_count').limit(500);
+    if(error)throw error;
+    const counts={};
+    for(const row of data||[])counts[row.post_id]={likes:Number(row.like_count)||0,comments:Number(row.comment_count)||0};
+    const mine=new Set();
+    if(user){
+      const {data:myLikes,error:likesError}=await sb.from('preview_sdas_comics_likes')
+        .select('post_id').eq('user_id',user.id).limit(500);
+      if(likesError)throw likesError;
+      for(const row of myLikes||[])mine.add(row.post_id);
+    }
+    return {counts,mine:[...mine]};
+  }
+  async function getComments(postId) {
+    if(!sb)await init();
+    const {data,error}=await sb.from('preview_sdas_comics_comments')
+      .select('id,post_id,user_id,author_name,body,created_at')
+      .eq('post_id',postId).order('created_at',{ascending:true}).limit(200);
+    if(error)throw error;
+    return data||[];
+  }
+  async function setLike(postId,liked) {
+    await refreshAccess();
+    if(!member())throw Error('Discord-verified SDAS Prospect or higher access is required to like posts.');
+    const query=liked
+      ?sb.from('preview_sdas_comics_likes').delete().eq('post_id',postId).eq('user_id',user.id)
+      :sb.from('preview_sdas_comics_likes').insert({post_id:postId,user_id:user.id});
+    const {error}=await query;
+    if(error)throw error;
+  }
+  async function addComment(postId,body) {
+    await refreshAccess();
+    if(!member())throw Error('Discord-verified SDAS Prospect or higher access is required to comment.');
+    const message=String(body||'').trim();
+    if(!message||message.length>1500)throw Error('Comments must be between 1 and 1,500 characters.');
+    const author=String(user.user_metadata?.full_name||user.user_metadata?.name||'SDAS pilot').trim().slice(0,80)||'SDAS pilot';
+    const {data,error}=await sb.from('preview_sdas_comics_comments')
+      .insert({post_id:postId,user_id:user.id,author_name:author,body:message})
+      .select('id,post_id,user_id,author_name,body,created_at').single();
+    if(error)throw error;
+    return data;
+  }
+  async function deleteComment(comment) {
+    await refreshAccess();
+    if(!user || !(user.id===comment.user_id || isAdmin()))throw Error('Only the author or a Super Admin may remove a comment.');
+    const {error}=await sb.from('preview_sdas_comics_comments')
+      .delete().eq('id',comment.id).eq('post_id',comment.post_id);
+    if(error)throw error;
+  }
+  function canModerateComment(comment) {
+    return !!(user&&(user.id===comment.user_id||isAdmin()));
+  }
+  window.SdasComicsCloud={init,access,refreshAccess,signIn,signOut,list,save,remove,canEdit:owns,canUpload:member,socialStats,getComments,setLike,addComment,deleteComment,canModerateComment};
 })();
