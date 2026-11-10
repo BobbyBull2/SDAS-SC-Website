@@ -272,3 +272,11 @@ body{font-family:var(--body);font-weight:400}
   .entry img{height:auto}
   .banner .hero-frame{padding:18px 0 24px}
 }
+
+/* Shared archive authentication and save status; wraps cleanly on phones. */
+.cloud-auth{display:flex;align-items:center;flex-wrap:wrap;gap:10px 12px;padding:13px 15px;margin:10px 0 16px;border:1px solid #2d6673;background:linear-gradient(130deg,#09232b,#06161d);font:600 13px/1.5 var(--condensed);color:#b9f3f0;overflow-wrap:anywhere}
+.cloud-auth span{flex:1 1 260px}
+.cloud-auth .btn{padding:8px 12px;font:600 12px var(--condensed);border-radius:3px}
+.archive-storage-note{line-height:1.5;overflow-wrap:anywhere}
+.toolbar button:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:620px){.cloud-auth{padding:10px;gap:8px}.cloud-auth span{flex-basis:100%}.cloud-auth .btn{flex:1 1 auto}.banner .hero-art > img{max-width:100%;object-fit:contain}}
