@@ -175,3 +175,42 @@ header .nav-wrap>.brand>span:not(.brand-emblem){display:none}
     text-align:left;
   }
 }
+
+/* SDAS hero final framing: right-side panorama aligned with title (2026-11-10).
+   Keep the approved sharp 3:1 image intact, shift its visible frame right
+   alongside the SOME DUDES / SPACESHIP heading, and feather only the image's
+   left edge over a blurred same-image backing. Do not change copy or hero height.
+   This desktop/tablet adjustment intentionally leaves the mobile stack alone. */
+@media (min-width:541px){
+  .hero-art{
+    inset:auto 0 0 clamp(420px,32vw,760px);
+    top:clamp(48px,4vw,64px);
+    display:flex;
+    align-items:flex-start;
+    justify-content:flex-end;
+    background:transparent;
+  }
+  .hero-art::before{
+    inset:-32px -36px -32px -110px;
+    background-position:center;
+    filter:blur(34px) brightness(.60) saturate(.88);
+  }
+  .hero-art img{
+    width:100%;
+    height:auto;
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+    object-position:right top;
+    -webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.35) 7%,#000 19%,#000 100%);
+    mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.35) 7%,#000 19%,#000 100%);
+  }
+  .hero-shade{
+    background:
+      linear-gradient(90deg,#061017 0%,#061017fa 15%,#061017e0 27%,#06101794 40%,#06101724 56%,transparent 71%),
+      linear-gradient(0deg,#06101748,transparent 26%);
+  }
+}
+@media (min-width:541px) and (max-width:1100px){
+  .hero-art{left:clamp(310px,35vw,450px);}
+}
