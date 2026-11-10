@@ -120,8 +120,8 @@ async function restoreDevicePosts(){
 
 function render(){$('total-count').textContent=String(items.length).padStart(2,'0');const q=$('search').value.toLowerCase(),f=$('filter').value;const filtered=items.filter(x=>(f==='all'||x.type===f)&&(x.title+' '+x.author+' '+x.description).toLowerCase().includes(q));$('entries').innerHTML=filtered.length?filtered.map(x=>'<button class="entry" data-id="'+esc(x.id)+'"><img src="'+esc(x.thumbnail||x.cover||x.pages[0]||base+'preview-orbit.png')+'" alt=""/><div><h2>'+esc(x.title)+' <span class="tag '+(x.type==='story'?'story':'')+'">'+(x.type==='story'?'Story':'Comic')+'</span></h2><div class="meta">by '+esc(x.author)+(x.demo?' · SAMPLE ENTRY':x.local?' · LOCAL DRAFT · NOT SHARED':' · SHARED SDAS ARCHIVE')+'</div><p class="meta">'+esc(x.description)+'</p></div><span class="arrow">❯</span></button>').join(''):'<p>No matching entries.</p>';document.querySelectorAll('.entry').forEach(b=>b.onclick=()=>openItem(b.dataset.id));}
 function openItem(id){selected=items.find(x=>x.id===id);if(!selected)return;index=0;history.pushState({},'',location.pathname+'#'+encodeURIComponent(id));showDetail();}
-function showDetail(){if(!selected)return;$('listing').classList.add('hidden');$('detail').classList.remove('hidden');$('detail-title').textContent='// '+selected.title;$('detail-meta').textContent='Created by '+selected.author+' · '+(selected.type==='comic'?'Comic':'Story')+(selected.demo?' · SAMPLE CONTENT':selected.local?' · LOCAL DRAFT · NOT SHARED':' · SHARED SDAS ARCHIVE');$('comic-reader').classList.toggle('hidden',selected.type==='story');$('story-view').classList.toggle('hidden',selected.type!=='story');$('story-text').textContent=selected.body||'';$('edit').classList.toggle('hidden',!!selected.demo || (!selected.local && !window.SdasComicsCloud.canEdit(selected)));const cover=selected.type==='story'?selected.cover:null;$('story-cover').classList.toggle('hidden',!cover);$('story-cover-img').src=cover||'';$('story-cover-img').alt=cover?selected.title+' — story cover image':'';drawPage();window.scrollTo(0,0)}
-function drawPage(){if(!selected||selected.type!=='comic')return;const p=selected.pages;$('counter').textContent='Page '+(index+1)+' of '+p.length;$('page-img').src=p[index];$('page-img').alt=selected.title+', page '+(index+1);$('prev').disabled=index===0;$('next').disabled=index===p.length-1;$('strip').innerHTML=p.map((src,i)=>'<button class="thumb" data-page="'+i+'" aria-label="Go to page '+(i+1)+'" aria-current="'+(i===index)+'"><img src="'+esc(src)+'" alt=""/>'+(i+1)+'</button>').join('');document.querySelectorAll('.thumb').forEach(b=>b.onclick=()=>{index=Number(b.dataset.page);drawPage()})}
+function showDetail(shouldScroll=true){if(!selected)return;$('listing').classList.add('hidden');$('detail').classList.remove('hidden');$('detail-title').textContent='// '+selected.title;$('detail-meta').textContent='Created by '+selected.author+' · '+(selected.type==='comic'?'Comic':'Story')+(selected.demo?' · SAMPLE CONTENT':selected.local?' · LOCAL DRAFT · NOT SHARED':' · SHARED SDAS ARCHIVE');$('comic-reader').classList.toggle('hidden',selected.type==='story');$('story-view').classList.toggle('hidden',selected.type!=='story');$('story-text').textContent=selected.body||'';$('edit').classList.toggle('hidden',!!selected.demo || (!selected.local && !window.SdasComicsCloud.canEdit(selected)));const cover=selected.type==='story'?selected.cover:null;$('story-cover').classList.toggle('hidden',!cover);$('story-cover-img').src=cover||'';$('story-cover-img').alt=cover?selected.title+' — story cover image':'';drawPage();if(shouldScroll)window.scrollTo(0,0)}
+function drawPage(){if(!selected||selected.type!=='comic')return;const p=selected.pages;$('counter').textContent='Page '+(index+1)+' of '+p.length;if($('page-img').getAttribute('src')!==p[index])$('page-img').src=p[index];$('page-img').alt=selected.title+', page '+(index+1);$('prev').disabled=index===0;$('next').disabled=index===p.length-1;$('strip').innerHTML=p.map((src,i)=>'<button class="thumb" data-page="'+i+'" aria-label="Go to page '+(i+1)+'" aria-current="'+(i===index)+'"><img src="'+esc(src)+'" alt=""/>'+(i+1)+'</button>').join('');document.querySelectorAll('.thumb').forEach(b=>b.onclick=()=>{index=Number(b.dataset.page);drawPage()})}
 function listing(){selected=null;$('detail').classList.add('hidden');$('listing').classList.remove('hidden');history.pushState({},'',location.pathname);render()}
 $('back').onclick=listing;$('prev').onclick=()=>{if(index>0){index--;drawPage()}};$('next').onclick=()=>{if(selected&&index<selected.pages.length-1){index++;drawPage()}};$('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='Link copied';setTimeout(()=>$('share').textContent='Share',1600)}catch{prompt('Copy this link',location.href)}};$('search').oninput=render;$('filter').onchange=render;
 
@@ -280,7 +280,7 @@ function showFormError(message){$('form-error').textContent=message;$('form-erro
 async function requestEditor(item,type){
   const cloud=window.SdasComicsCloud;
   if(!cloud.canUpload()){
-    $('storage-message').textContent='Sign in using Discord and verify your SDAS Patch, Board Member, or Super Admin role before uploading.';
+    $('storage-message').textContent='Sign in using Discord and verify your SDAS Prospect or higher role before uploading.';
     try{await cloud.signIn()}catch(error){$('storage-message').textContent='Discord sign-in could not start: '+(error.message||error)}
     return;
   }
@@ -375,7 +375,7 @@ async function refreshSharedArchive(){
     render();
     const requested=decodeURIComponent(location.hash.slice(1));
     const match=items.find(x=>x.id===requested);
-    if(match){selected=match;index=0;showDetail()}
+    if(match){const changed=selected?.id!==match.id;selected=match;if(changed)index=0;index=Math.max(0,Math.min(index,(match.pages||[]).length-1));if(!$('detail').classList.contains('hidden'))showDetail(false)}
     $('storage-message').textContent='Shared Supabase archive connected · '+shared.length+' server-saved post(s). Browser-only drafts are labeled LOCAL DRAFT and can be published by editing them.';
   }catch(error){
     $('storage-message').textContent='Server archive could not load: '+(error.message||error)+'. Local drafts and sample entries remain visible.';
@@ -399,7 +399,7 @@ function renderCloudAuth(){
   }
   $('upload').disabled=!access.member;
   $('upload-story').disabled=!access.member;
-  if(selected)showDetail();
+  if(selected&&!$('detail').classList.contains('hidden'))showDetail(false);
 }
 async function startCloudArchive(){
   try{
