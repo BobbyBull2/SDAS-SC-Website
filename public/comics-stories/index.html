@@ -18,9 +18,10 @@
 </style><link rel="icon" type="image/png" href="/images/sdas-neon-bookmark.png"/><meta name="theme-color" content="#051015"/><meta name="description" content="SDAS Comics & Stories: illustrated adventures and written tales from the Some Dudes and a Spaceship Star Citizen crew."/><link rel="stylesheet" href="./theme.css?v=exact-hangar-responsive-20261109"/></head><body><header class="top"><a class="brand" href="/" aria-label="SDAS home"><img class="sdas-fleet-logo" src="/images/sdas-fleet-manager-emblem.png" alt="SDAS — Some Dudes and a Spaceship, Fleet Manager insignia" width="2164" height="726"/></a><nav class="nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/#calendar">Events</a><a href="/#issue-council">Issue Council</a><a href="/SDFM/">Fleet Manager</a><a class="active" aria-current="page" href="./">Comics &amp; Stories</a></nav><div class="header-status"><span class="status-dot"></span> PREVIEW CHANNEL</div></header>
 <section class="banner" aria-label="SDAS Comics and Stories"><a class="hero-art" href="/images/sdas-comics-hangar-exact-lossless.webp" target="_blank" rel="noopener noreferrer" aria-label="View the full SDAS cinematic hangar banner"><img src="/images/sdas-comics-hangar-exact-lossless.webp" width="2048" height="682" alt="SDAS crew member overlooking a starship and space station from a hangar, with the SDAS insignia displayed" fetchpriority="high" decoding="async"/></a><div class="hero-frame"><div class="eyebrow">Some Dudes and a Spaceship <span aria-hidden="true">/</span> Creative Division</div><h1><span class="slashes">//</span>Comics <span style="color:var(--cyan)">&amp;</span> Stories</h1><p>Every mission becomes a legend. Every bad idea deserves its own comic. Explore stories from the SDAS crew across the ’verse.</p><div class="hero-facts" aria-label="Archive sections"><span class="hero-fact"><b>01 /</b> ILLUSTRATED COMICS</span><span class="hero-fact"><b>02 /</b> CREW STORIES</span><span class="hero-fact"><b>03 /</b> MISADVENTURES</span></div><span class="preview">FOX APPROVAL PREVIEW · DEMONSTRATION CONTENT ONLY</span><div class="hero-coordinate"><strong>SDAS / CREATIVE ARCHIVE</strong>COMMUNITY UPLINK ESTABLISHED<br/>STORIES FROM THE ’VERSE</div></div><div class="hero-glow" aria-hidden="true"></div></section>
 <div class="microstrip"><span>◈ &nbsp; SDAS NETWORK / COMMS / COMMUNITY TRANSMISSIONS</span><span class="right">NOT FOR LIVE PUBLICATION · DESIGN REVIEW</span></div>
-<main class="wrap"><div id="listing"><div class="archive-head"><div><p class="archive-kicker">TRANSMISSIONS / COMMUNITY CONTENT</p><h2>THE <em>ARCHIVE</em></h2></div><div class="archive-count"><strong id="total-count">07</strong><small>PREVIEW ENTRIES</small></div></div><div class="toolbar"><input id="search" type="search" placeholder="Search comics & stories…" aria-label="Search comics and stories"/><select id="filter" aria-label="Filter content"><option value="all">All content</option><option value="comic">Comics</option><option value="story">Stories</option></select><button class="btn primary" id="upload">＋ Upload New Comic</button><button class="btn" id="upload-story">＋ Upload New Story</button></div><p class="fine archive-storage-note" id="storage-message" role="status">Loading posts saved on this device…</p><div id="entries"></div></div>
+<main class="wrap"><div id="listing"><div class="archive-head"><div><p class="archive-kicker">TRANSMISSIONS / COMMUNITY CONTENT</p><h2>THE <em>ARCHIVE</em></h2></div><div class="archive-count"><strong id="total-count">07</strong><small>PREVIEW ENTRIES</small></div></div><div class="toolbar"><input id="search" type="search" placeholder="Search comics & stories…" aria-label="Search comics and stories"/><select id="filter" aria-label="Filter content"><option value="all">All content</option><option value="comic">Comics</option><option value="story">Stories</option></select><button class="btn primary" id="upload">＋ Upload New Comic</button><button class="btn" id="upload-story">＋ Upload New Story</button></div><div id="cloud-auth" class="cloud-auth" role="status" aria-live="polite">Connecting to shared SDAS archive…</div><p class="fine archive-storage-note" id="storage-message" role="status">Loading shared SDAS posts…</p><div id="entries"></div></div>
 <div id="detail" class="hidden"><button class="btn back" id="back">← Back to Comics & Stories</button><div class="reader-head"><h2 id="detail-title"></h2><div class="detail-actions"><button class="btn hidden" id="edit" type="button">✎ Edit Post</button><button class="btn" id="share" type="button">Share</button></div></div><p class="meta" id="detail-meta"></p><div id="comic-reader" class="reader"><div class="page-counter" id="counter"></div><div class="page"><img id="page-img" alt="Comic page"/></div><div class="reader-controls"><button class="btn" id="prev">❮ Previous</button><button class="btn" id="next">Next ❯</button></div><div class="strip" id="strip"></div></div><div id="story-view" class="hidden"><figure class="story-cover hidden" id="story-cover"><img id="story-cover-img" alt="" decoding="async"/></figure><article class="storytext" id="story-text"></article></div></div></main><footer class="site-footer"><span class="footer-word">SDAS</span><small>GOOD FRIENDS. BAD IDEAS. LEGENDARY STORIES.</small><a href="/">RETURN TO SDAS.SPACE ↗</a></footer>
 <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="dialog"><button class="btn" id="close" style="float:right">✕ Close</button><h2 id="modal-title">Submit a Comic or Story</h2><p class="fine" id="editor-note">Preview only: posts and uploaded images are stored in this browser on this device after saving. They are not published or shared through SDAS servers.</p><form id="form" class="form"><label>Title<input name="title" required maxlength="100"/></label><label>Creator name<input name="author" required maxlength="60"/></label><label>Format<select name="type" id="type"><option value="comic">Comic</option><option value="story">Written story</option></select></label><label>Short description<textarea name="description" maxlength="400"></textarea></label><label id="thumbnail-label">Landing-page thumbnail (optional JPG, PNG or WebP, max 8 MB)<input id="thumbnail-input" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"/></label><div class="image-edit-notice hidden" id="thumbnail-editor"><p class="fine" id="thumbnail-note"></p><img class="current-cover-preview hidden" id="thumbnail-preview" alt="Selected landing-page thumbnail"/><label id="remove-thumbnail-label" class="cover-remove hidden"><input type="checkbox" id="remove-thumbnail"/> Remove custom thumbnail (use first comic page or story cover)</label></div><label id="pages-label">Comic pages (images, in reading order)<input id="pages-input" type="file" accept="image/*" multiple/></label><label id="story-cover-label" class="hidden">Story cover image (optional JPG, PNG, or WebP, max 8 MB)<input id="story-cover-input" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"/></label><label id="text-label" class="hidden">Story text<textarea name="body" id="body"></textarea></label><div id="current-image" class="hidden image-edit-notice"><p class="fine" id="image-note"></p><div id="comic-pages-editor" class="hidden" aria-label="Comic pages editor"></div><img id="current-cover-preview" class="hidden current-cover-preview" alt="Current uploaded story cover"/><label id="remove-cover-label" class="hidden cover-remove"><input type="checkbox" id="remove-cover"/> Remove current story cover</label></div><p class="error hidden" id="form-error" role="alert"></p><button class="btn primary" id="form-submit" type="submit">Add to local preview</button></form></div></div>
+<script src="./cloud.js?v=server-preview-20261109"></script>
 <script>
 const base='/images/';const demo=[
 {id:'polaris-incident',title:'The Polaris Incident',type:'comic',author:'Fox',description:'Community comic cover preview.',pages:[base+'fox-comic-thumb-1.webp'],demo:true},
@@ -98,7 +99,7 @@ function hydratePost(record){
   return {id:String(record.id),title:String(record.title||''),author:String(record.author||''),
     type:record.type,description:String(record.description||''),body:String(record.body||''),
     pages,cover,thumbnail:restoredImage(record.thumbnail),createdAt:record.createdAt||null,
-    updatedAt:record.updatedAt||null,demo:false};
+    updatedAt:record.updatedAt||null,demo:false,local:true};
 }
 async function restoreDevicePosts(){
   try{
@@ -110,16 +111,16 @@ async function restoreDevicePosts(){
     render();
     const fromUrl=items.find(x=>x.id===decodeURIComponent(location.hash.slice(1)));
     if(fromUrl&&!selected){selected=fromUrl;index=0;showDetail()}
-    $('storage-message').textContent='Preview posts are saved only in this browser on this device, not to SDAS servers. Clearing site data, changing devices, or using private browsing can erase them.'+(restored.length?' Restored '+restored.length+' saved post(s).':'');
+    if(restored.length)$('storage-message').textContent='Found '+restored.length+' browser-only post(s). Open and edit one to save a shared copy to the SDAS server. Your original browser copy is kept until server save succeeds.';
   }catch(error){
-    $('storage-message').textContent='Browser storage is unavailable: new uploads cannot be saved safely. Try a normal browsing window with site storage enabled.';
+    $('storage-message').textContent='Local browser drafts are unavailable, but the shared Supabase archive can still be used.';
     console.warn('SDAS browser storage unavailable:',error);
   }
 }
 
-function render(){$('total-count').textContent=String(items.length).padStart(2,'0');const q=$('search').value.toLowerCase(),f=$('filter').value;const filtered=items.filter(x=>(f==='all'||x.type===f)&&(x.title+' '+x.author+' '+x.description).toLowerCase().includes(q));$('entries').innerHTML=filtered.length?filtered.map(x=>'<button class="entry" data-id="'+esc(x.id)+'"><img src="'+esc(x.thumbnail||x.cover||x.pages[0]||base+'preview-orbit.png')+'" alt=""/><div><h2>'+esc(x.title)+' <span class="tag '+(x.type==='story'?'story':'')+'">'+(x.type==='story'?'Story':'Comic')+'</span></h2><div class="meta">by '+esc(x.author)+(x.demo?' · SAMPLE ENTRY':' · SAVED ON THIS DEVICE')+'</div><p class="meta">'+esc(x.description)+'</p></div><span class="arrow">❯</span></button>').join(''):'<p>No matching entries.</p>';document.querySelectorAll('.entry').forEach(b=>b.onclick=()=>openItem(b.dataset.id));}
+function render(){$('total-count').textContent=String(items.length).padStart(2,'0');const q=$('search').value.toLowerCase(),f=$('filter').value;const filtered=items.filter(x=>(f==='all'||x.type===f)&&(x.title+' '+x.author+' '+x.description).toLowerCase().includes(q));$('entries').innerHTML=filtered.length?filtered.map(x=>'<button class="entry" data-id="'+esc(x.id)+'"><img src="'+esc(x.thumbnail||x.cover||x.pages[0]||base+'preview-orbit.png')+'" alt=""/><div><h2>'+esc(x.title)+' <span class="tag '+(x.type==='story'?'story':'')+'">'+(x.type==='story'?'Story':'Comic')+'</span></h2><div class="meta">by '+esc(x.author)+(x.demo?' · SAMPLE ENTRY':x.local?' · LOCAL DRAFT · NOT SHARED':' · SHARED SDAS ARCHIVE')+'</div><p class="meta">'+esc(x.description)+'</p></div><span class="arrow">❯</span></button>').join(''):'<p>No matching entries.</p>';document.querySelectorAll('.entry').forEach(b=>b.onclick=()=>openItem(b.dataset.id));}
 function openItem(id){selected=items.find(x=>x.id===id);if(!selected)return;index=0;history.pushState({},'',location.pathname+'#'+encodeURIComponent(id));showDetail();}
-function showDetail(){if(!selected)return;$('listing').classList.add('hidden');$('detail').classList.remove('hidden');$('detail-title').textContent='// '+selected.title;$('detail-meta').textContent='Created by '+selected.author+' · '+(selected.type==='comic'?'Comic':'Story')+(selected.demo?' · SAMPLE CONTENT':' · SAVED ON THIS DEVICE');$('comic-reader').classList.toggle('hidden',selected.type==='story');$('story-view').classList.toggle('hidden',selected.type!=='story');$('story-text').textContent=selected.body||'';$('edit').classList.toggle('hidden',!!selected.demo);const cover=selected.type==='story'?selected.cover:null;$('story-cover').classList.toggle('hidden',!cover);$('story-cover-img').src=cover||'';$('story-cover-img').alt=cover?selected.title+' — story cover image':'';drawPage();window.scrollTo(0,0)}
+function showDetail(){if(!selected)return;$('listing').classList.add('hidden');$('detail').classList.remove('hidden');$('detail-title').textContent='// '+selected.title;$('detail-meta').textContent='Created by '+selected.author+' · '+(selected.type==='comic'?'Comic':'Story')+(selected.demo?' · SAMPLE CONTENT':selected.local?' · LOCAL DRAFT · NOT SHARED':' · SHARED SDAS ARCHIVE');$('comic-reader').classList.toggle('hidden',selected.type==='story');$('story-view').classList.toggle('hidden',selected.type!=='story');$('story-text').textContent=selected.body||'';$('edit').classList.toggle('hidden',!!selected.demo || (!selected.local && !window.SdasComicsCloud.canEdit(selected)));const cover=selected.type==='story'?selected.cover:null;$('story-cover').classList.toggle('hidden',!cover);$('story-cover-img').src=cover||'';$('story-cover-img').alt=cover?selected.title+' — story cover image':'';drawPage();window.scrollTo(0,0)}
 function drawPage(){if(!selected||selected.type!=='comic')return;const p=selected.pages;$('counter').textContent='Page '+(index+1)+' of '+p.length;$('page-img').src=p[index];$('page-img').alt=selected.title+', page '+(index+1);$('prev').disabled=index===0;$('next').disabled=index===p.length-1;$('strip').innerHTML=p.map((src,i)=>'<button class="thumb" data-page="'+i+'" aria-label="Go to page '+(i+1)+'" aria-current="'+(i===index)+'"><img src="'+esc(src)+'" alt=""/>'+(i+1)+'</button>').join('');document.querySelectorAll('.thumb').forEach(b=>b.onclick=()=>{index=Number(b.dataset.page);drawPage()})}
 function listing(){selected=null;$('detail').classList.add('hidden');$('listing').classList.remove('hidden');history.pushState({},'',location.pathname);render()}
 $('back').onclick=listing;$('prev').onclick=()=>{if(index>0){index--;drawPage()}};$('next').onclick=()=>{if(selected&&index<selected.pages.length-1){index++;drawPage()}};$('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$('share').textContent='Link copied';setTimeout(()=>$('share').textContent='Share',1600)}catch{prompt('Copy this link',location.href)}};$('search').oninput=render;$('filter').onchange=render;
@@ -247,8 +248,8 @@ function openEditor(item,type){
   $('type').disabled=!!editingId;
   $('type').value=item?item.type:type;
   $('modal-title').textContent=editingId?(item.type==='story'?'Edit Story':'Edit Comic'):(type==='story'?'Upload New Story':'Upload New Comic');
-  $('form-submit').textContent=editingId?'Save changes on this device':'Save to this device';
-  $('editor-note').textContent='Preview only: posts and uploaded images are saved in this browser on this device after you select Save. They are not published to SDAS servers or shared with other visitors. Clearing site data or using another browser/device will lose them.';
+  $('form-submit').textContent=editingId?(item.local?'Publish local draft to server':'Save changes to server'):'Save to SDAS server';
+  $('editor-note').textContent='Preview archive: text and images are saved to the SDAS Supabase server and shared with other visitors. Changes are editable by their author or SDAS Super Admins. Local browser drafts can be published here.';
   $('form-error').classList.add('hidden');
   $('remove-cover').checked=false;
   $('remove-thumbnail').checked=false;
@@ -276,9 +277,21 @@ function closeEditor(keepUrls=[]){
   $('form-error').classList.add('hidden');
 }
 function showFormError(message){$('form-error').textContent=message;$('form-error').classList.remove('hidden')}
-$('upload').onclick=()=>openEditor(null,'comic');
-$('upload-story').onclick=()=>openEditor(null,'story');
-$('edit').onclick=()=>{if(selected&&!selected.demo)openEditor(selected,selected.type)};
+async function requestEditor(item,type){
+  const cloud=window.SdasComicsCloud;
+  if(!cloud.canUpload()){
+    $('storage-message').textContent='Sign in using Discord and verify your SDAS Patch, Board Member, or Super Admin role before uploading.';
+    try{await cloud.signIn()}catch(error){$('storage-message').textContent='Discord sign-in could not start: '+(error.message||error)}
+    return;
+  }
+  if(item&&!item.local&&!cloud.canEdit(item)){
+    $('storage-message').textContent='Only this post’s author or an SDAS Super Admin can edit it.';return;
+  }
+  openEditor(item,type);
+}
+$('upload').onclick=()=>requestEditor(null,'comic');
+$('upload-story').onclick=()=>requestEditor(null,'story');
+$('edit').onclick=()=>{if(selected&&!selected.demo)void requestEditor(selected,selected.type)};
 $('close').onclick=closeEditor;
 $('modal').onclick=e=>{if(e.target===$('modal'))closeEditor()};
 window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').classList.contains('hidden'))closeEditor()});
@@ -314,38 +327,94 @@ $('form').onsubmit=async e=>{
     else if($('remove-cover').checked)cover=null;
     pages=[cover||base+'preview-orbit.png'];
   }
-  const id=existing?.id||'local-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
-  const post={...existing,id,title,author,type,description,body,pages,cover,thumbnail,demo:false};
+  const post={...existing,title,author,type,description,body,pages,cover,thumbnail,demo:false};
   const submit=$('form-submit');
   const originalLabel=submit.textContent;
-  submit.disabled=true;submit.textContent='Saving to this device…';
+  submit.disabled=true;submit.textContent='Uploading to SDAS server…';
+  let saved;
   try{
-    const saved=await savePostToDevice(post);
-    post.createdAt=saved.createdAt;
-    post.updatedAt=saved.updatedAt;
+    saved=await window.SdasComicsCloud.save(post,existing);
   }catch(error){
-    temporaryUrls.forEach(url=>URL.revokeObjectURL(url));
-    showFormError('Save failed — your post was not stored. '+(error?.name==='QuotaExceededError'?'The device is out of website storage space.':'Check browser storage settings or available device space, then try again.'));
-    console.warn('SDAS post could not be saved:',error);
+    showFormError('Server save failed. Nothing was published: '+(error?.message||String(error)));
+    console.warn('SDAS server save failure:',error);
     return;
   }finally{submit.disabled=false;submit.textContent=originalLabel}
   if(existing){
-    Object.assign(existing,post);
-    const after=new Set([...pages,cover,thumbnail]);
-    [...new Set(before)].forEach(url=>{if(url.startsWith('blob:')&&!after.has(url))URL.revokeObjectURL(url)});
-  }else{
-    items.unshift(post);
-  }
-  closeEditor([...pages,cover,thumbnail]);render();
-  selected=existing||post;index=0;
-  history.replaceState({},'',location.pathname+'#'+encodeURIComponent(post.id));
+    if(existing.local){
+      try{
+        const db=await openPostDb();
+        await new Promise((resolve,reject)=>{
+          const tx=db.transaction('posts','readwrite');
+          tx.objectStore('posts').delete(existing.id);
+          tx.oncomplete=resolve;
+          tx.onerror=()=>reject(tx.error||Error('Local draft cleanup failed'));
+        });
+      }catch(error){console.warn('The published local draft remains in browser storage:',error)}
+    }
+    const oldImages=new Set(before);
+    const newImages=new Set([...saved.pages,saved.cover,saved.thumbnail].filter(Boolean));
+    oldImages.forEach(url=>{if(url.startsWith('blob:')&&!newImages.has(url))URL.revokeObjectURL(url)});
+    Object.assign(existing,saved);
+  }else{items.unshift(saved)}
+  closeEditor();
+  temporaryUrls.forEach(url=>URL.revokeObjectURL(url));
+  render();
+  selected=existing||saved;index=0;
+  history.replaceState({},'',location.pathname+'#'+encodeURIComponent(saved.id));
   showDetail();
-  $('storage-message').textContent='Saved on this browser and device. The post will remain after refreshing this page, but it is not yet visible to others.';
-
+  $('storage-message').textContent='Saved to the shared SDAS server. Other visitors can now see this post on their devices.';
 };
 window.onpopstate=()=>{const id=decodeURIComponent(location.hash.slice(1));const item=items.find(x=>x.id===id);if(item){selected=item;index=0;showDetail()}else{selected=null;$('detail').classList.add('hidden');$('listing').classList.remove('hidden')}};
 const startItem=items.find(x=>x.id===decodeURIComponent(location.hash.slice(1)));
 if(startItem){selected=startItem;showDetail()}
+async function refreshSharedArchive(){
+  try {
+    const shared=await window.SdasComicsCloud.list();
+    for(let i=items.length-1;i>=0;i--)if(items[i].server)items.splice(i,1);
+    items.unshift(...shared);
+    render();
+    const requested=decodeURIComponent(location.hash.slice(1));
+    const match=items.find(x=>x.id===requested);
+    if(match){selected=match;index=0;showDetail()}
+    $('storage-message').textContent='Shared Supabase archive connected · '+shared.length+' server-saved post(s). Browser-only drafts are labeled LOCAL DRAFT and can be published by editing them.';
+  }catch(error){
+    $('storage-message').textContent='Server archive could not load: '+(error.message||error)+'. Local drafts and sample entries remain visible.';
+  }
+}
+function renderCloudAuth(){
+  const auth=$('cloud-auth'),cloud=window.SdasComicsCloud,access=cloud.access();
+  auth.replaceChildren();
+  const status=document.createElement('span');
+  status.textContent=access.signedIn
+    ?access.member?'Discord verified: '+access.name+' · '+access.role+' · Server uploads enabled'
+      :'Discord signed in as '+access.name+' · Reconnect Discord to verify SDAS roles'
+    :'Shared archive · Sign in with Discord to publish and edit';
+  auth.append(status);
+  const addButton=(label,fn)=>{const b=document.createElement('button');b.className='btn';b.type='button';b.textContent=label;b.onclick=async()=>{b.disabled=true;try{await fn()}catch(e){$('storage-message').textContent=label+' failed: '+(e.message||e)}finally{b.disabled=false}};auth.append(b)};
+  if(!access.signedIn)addButton('LOGIN WITH DISCORD',()=>cloud.signIn());
+  else{
+    addButton('REFRESH SDAS ROLES',async()=>{await cloud.refreshAccess();renderCloudAuth()});
+    addButton('RECONNECT DISCORD',()=>cloud.signIn());
+    addButton('SIGN OUT',async()=>{await cloud.signOut();renderCloudAuth()});
+  }
+  $('upload').disabled=!access.member;
+  $('upload-story').disabled=!access.member;
+  if(selected)showDetail();
+}
+async function startCloudArchive(){
+  try{
+    await window.SdasComicsCloud.init();
+    renderCloudAuth();
+    window.addEventListener('sdas-comics-auth-changed',renderCloudAuth);
+    await restoreDevicePosts();
+    await refreshSharedArchive();
+    window.addEventListener('focus',()=>{void window.SdasComicsCloud.refreshAccess().then(renderCloudAuth);void refreshSharedArchive()});
+    setInterval(()=>{if(!document.hidden)void refreshSharedArchive()},120000);
+  }catch(error){
+    $('storage-message').textContent='Shared archive startup failed: '+(error.message||error)+'. Retry by refreshing the page.';
+    await restoreDevicePosts();
+  }
+}
 render();
-void restoreDevicePosts();
+void startCloudArchive();
 </script></body></html>
