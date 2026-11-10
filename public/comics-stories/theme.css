@@ -280,3 +280,40 @@ body{font-family:var(--body);font-weight:400}
 .archive-storage-note{line-height:1.5;overflow-wrap:anywhere}
 .toolbar button:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:620px){.cloud-auth{padding:10px;gap:8px}.cloud-auth span{flex-basis:100%}.cloud-auth .btn{flex:1 1 auto}.banner .hero-art > img{max-width:100%;object-fit:contain}}
+
+/* Fox tester revision: a shorter cinematic banner without stretching the art.
+   Preserve the center subject, cropping roughly 10% from its top and bottom. */
+.banner .hero-art{width:100%;height:auto;aspect-ratio:2048 / 545.6;overflow:hidden;display:block}
+.banner .hero-art > img{width:100%;height:100%;max-height:none;aspect-ratio:auto;object-fit:cover;object-position:center center}
+@media(max-width:620px){
+  .banner .hero-art{width:100%;height:auto;aspect-ratio:2048 / 545.6;display:block}
+  .banner .hero-art > img{width:100%;height:100%;max-height:none;object-fit:cover}
+}
+@media(max-width:390px){.banner .hero-art{height:auto;aspect-ratio:2048 / 545.6}}
+/* Comics have a 50% wider reading area, with full-resolution vertical pages. */
+.reader{max-width:min(1800px,99%);width:99%}
+.page{min-height:0}
+.page img{width:100%;height:auto;max-height:none;object-fit:contain}
+@media(max-width:620px){.reader{width:100%;max-width:100%}.page img{max-height:none}.strip{justify-content:flex-start;overflow:auto;flex-wrap:nowrap}}
+/* Shared social controls are distinct from the click-to-open entry button. */
+.entry-shell{margin-bottom:13px;border:1px solid #2a5960;background:#071820;box-shadow:0 10px 30px #0005}
+.entry-shell .entry{margin-bottom:0;border:0;box-shadow:none}
+.entry-social{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;padding:8px 14px 10px 16px;border-top:1px solid #28555c;color:#a6cecd;font:600 13px var(--condensed)}
+.entry-social.placeholder{font-size:11px;opacity:.65}
+.social-action{cursor:pointer;border:1px solid #386a71;border-radius:3px;color:#bfeee7;background:#102a32;font:700 13px var(--condensed);padding:6px 12px;letter-spacing:.3px}
+.social-action:hover,.social-action:focus-visible{border-color:#5ff3dc;color:#fff;background:#19424a}
+.social-action.is-liked{border-color:#bc768a;color:#ffc5d3;background:#3a202b}
+.social-action span{margin-left:5px;color:#f1e1b8}
+.entry-comments{flex:1 0 100%;border-top:1px solid #2a5960;margin:6px 0 0;padding:14px 0 4px}
+.comment-list{display:grid;gap:10px;max-height:450px;overflow-y:auto}
+.comment-row{padding:10px 12px;background:#0b242c;border:1px solid #35575e;overflow-wrap:anywhere}
+.comment-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.comment-top strong{color:#a3f4e4}.comment-top time{font-size:11px;color:#89aeb5}
+.comment-row p{white-space:pre-wrap;font:400 14px/1.55 var(--body);margin:8px 0 0}
+.comment-delete{margin-left:auto;border:0;color:#ffd0d0;background:transparent;cursor:pointer;text-decoration:underline}
+.social-subtle{color:#95b8b9;font:12px/1.5 var(--body)}
+.comment-form{display:grid;gap:8px;margin-top:12px;max-width:880px}
+.comment-form label{font:700 13px var(--condensed)}
+.comment-form textarea{width:100%;min-height:78px;resize:vertical;background:#06171d;color:#f1f9f8;border:1px solid #3c7276;padding:10px;font:14px/1.5 var(--body)}
+.comment-form .btn{justify-self:start}
+@media(max-width:620px){.entry-social{padding:9px;gap:8px}.entry-comments{padding:11px 0}.social-action{font-size:12px}}
