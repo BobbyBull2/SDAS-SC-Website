@@ -291,7 +291,7 @@ body{font-family:var(--body);font-weight:400}
 }
 @media(max-width:390px){.banner .hero-art{height:auto;aspect-ratio:2048 / 545.6}}
 /* Comics have a 50% wider reading area, with full-resolution vertical pages. */
-.reader{max-width:1350px;width:74.25%}
+.reader{max-width:1012.5px;width:55.6875%}
 .page{min-height:0}
 .page img{width:100%;height:auto;max-height:none;object-fit:contain}
 @media(max-width:620px){.reader{width:100%;max-width:100%}.page img{max-height:none}.strip{justify-content:flex-start;overflow:auto;flex-wrap:nowrap}}
@@ -318,8 +318,8 @@ body{font-family:var(--body);font-weight:400}
 .comment-form .btn{justify-self:start}
 @media(max-width:620px){.entry-social{padding:9px;gap:8px}.entry-comments{padding:11px 0}.social-action{font-size:12px}}
 
-/* Fullscreen comic interaction / magnifier. Keeps the normal page at 75% of the
-   previous 1800px reader; fullscreen can use the entire display. */
+/* Fullscreen comic interaction / magnifier. Inline reader is now 25% narrower
+   than the previous version; fullscreen can still use the entire display. */
 .page #page-img{cursor:zoom-in}
 .page #page-img:focus-visible{outline:3px solid var(--cyan);outline-offset:5px}
 .reader-zoom-hint{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;margin:8px auto 12px;color:#afdae0;font:600 13px var(--condensed);letter-spacing:.2px}
