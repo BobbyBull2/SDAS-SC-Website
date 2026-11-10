@@ -15,6 +15,7 @@
       const stats=await cloud().socialStats();
       counts=stats.counts;mine=new Set(stats.mine);
       mount();
+      mountDetail();
       document.querySelectorAll('.entry-social[data-post]').forEach(toolbar=>updateButtons(toolbar));
     }catch(error){console.warn('SDAS reactions could not load:',error)}
   }
@@ -35,6 +36,51 @@
     const status=document.getElementById('storage-message');
     if(status)status.textContent=message;
   }
+  function setupToolbar(toolbar,id,post){
+    if(!post.server){
+      toolbar.classList.add('placeholder');
+      toolbar.textContent='Preview / local draft · Likes and comments available after publishing';
+      return;
+    }
+    toolbar.dataset.post=id;
+    const like=el('button','social-action like-action');
+    like.type='button';like.dataset.like=id;
+    like.addEventListener('click',async()=>{
+      if(!cloud().canUpload()){
+        notify('Sign in with Discord and verify SDAS Prospect or higher to like a post.');
+        return;
+      }
+      like.disabled=true;
+      try{await cloud().setLike(id,mine.has(id));await refresh()}
+      catch(error){notify('Like failed: '+(error.message||error))}
+      finally{like.disabled=false}
+    });
+    const open=el('button','social-action comment-action');
+    open.type='button';open.dataset.comments=id;
+    open.addEventListener('click',()=>toggleComments(id));
+    toolbar.append(like,open);
+    updateButtons(toolbar);
+    if(openId===id)buildComments(toolbar,id);
+  }
+  function mountDetail(){
+    const host=document.getElementById('detail-social');
+    if(!host||document.getElementById('detail')?.classList.contains('hidden'))return;
+    const post=window.SdasComicsCurrentItem?.();
+    if(!post)return;
+    const auth=String(!!cloud().canUpload());
+    const current=host.querySelector('.entry-social');
+    if(host.dataset.post===post.id && host.dataset.auth===auth && current){
+      if(post.server)updateButtons(current);
+      return;
+    }
+    host.dataset.post=post.id;
+    host.dataset.auth=auth;
+    host.replaceChildren();
+    host.append(el('h3','detail-social-heading','Crew reactions & discussion'));
+    const toolbar=el('div','entry-social');
+    host.append(toolbar);
+    setupToolbar(toolbar,post.id,post);
+  }
   function mount(){
     document.querySelectorAll('#entries button.entry[data-id]').forEach(button=>{
       if(button.parentElement?.classList.contains('entry-shell'))return;
@@ -45,30 +91,7 @@
       shell.append(button);
       const toolbar=el('div','entry-social');
       shell.append(toolbar);
-      if(!post.server){
-        toolbar.classList.add('placeholder');
-        toolbar.textContent='Preview / local draft · Likes and comments available after publishing';
-        return;
-      }
-      toolbar.dataset.post=id;
-      const like=el('button','social-action like-action');
-      like.type='button';like.dataset.like=id;
-      like.addEventListener('click',async()=>{
-        if(!cloud().canUpload()){
-          notify('Sign in with Discord and verify SDAS Prospect or higher to like a post.');
-          return;
-        }
-        like.disabled=true;
-        try{await cloud().setLike(id,mine.has(id));await refresh()}
-        catch(error){notify('Like failed: '+(error.message||error))}
-        finally{like.disabled=false}
-      });
-      const open=el('button','social-action comment-action');
-      open.type='button';open.dataset.comments=id;
-      open.addEventListener('click',()=>toggleComments(id));
-      toolbar.append(like,open);
-      updateButtons(toolbar);
-      if(openId===id)buildComments(toolbar,id);
+      setupToolbar(toolbar,id,post);
     });
   }
   async function toggleComments(id){
@@ -152,7 +175,7 @@
     }
     toolbar.append(panel);
   }
-  window.SdasComicsSocial={mount,refresh};
+  window.SdasComicsSocial={mount,mountDetail,refresh};
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)void refresh()});
   setInterval(()=>{if(!document.hidden)void refresh()},120000);
 })();
