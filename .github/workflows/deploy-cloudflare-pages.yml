@@ -77,6 +77,20 @@ jobs:
           print("Production home intact and Fleet Manager safely isolated.")
           PY
 
+      - name: Verify Comics & Stories live bundle
+        run: |
+          test -s dist/comics/index.html
+          test -s dist/comics/cloud.js
+          test -s dist/comics/social.js
+          test -s dist/comics/theme.css
+          test -s dist/comics/viewer.js
+          test -s dist/images/sdas-comics-hangar-exact-lossless.webp
+          test -s dist/images/sdas-fleet-manager-emblem.png
+          node --check dist/comics/cloud.js
+          node --check dist/comics/social.js
+          node --check dist/comics/viewer.js
+          grep -q 'sdas_comics_posts' dist/comics/cloud.js
+
       - name: Check Cloudflare credentials
         env:
           CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
