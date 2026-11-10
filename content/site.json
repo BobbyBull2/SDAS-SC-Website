@@ -1,8 +1,8 @@
 {
-  "heroImage": "images/sdas-hero-crew-polaris-20261110.webp",
-  "heroPosition": "center 55%",
+  "heroImage": "images/sdas-home-hero-natural-20261110.webp",
+  "heroPosition": "right center",
   "mobileHeroPosition": "center center",
-  "heroAlt": "A large spaceship on a sunset landing pad, with friends relaxing together beneath it and a planet overhead.",
+  "heroAlt": "SDAS crew relaxing beside a capital ship on a reflective spaceport landing pad, with two landing gear assemblies, a planetary sky, and natural sunset light.",
   "posterImage": "images/Fox_poster_with_text.png",
   "discord": "https://discord.gg/NrK6apayqH",
   "org": "https://robertsspaceindustries.com/en/orgs/SDAS",
