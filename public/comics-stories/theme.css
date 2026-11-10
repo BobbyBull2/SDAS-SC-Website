@@ -291,7 +291,7 @@ body{font-family:var(--body);font-weight:400}
 }
 @media(max-width:390px){.banner .hero-art{height:auto;aspect-ratio:2048 / 545.6}}
 /* Comics have a 50% wider reading area, with full-resolution vertical pages. */
-.reader{max-width:min(1350px,99%);width:99%}
+.reader{max-width:1350px;width:74.25%}
 .page{min-height:0}
 .page img{width:100%;height:auto;max-height:none;object-fit:contain}
 @media(max-width:620px){.reader{width:100%;max-width:100%}.page img{max-height:none}.strip{justify-content:flex-start;overflow:auto;flex-wrap:nowrap}}
@@ -365,3 +365,7 @@ body.sdas-reader-active{overflow:hidden}
   .sdas-fullscreen-counter{margin-left:auto}
   .sdas-fullscreen-zoom{margin-left:0}
 }
+
+/* Tablet/mobile keep a legible full-width page rather than shrinking by 25%. */
+@media(max-width:920px){.reader{width:95%;max-width:100%}}
+@media(max-width:620px){.reader{width:100%;max-width:100%}}
