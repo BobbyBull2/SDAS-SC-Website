@@ -1,12 +1,103 @@
 {
   "schemaVersion": 1,
   "source": "https://robertsspaceindustries.com/en/orgs/SDAS/members",
-  "fetchedAt": "2026-10-09T02:22:19.232Z",
-  "organizationTotal": 71,
-  "hiddenMembers": 2,
-  "publicMembers": 69,
+  "fetchedAt": "2026-11-14T20:16:15.850Z",
+  "organizationTotal": 81,
+  "hiddenMembers": 1,
+  "publicMembers": 80,
   "pagesFetched": 3,
   "members": [
+    {
+      "handle": "KeithAkAKIST",
+      "avatar": "https://theverse.robertsspaceindustries.com/dpvlntrmgbgd1/avatar.png",
+      "profile": "https://robertsspaceindustries.com/citizens/KeithAkAKIST",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "Kleetus",
+      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/Kleetus",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "PLAGOO",
+      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/PLAGOO",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "Dirtbag_Leader",
+      "avatar": "https://robertsspaceindustries.com/media/2zfqej26rhc2hr/avatar/Sw_xwing1_lg.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/Dirtbag_Leader",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "Baxxle",
+      "avatar": "https://theverse.robertsspaceindustries.com/xqqeezq4epan0/avatar.png",
+      "profile": "https://robertsspaceindustries.com/citizens/Baxxle",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "Sir_Scraggy",
+      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/Sir_Scraggy",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "TheFilt01",
+      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/TheFilt01",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "CaptainHandsome_1",
+      "avatar": "https://theverse.robertsspaceindustries.com/vyq81t7o0ygrd/avatar.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/CaptainHandsome_1",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "Sgt-Oddball",
+      "avatar": "https://theverse.robertsspaceindustries.com/elahifg34ppxb/avatar.png",
+      "profile": "https://robertsspaceindustries.com/citizens/Sgt-Oddball",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "CavBear",
+      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/CavBear",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "Saker82",
+      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/Saker82",
+      "rank": "Patch",
+      "roles": []
+    },
+    {
+      "handle": "Downslide",
+      "avatar": "https://theverse.robertsspaceindustries.com/zkjgsrop1bkqo/avatar.png",
+      "profile": "https://robertsspaceindustries.com/citizens/Downslide",
+      "rank": "Patch",
+      "roles": []
+    },
+    {
+      "handle": "smthng",
+      "avatar": "https://robertsspaceindustries.com/media/jpe970l4hud78r/avatar/MoabReadyCr.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/smthng",
+      "rank": "Prospect",
+      "roles": []
+    },
     {
       "handle": "disulfiram",
       "avatar": "https://theverse.robertsspaceindustries.com/huve8jcgsjitu/avatar.png",
@@ -22,10 +113,17 @@
       "roles": []
     },
     {
+      "handle": "Au5tro",
+      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/Au5tro",
+      "rank": "Patch",
+      "roles": []
+    },
+    {
       "handle": "Mike-Mistoffelees",
       "avatar": "https://robertsspaceindustries.com/media/hbum1ydtrapnmr/avatar/Fab66118-69e9-4ddb-87fc-9769585fcaf2.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/Mike-Mistoffelees",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
@@ -46,14 +144,14 @@
       "handle": "A_Vostrikov",
       "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/A_Vostrikov",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
       "handle": "OleSalty",
-      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "avatar": "https://theverse.robertsspaceindustries.com/q9lkit4cvyi2c/avatar.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/OleSalty",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
@@ -67,7 +165,7 @@
       "handle": "Kind_tiger99",
       "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/Kind_tiger99",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
@@ -88,14 +186,14 @@
       "handle": "Ex-The-Duane",
       "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/Ex-The-Duane",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
       "handle": "tweendaeyez",
       "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/tweendaeyez",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
@@ -141,20 +239,6 @@
       "roles": []
     },
     {
-      "handle": "Beddo",
-      "avatar": "https://theverse.robertsspaceindustries.com/87z65awyx5iz1/avatar.gif",
-      "profile": "https://robertsspaceindustries.com/citizens/Beddo",
-      "rank": "Patch",
-      "roles": []
-    },
-    {
-      "handle": "NewLife-60",
-      "avatar": "https://theverse.robertsspaceindustries.com/gc99mmbdw5x4c/avatar.jpg",
-      "profile": "https://robertsspaceindustries.com/citizens/NewLife-60",
-      "rank": "Patch",
-      "roles": []
-    },
-    {
       "handle": "ThunderWolf119",
       "avatar": "https://robertsspaceindustries.com/media/rmhb0ibq79s4vr/avatar/67ac4f4d-2649-451a-Ad51-88f222530f27.png",
       "profile": "https://robertsspaceindustries.com/citizens/ThunderWolf119",
@@ -172,8 +256,11 @@
       "handle": "Bobby_Bull",
       "avatar": "https://robertsspaceindustries.com/media/0xtl805z6edb9r/avatar/4513a6b1-3c8d-41ed-A383-088f929e51f7.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/Bobby_Bull",
-      "rank": "Patch",
-      "roles": []
+      "rank": "Sgt. At Arms",
+      "roles": [
+        "Officer",
+        "Chief Marketing"
+      ]
     },
     {
       "handle": "Island_Shuttle",
@@ -219,7 +306,7 @@
     },
     {
       "handle": "Sweetmartialaw",
-      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "avatar": "https://theverse.robertsspaceindustries.com/bhfxx2rkfi91j/avatar.png",
       "profile": "https://robertsspaceindustries.com/citizens/Sweetmartialaw",
       "rank": "Patch",
       "roles": []
@@ -250,13 +337,6 @@
       "avatar": "https://robertsspaceindustries.com/media/k3w4dd4n8nf02r/avatar/Fa575f9b-4c37-4878-Baa4-52ce3bfb06c2.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/glizzyup",
       "rank": "Patch",
-      "roles": []
-    },
-    {
-      "handle": "S3curity_Forc3s_2",
-      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
-      "profile": "https://robertsspaceindustries.com/citizens/S3curity_Forc3s_2",
-      "rank": "Prospect",
       "roles": []
     },
     {
