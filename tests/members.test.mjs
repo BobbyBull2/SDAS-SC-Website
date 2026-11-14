@@ -35,3 +35,14 @@ test('blocked, repeated, and partial retrieval preserve last-known-good file',as
     ]){await assert.rejects(syncMembers(out,request,async()=>{}));assert.equal(await readFile(out,'utf8'),'last known good');}
   }finally{await rm(root,{recursive:true,force:true});}
 });
+
+test('crew refresh is enabled daily and dispatches the existing production deployment after publishing',async()=>{
+  const {readFile}=await import('node:fs/promises');
+  const workflow=await readFile(new URL('../.github/workflows/sync-members.yml',import.meta.url),'utf8');
+  assert.match(workflow,/schedule:\s*\n\s*- cron:/);
+  assert.match(workflow,/workflow_dispatch:/);
+  assert.doesNotMatch(workflow,/SDAS_MEMBER_SYNC_ENABLED/);
+  assert.match(workflow,/npm run sync:members/);
+  assert.match(workflow,/steps.publish.outputs.changed == 'true'/);
+  assert.match(workflow,/gh workflow run deploy-cloudflare-pages\.yml --ref main/);
+});

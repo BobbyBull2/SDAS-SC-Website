@@ -20,7 +20,7 @@ export function Crew(){
   const motion=useCrewMotion(roster?.members.length||0);
   useEffect(()=>{
     const controller=new AbortController();
-    fetch(`${import.meta.env.BASE_URL}data/members.json`,{signal:controller.signal}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{
+    fetch(`${import.meta.env.BASE_URL}data/members.json`,{signal:controller.signal,cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{
       if(data.schemaVersion!==1||data.source!==source||!Number.isFinite(Date.parse(data.fetchedAt))||!Array.isArray(data.members)||new Set(data.members.map((m:Member)=>m?.handle?.toLowerCase())).size!==data.members.length||
         !data.members.every((m:Member)=>m&&typeof m.handle==='string'&&m.handle.length>0&&safeURL(m.profile,true)&&
           (m.avatar===null||safeURL(m.avatar))&&(m.rank===null||typeof m.rank==='string')&&Array.isArray(m.roles)&&m.roles.every(r=>typeof r==='string')))throw Error();

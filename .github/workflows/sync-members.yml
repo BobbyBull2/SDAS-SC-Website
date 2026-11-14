@@ -3,15 +3,24 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '23 10 * * *'
+  # Run once when this workflow is fixed; daily runs continue via schedule.
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/sync-members.yml
+
 permissions:
   contents: write
+  actions: write
+
 concurrency:
   group: public-member-sync
   cancel-in-progress: false
+
 jobs:
   sync:
-    # Opt in only after branch review and publication approval.
-    if: vars.SDAS_MEMBER_SYNC_ENABLED == 'true' && github.ref_name == github.event.repository.default_branch
+    if: github.ref_name == github.event.repository.default_branch
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -22,11 +31,24 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run sync:members
-      - name: Save successful public roster snapshot only
+      - name: Save validated public roster snapshot
+        id: publish
         run: |
-          if git diff --quiet -- public/data/members.json; then exit 0; fi
+          if git diff --quiet -- public/data/members.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -- public/data/members.json
           git commit -m 'Refresh public SDAS crew roster'
-          git push
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      # GitHub intentionally does not trigger a push workflow for commits
+      # authored with GITHUB_TOKEN. Explicitly dispatch the EXISTING Pages
+      # workflow so the new snapshot actually appears on sdas.space.
+      - name: Publish refreshed roster via existing Cloudflare Pages workflow
+        if: steps.publish.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-cloudflare-pages.yml --ref main
