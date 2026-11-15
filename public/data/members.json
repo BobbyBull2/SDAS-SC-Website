@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source": "https://robertsspaceindustries.com/en/orgs/SDAS/members",
-  "fetchedAt": "2026-11-14T20:16:15.850Z",
+  "fetchedAt": "2026-11-15T17:16:47.826Z",
   "organizationTotal": 81,
   "hiddenMembers": 1,
   "publicMembers": 80,
@@ -142,7 +142,7 @@
     },
     {
       "handle": "A_Vostrikov",
-      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "avatar": "https://theverse.robertsspaceindustries.com/opwpw4hlm8p78/avatar.png",
       "profile": "https://robertsspaceindustries.com/citizens/A_Vostrikov",
       "rank": "Patch",
       "roles": []
