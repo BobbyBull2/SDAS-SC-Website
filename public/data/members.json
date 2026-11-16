@@ -1,12 +1,19 @@
 {
   "schemaVersion": 1,
   "source": "https://robertsspaceindustries.com/en/orgs/SDAS/members",
-  "fetchedAt": "2026-11-15T17:16:47.826Z",
-  "organizationTotal": 81,
+  "fetchedAt": "2026-11-16T20:34:21.710Z",
+  "organizationTotal": 82,
   "hiddenMembers": 1,
-  "publicMembers": 80,
+  "publicMembers": 81,
   "pagesFetched": 3,
   "members": [
+    {
+      "handle": "TopHat_Jones",
+      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/TopHat_Jones",
+      "rank": "Prospect",
+      "roles": []
+    },
     {
       "handle": "KeithAkAKIST",
       "avatar": "https://theverse.robertsspaceindustries.com/dpvlntrmgbgd1/avatar.png",
