@@ -1381,3 +1381,38 @@ body>.shell,.shell{
     transform-origin: center center !important;
   }
 }
+
+/* Compact Fleet login troubleshooting bar: visible before and after sign-in.
+   It stays below the auth controls without changing OAuth or fleet permissions. */
+#sdas-fleet-login-help{
+  position:relative;z-index:6;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
+  gap:6px 15px;max-width:900px;width:calc(100% - 28px);
+  margin:8px auto 14px;padding:10px 18px;
+  border:1px solid #286b7a;border-left:3px solid #43e7df;border-radius:7px;
+  background:linear-gradient(110deg,#0b2b37f0,#071a26f0);
+  box-shadow:0 5px 22px #02080e78,inset 0 1px #6cf4ef13;
+  color:#e3f2f2;font:600 12px/1.4 system-ui,Arial,sans-serif;
+}
+#sdas-fleet-login-help>strong{
+  color:#62e7e4;font-size:11px;letter-spacing:.12em;white-space:nowrap;
+}
+#sdas-fleet-login-help ol{
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
+  gap:6px 14px;list-style:none;counter-reset:sdas-login-step;
+  margin:0;padding:0;
+}
+#sdas-fleet-login-help li{
+  counter-increment:sdas-login-step;
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+}
+#sdas-fleet-login-help li::before{
+  content:counter(sdas-login-step);display:inline-grid;place-items:center;
+  width:20px;height:20px;flex:0 0 20px;border:1px solid #3d8a99;
+  border-radius:50%;background:#0c3844;color:#b9f8f5;font-size:11px;
+}
+@media(max-width:650px){
+  #sdas-fleet-login-help{padding:10px 12px;gap:6px 12px}
+  #sdas-fleet-login-help ol{gap:7px 11px}
+  #sdas-fleet-login-help li{font-size:11px}
+}

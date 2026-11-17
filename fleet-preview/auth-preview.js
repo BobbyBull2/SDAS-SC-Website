@@ -154,6 +154,16 @@
  const anchor=document.querySelector("#pilotSelect");
  if(anchor){anchor.insertAdjacentElement("afterend",root);}
  else {const header=document.querySelector(".header")||document.querySelector("header");if(header)header.append(root);else document.body.prepend(root);}
+ // Compact troubleshooting instructions beneath the actual login controls.
+ // Keep this independent of authentication state, session data, and role checks.
+ if(!document.getElementById("sdas-fleet-login-help")){
+  const help=document.createElement("aside");
+  help.id="sdas-fleet-login-help";
+  help.setAttribute("aria-label","Fleet login help");
+  help.innerHTML='<strong>HAVING LOGIN TROUBLE?</strong><ol><li>Sign Out</li><li>Log In with Discord</li><li>Refresh SDAS Roles</li></ol>';
+  const loginBar=root.closest(".header")||document.querySelector(".header")||document.querySelector("header");
+  (loginBar||root).insertAdjacentElement("afterend",help);
+ }
  const state=root.querySelector("#sdas-auth-state"),actions=root.querySelector("#sdas-auth-actions");
  const discordIcon='<svg aria-hidden="true" viewBox="0 0 127.14 96.36" width="18" height="14" style="fill:currentColor;flex:none"><path d="M104.4 8.65A102.73 102.73 0 0 0 79.25.77a71.8 71.8 0 0 0-3.2 6.58 95.2 95.2 0 0 0-28.96 0A71.8 71.8 0 0 0 43.9.77a102.73 102.73 0 0 0-25.15 7.88C2.85 32.25-1.45 55.26.71 77.94a103.18 103.18 0 0 0 31.04 15.67 75.2 75.2 0 0 0 6.65-10.8 66.79 66.79 0 0 1-10.46-5.05c.88-.64 1.74-1.3 2.57-1.98a73.73 73.73 0 0 0 63.12 0c.84.68 1.7 1.34 2.57 1.98a66.79 66.79 0 0 1-10.46 5.05 75.2 75.2 0 0 0 6.65 10.8 103.18 103.18 0 0 0 31.04-15.67c2.54-26.29-4.33-49.08-18.99-69.29ZM42.45 64.06c-6 0-10.94-5.5-10.94-12.25s4.83-12.25 10.94-12.25 11.05 5.55 10.94 12.25-4.83 12.25-10.94 12.25Zm42.24 0c-6 0-10.94-5.5-10.94-12.25s4.83-12.25 10.94-12.25 11.05 5.55 10.94 12.25-4.83 12.25-10.94 12.25Z"/></svg>';
  const button=(label,fn)=>{const b=document.createElement("button");b.type="button";b.style.cssText="display:inline-flex;align-items:center;gap:7px;border:1px solid #61cde2;border-radius:7px;background:linear-gradient(135deg,#134257,#081e2c);color:#a7edfb;padding:8px 11px;cursor:pointer;letter-spacing:.05em;font:600 11px system-ui,Arial";if(label==="LOGIN WITH DISCORD"){b.innerHTML=discordIcon+"<span>LOGIN WITH DISCORD</span>";}else{b.textContent=label;}b.onclick=fn;actions.append(b)};
