@@ -119,7 +119,7 @@ assert "sdas-production-access" in html
 shutil.copy2("scripts/sdfm-production-login.js",target/"sdfm-production-login.js")
 html=html.replace("<head>",'<head><script src="/SDFM/sdfm-production-login.js"></script>',1)
 assert 'src="/SDFM/sdfm-production-login.js"' in html
-html=html.replace('src="/SDFM/sdfm-production-login.js"', 'src="/SDFM/sdfm-production-login.js?v=20261020-prospect-readonly"')
+html=html.replace('src="/SDFM/sdfm-production-login.js"', 'src="/SDFM/sdfm-production-login.js?v=20261119-auto-role-refresh"')
 # The cloud bridge and login area must not separately consume the OAuth callback.
 cloud_before='''import("https://esm.sh/@supabase/supabase-js@2").then(async mod=>{
    client=mod.createClient(SUPA,PUB,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});'''
@@ -137,7 +137,7 @@ assert 'client.from("preview_fleet_ships")' not in html, "Preview fleet tables l
 assert 'sdas-cloud-status' in html, "Fleet status feedback not staged"
 # Reference a fresh asset URL so cached 2026-era verification JavaScript is not reused.
 assert html.count('src="/SDFM/auth-preview.js"')==1
-html=html.replace('src="/SDFM/auth-preview.js"', 'src="/SDFM/auth-preview.js?v=20261021-session-recovery"')
+html=html.replace('src="/SDFM/auth-preview.js"', 'src="/SDFM/auth-preview.js?v=20261119-auto-role-refresh"')
 target.joinpath("index.html").write_text(html)
 # Pages serves case-sensitive folders; support user-typed lowercase URLs directly.
 lowercase = Path("dist/sdfm")

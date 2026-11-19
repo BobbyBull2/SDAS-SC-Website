@@ -9,7 +9,7 @@ const staging=readFileSync(new URL('../scripts/stage-sdfm.py',import.meta.url),'
 test('Fleet login troubleshooting is always visible and lists the correct steps',()=>{
   assert.ok(auth.includes('help.id="sdas-fleet-login-help"'));
   assert.ok(auth.includes('HAVING LOGIN TROUBLE?'));
-  for(const label of ['Sign Out','Log In with Discord','Refresh SDAS Roles']) assert.ok(auth.includes('<li>'+label+'</li>'));
+  for(const label of ['Sign Out','Log In with Discord','Refresh SDAS Roles if needed']) assert.ok(auth.includes('<li>'+label+'</li>'));
   assert.ok(auth.includes('(loginBar||root).insertAdjacentElement("afterend",help)'));
   assert.ok(css.includes('#sdas-fleet-login-help'));
 });

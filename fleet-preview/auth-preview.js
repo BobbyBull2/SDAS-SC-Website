@@ -160,7 +160,7 @@
   const help=document.createElement("aside");
   help.id="sdas-fleet-login-help";
   help.setAttribute("aria-label","Fleet login help");
-  help.innerHTML='<strong>HAVING LOGIN TROUBLE?</strong><ol><li>Sign Out</li><li>Log In with Discord</li><li>Refresh SDAS Roles</li></ol>';
+  help.innerHTML='<strong>HAVING LOGIN TROUBLE?</strong><ol><li>Sign Out</li><li>Log In with Discord</li><li>Refresh SDAS Roles if needed</li></ol>';
   const loginBar=root.closest(".header")||document.querySelector(".header")||document.querySelector("header");
   (loginBar||root).insertAdjacentElement("afterend",help);
  }
@@ -178,8 +178,8 @@
  };
  window.sdasFleetStartDiscordLogin=startDiscordLogin;
  let renderNumber=0;
- const announceLoginState=(signedIn,verified)=>{
-   window.sdasFleetLoginState={signedIn,verified};
+ const announceLoginState=(signedIn,verified,checkingRoles=false)=>{
+   window.sdasFleetLoginState={signedIn,verified,checkingRoles};
    window.dispatchEvent(new CustomEvent("sdas-fleet-auth-state",{detail:window.sdasFleetLoginState}));
  };
  const autoRoleChecks=new Map();
@@ -194,8 +194,11 @@
   const current=++renderNumber;
   const {data:{user},error}=await sb.auth.getUser();
   if(current!==renderNumber)return;
+  if(user&&verifyingUsers.has(user.id))return;
   actions.replaceChildren();
   if(error||!user){
+   if(!error)window.sdasFleetSetFreshRoleRefreshPending?.(false);
+   if(!user&&!error){autoRoleChecks.clear();roleFailures.clear();}
    announceLoginState(false,false);
    state.textContent="";
    button("LOGIN WITH DISCORD",startDiscordLogin);
@@ -204,7 +207,8 @@
   const name=user.user_metadata?.full_name||user.user_metadata?.name||user.email||"Discord pilot";
   const {data:membership,error:membershipError}=await sb.from("sdas_memberships").select("role,discord_rank,last_role_checked_at").eq("user_id",user.id).maybeSingle();
   if(current!==renderNumber)return;
-  const verified=!membershipError&&isVerified(membership);
+  const fresh=window.sdasFleetFreshRoleRefreshPending===true;
+  const verified=!fresh&&!membershipError&&isVerified(membership);
   if(verified)autoRoleChecks.delete(user.id);
   if(membershipError){state.textContent="Signed in as "+name+". Membership check failed: "+membershipError.message;}
   else if(verified){state.textContent=name+" • "+({admin:"Super Admin",officer:"Board Member",member:"Patch",prospect:"Prospect — Read Only"}[membership.role]||"Restricted")+" access";}
@@ -214,7 +218,9 @@
   if(!verified)window.dispatchEvent(new Event("sdas-fleet-verification-needed"));
   if(verified&&!window.sdasCloudActive)window.dispatchEvent(new Event("sdas-auth-ready"));
   const verifyRoles=async()=>{
+    if(verifyingUsers.has(user.id))return;
     actions.replaceChildren();verifyingUsers.add(user.id);roleFailures.delete(user.id);state.textContent="Checking SDAS Discord roles…";
+    announceLoginState(true,false,true);
     try{
       const {data:{session},error:sessionError}=await sb.auth.getSession();
       if(sessionError)throw Error("Your login session could not be loaded. Sign out and sign in again.");
@@ -232,6 +238,9 @@
       if(!res.ok)throw Error(json.error||"The role verification service returned an error.");
       if(!json.verified)throw Error("Your Discord membership could not be verified.");
       roleFailures.delete(user.id);
+      window.sdasFleetSetFreshRoleRefreshPending?.(false);
+      // Permit the post-verification render; unrelated auth events are deduplicated.
+      verifyingUsers.delete(user.id);
       await render();
       window.dispatchEvent(new Event("sdas-auth-ready"));
     }catch(e){
@@ -241,13 +250,17 @@
       button("RETRY ROLE CHECK",verifyRoles);
       button("RECONNECT DISCORD",startDiscordLogin);
       button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
-    }finally{verifyingUsers.delete(user.id);}
+    }finally{
+      verifyingUsers.delete(user.id);
+      if(window.sdasFleetLoginState?.checkingRoles)announceLoginState(true,false);
+    }
   };
   button(membership?"REFRESH SDAS ROLES":"VERIFY SDAS ROLES",verifyRoles);
   button("SIGN OUT",async()=>{await sb.auth.signOut();window.sdasCloudLogout?.();await render();});
   // Retry once every two minutes while stale; a page left open overnight
   // must not get stuck behind a one-time verification attempt.
-  if(!verified&&!membershipError&&
+  // A new Discord OAuth return must refresh even a previously valid membership.
+  if((fresh||(!verified&&!membershipError))&&
     Date.now()-(autoRoleChecks.get(user.id)||0)>2*60*1000 &&
     !verifyingUsers.has(user.id)){
     autoRoleChecks.set(user.id,Date.now());
