@@ -59,7 +59,6 @@
        (e?.message||String(e)));return;
    }
    if(!u){requireVerification("Sign in with Discord to access the fleet.");return;}
-   if(window.sdasFleetFreshRoleRefreshPending){requireVerification("Checking current SDAS Discord roles…");return;}
    const {data:m,error:membershipError}=await client.from("sdas_memberships")
      .select("role,discord_rank,last_role_checked_at").eq("user_id",u.id).maybeSingle();
    if(membershipError){
@@ -89,7 +88,7 @@
      // Recheck before accepting a genuinely empty registry.
      const {data:confirmed,error:checkError}=await client.from("sdas_memberships")
        .select("role,discord_rank,last_role_checked_at").eq("user_id",u.id).maybeSingle();
-     if(window.sdasFleetFreshRoleRefreshPending||checkError||!validMembership(confirmed)){
+     if(checkError||!validMembership(confirmed)){
        requireVerification("Fleet access requires verification. Reconnect Discord.");
        return;
      }

@@ -36,24 +36,6 @@
   // already selected from a previous visit.
   if (!pref()) clearPersistentFleetSessions();
 
-  // Capture the OAuth return BEFORE Supabase consumes and removes it.
-  // Persist the pending flag in this tab until a real role refresh succeeds.
-  const roleRefreshKey = "sdas-fleet-fresh-role-refresh";
-  window.sdasFleetSetFreshRoleRefreshPending = pending => {
-    window.sdasFleetFreshRoleRefreshPending = Boolean(pending);
-    try {
-      if (pending) sessionStorage.setItem(roleRefreshKey, "true");
-      else sessionStorage.removeItem(roleRefreshKey);
-    } catch {}
-  };
-  const callbackQuery = new URLSearchParams(location.search);
-  const callbackHash = new URLSearchParams(location.hash.slice(1));
-  let pendingRoleRefresh = false;
-  try { pendingRoleRefresh = sessionStorage.getItem(roleRefreshKey) === "true"; } catch {}
-  window.sdasFleetSetFreshRoleRefreshPending(pendingRoleRefresh ||
-    callbackQuery.has("code") || callbackHash.has("access_token") ||
-    callbackHash.has("provider_token"));
-
   // A single client owns the OAuth callback, session, and Discord provider token.
   // Avoid racing two Supabase instances against one authentication redirect.
   window.sdasFleetSharedClientPromise = import("https://esm.sh/@supabase/supabase-js@2")
@@ -138,19 +120,11 @@
     function updateCard() {
       if(window.sdasCloudActive===true)return;
       const auth=window.sdasFleetLoginState;
-      button.disabled=false;
       if(!auth?.signedIn){
         button.textContent="Sign in with Discord to access the SDAS Fleet Manager";
         row.style.display="";
         help.textContent="Uncheck to keep your login only for this browser session. Use this on shared devices.";
         status.textContent="";
-      }else if(auth.checkingRoles){
-        button.textContent="Refreshing SDAS Roles…";
-        button.disabled=true;
-        row.style.display="none";
-        help.textContent="Checking your current Discord roles automatically.";
-        status.textContent="Please wait while membership is verified.";
-        return;
       }else if(auth.verified){
         button.textContent="Retry Fleet Connection";
         row.style.display="none";
@@ -159,7 +133,7 @@
       }else{
         button.textContent="Reconnect Discord to verify SDAS membership";
         row.style.display="none";
-        help.textContent="Discord login succeeded. Retry the role check above, or reconnect if Discord authorization expired.";
+        help.textContent="Discord login succeeded. Use the role verification controls above, or reconnect if Discord authorization expired.";
         status.textContent="";
       }
     }
