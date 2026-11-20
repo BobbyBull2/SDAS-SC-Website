@@ -1,12 +1,26 @@
 {
   "schemaVersion": 1,
   "source": "https://robertsspaceindustries.com/en/orgs/SDAS/members",
-  "fetchedAt": "2026-11-19T19:03:40.630Z",
-  "organizationTotal": 82,
+  "fetchedAt": "2026-11-20T18:39:42.128Z",
+  "organizationTotal": 84,
   "hiddenMembers": 1,
-  "publicMembers": 81,
+  "publicMembers": 83,
   "pagesFetched": 3,
   "members": [
+    {
+      "handle": "KnownGeeksta",
+      "avatar": "https://robertsspaceindustries.com/media/wgg4eays60qy5r/avatar/Bpanther.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/KnownGeeksta",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "RebelMedic",
+      "avatar": "https://robertsspaceindustries.com/media/jr1kg9ahpb5hrr/avatar/Images.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/RebelMedic",
+      "rank": "Prospect",
+      "roles": []
+    },
     {
       "handle": "TopHat_Jones",
       "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
