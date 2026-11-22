@@ -1,12 +1,19 @@
 {
   "schemaVersion": 1,
   "source": "https://robertsspaceindustries.com/en/orgs/SDAS/members",
-  "fetchedAt": "2026-11-21T17:39:09.004Z",
-  "organizationTotal": 84,
+  "fetchedAt": "2026-11-22T17:54:28.354Z",
+  "organizationTotal": 85,
   "hiddenMembers": 1,
-  "publicMembers": 83,
+  "publicMembers": 84,
   "pagesFetched": 3,
   "members": [
+    {
+      "handle": "NovaCoreExtreme",
+      "avatar": "https://robertsspaceindustries.com/media/fp6r12k33iw37r/avatar/25fb42a9-246f-4d23-8635-6787357a2ffe.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/NovaCoreExtreme",
+      "rank": "Patch",
+      "roles": []
+    },
     {
       "handle": "KnownGeeksta",
       "avatar": "https://robertsspaceindustries.com/media/wgg4eays60qy5r/avatar/Bpanther.jpg",
@@ -39,7 +46,7 @@
       "handle": "Kleetus",
       "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/Kleetus",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
@@ -60,7 +67,7 @@
       "handle": "Baxxle",
       "avatar": "https://theverse.robertsspaceindustries.com/xqqeezq4epan0/avatar.png",
       "profile": "https://robertsspaceindustries.com/citizens/Baxxle",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
@@ -95,7 +102,7 @@
       "handle": "CavBear",
       "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/CavBear",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
@@ -116,7 +123,7 @@
       "handle": "smthng",
       "avatar": "https://robertsspaceindustries.com/media/jpe970l4hud78r/avatar/MoabReadyCr.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/smthng",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
@@ -399,7 +406,7 @@
       "handle": "ScytheSniper",
       "avatar": "https://robertsspaceindustries.com/media/lo8lwbaf08pt1r/avatar/QwCct0z.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/ScytheSniper",
-      "rank": "Prospect",
+      "rank": "Patch",
       "roles": []
     },
     {
