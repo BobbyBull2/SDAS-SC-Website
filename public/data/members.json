@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "source": "https://robertsspaceindustries.com/en/orgs/SDAS/members",
-  "fetchedAt": "2026-11-22T17:54:28.354Z",
+  "fetchedAt": "2026-11-23T22:06:18.674Z",
   "organizationTotal": 85,
-  "hiddenMembers": 1,
-  "publicMembers": 84,
+  "hiddenMembers": 3,
+  "publicMembers": 82,
   "pagesFetched": 3,
   "members": [
     {
@@ -141,13 +141,6 @@
       "roles": []
     },
     {
-      "handle": "Au5tro",
-      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
-      "profile": "https://robertsspaceindustries.com/citizens/Au5tro",
-      "rank": "Patch",
-      "roles": []
-    },
-    {
       "handle": "Mike-Mistoffelees",
       "avatar": "https://robertsspaceindustries.com/media/hbum1ydtrapnmr/avatar/Fab66118-69e9-4ddb-87fc-9769585fcaf2.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/Mike-Mistoffelees",
@@ -229,13 +222,6 @@
       "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
       "profile": "https://robertsspaceindustries.com/citizens/SLG_Tunez",
       "rank": "Prospect",
-      "roles": []
-    },
-    {
-      "handle": "anunnaki_jake",
-      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
-      "profile": "https://robertsspaceindustries.com/citizens/anunnaki_jake",
-      "rank": "Patch",
       "roles": []
     },
     {
