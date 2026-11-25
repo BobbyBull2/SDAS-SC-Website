@@ -1,12 +1,33 @@
 {
   "schemaVersion": 1,
   "source": "https://robertsspaceindustries.com/en/orgs/SDAS/members",
-  "fetchedAt": "2026-11-24T20:42:41.637Z",
-  "organizationTotal": 85,
+  "fetchedAt": "2026-11-25T19:59:03.123Z",
+  "organizationTotal": 88,
   "hiddenMembers": 3,
-  "publicMembers": 82,
+  "publicMembers": 85,
   "pagesFetched": 3,
   "members": [
+    {
+      "handle": "Malanowski",
+      "avatar": "https://robertsspaceindustries.com/media/r3weo77ekskp5r/avatar/74ee07c6-0954-432c-80cc-A1211629ce0c.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/Malanowski",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "L0c0jellybean",
+      "avatar": "https://cdn.robertsspaceindustries.com/static/images/account/avatar_default_big.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/L0c0jellybean",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "UrainusMuffin",
+      "avatar": "https://robertsspaceindustries.com/media/05gdtw84jv18vr/avatar/N2543180001001_001.jpg",
+      "profile": "https://robertsspaceindustries.com/citizens/UrainusMuffin",
+      "rank": "Prospect",
+      "roles": []
+    },
     {
       "handle": "NovaCoreExtreme",
       "avatar": "https://robertsspaceindustries.com/media/fp6r12k33iw37r/avatar/25fb42a9-246f-4d23-8635-6787357a2ffe.jpg",
@@ -586,7 +607,7 @@
     },
     {
       "handle": "FoxSC",
-      "avatar": "https://theverse.robertsspaceindustries.com/i7xsahlfq8wbd/avatar.png",
+      "avatar": "https://theverse.robertsspaceindustries.com/98snf4xaj8qs1/avatar.png",
       "profile": "https://robertsspaceindustries.com/citizens/FoxSC",
       "rank": "President",
       "roles": [
