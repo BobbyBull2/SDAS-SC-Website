@@ -1,12 +1,33 @@
 {
   "schemaVersion": 1,
   "source": "https://robertsspaceindustries.com/en/orgs/SDAS/members",
-  "fetchedAt": "2026-11-27T19:31:21.710Z",
-  "organizationTotal": 88,
+  "fetchedAt": "2026-11-28T18:17:41.458Z",
+  "organizationTotal": 91,
   "hiddenMembers": 3,
-  "publicMembers": 85,
+  "publicMembers": 88,
   "pagesFetched": 3,
   "members": [
+    {
+      "handle": "GaugeTyrion",
+      "avatar": "https://robertsspaceindustries.com/media/ikbor4gp0vvwdr/avatar/Wendigo.png",
+      "profile": "https://robertsspaceindustries.com/citizens/GaugeTyrion",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "Luminarch",
+      "avatar": "https://theverse.robertsspaceindustries.com/15xee8kgn7zpv/avatar.gif",
+      "profile": "https://robertsspaceindustries.com/citizens/Luminarch",
+      "rank": "Prospect",
+      "roles": []
+    },
+    {
+      "handle": "JaegerHulk",
+      "avatar": "https://robertsspaceindustries.com/media/qvkfisjd5ax25r/avatar/4758e9da-5f8e-408f-9f8d-Cd579f37078b.png",
+      "profile": "https://robertsspaceindustries.com/citizens/JaegerHulk",
+      "rank": "Prospect",
+      "roles": []
+    },
     {
       "handle": "Malanowski",
       "avatar": "https://robertsspaceindustries.com/media/r3weo77ekskp5r/avatar/74ee07c6-0954-432c-80cc-A1211629ce0c.jpg",
